@@ -1,0 +1,12 @@
+{
+  "name": "altr-skills",
+  "description": "Personal productivity skills by ALTR — writing, note-taking, and prompt refinement tools.",
+  "author": {
+    "name": "ALTR"
+  },
+  "skills": [
+    "./skills/productivity/evergreen-note-writer",
+    "./skills/productivity/quill-edit",
+    "./skills/productivity/revise-prompt"
+  ]
+}
