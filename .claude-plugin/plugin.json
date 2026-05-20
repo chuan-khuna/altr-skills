@@ -7,6 +7,8 @@
   "skills": [
     "./skills/productivity/evergreen-note-writer",
     "./skills/productivity/quill-edit",
-    "./skills/productivity/revise-prompt"
+    "./skills/productivity/revise-prompt",
+    "./skills/work/jira-standup-meeting",
+    "./skills/work/progress-summary"
   ]
 }
