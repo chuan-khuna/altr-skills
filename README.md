@@ -17,3 +17,4 @@ bunx skills add https://github.com/chuan-khuna/altr-skills
 
 - https://agentskills.io/home
 - https://github.com/vercel-labs/skills
+- https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf
