@@ -71,28 +71,19 @@ Use grep, glob, and file reads to understand the feature. Trace the code paths, 
 
 ### Step 3 — Write the document
 
-Structure the document as:
+Use these sections as the default structure. **Overview and How It Works are mandatory.** The rest are conditional — include them when they add signal, skip or merge them when they don't. If a feature's shape calls for a different section, add it.
 
-```
-# <Feature Name>
+**Overview** *(mandatory)* — One paragraph: what the feature does, why it exists, and where it fits in the system. A reader who stops here should have enough context to know whether to keep reading.
 
-## Overview
-One paragraph explaining what the feature does.
+**How It Works** *(mandatory)* — The core mechanism: data flow, control flow, key logic. Walk it end-to-end. Include a Mermaid diagram if the feature has meaningful interactions between modules, services, or states (see Diagrams below).
 
-## How It Works
-The core mechanism — data flow, control flow, key logic. Include a Mermaid diagram here if the feature involves meaningful interactions between modules, services, or states.
+**Request / Response** *(conditional — include for any API or protocol boundary)* — Exact shapes: HTTP method, URL, request body, success response, error responses. Use code blocks with real field names. Skip for internal-only features with no public surface.
 
-## Key Files / Entry Points
-A brief list of the most important files and what role they play.
+**Key Files / Entry Points** *(conditional — include when the codebase is non-trivial)* — A short annotated list of the most important files, modules, or functions and the role each plays. Enough for a reader to find the code without a full grep.
 
-## Usage / Examples
-How to invoke or use the feature. Code examples where helpful.
+**Usage / Examples** *(conditional — include when the feature has a public API or is invoked by other code)* — How to call or configure the feature. Real code examples with realistic values.
 
-## Notes / Caveats
-Edge cases, gotchas, known limitations, or anything a developer should be aware of.
-```
-
-Drop any section that doesn't apply (e.g., skip Usage if the feature is internal with no public API).
+**Notes / Caveats** *(conditional — include when there are gotchas worth saving the next engineer from)* — Edge cases, known limitations, security considerations, anything that isn't obvious from the code.
 
 ### Diagrams
 
@@ -120,25 +111,29 @@ Pick the type that best represents what you found. Include more than one diagram
 
 ### Proposing a filename and path
 
-Suggest a filename based on the content:
+All docs follow the repo-wide artifact convention (defined in `CLAUDE.md`):
 
-- For conversation docs: `yyyy-mm-dd-<topic>.md` (e.g. `2026-05-23-write-doc-skill-design.md`)
-- For feature docs: `how-<feature>-works.md` or `<feature>.md`
+```
+docs/artifacts/<category>/yyyy-mm-dd-<topic>.md
+```
 
-Suggest a save path by detecting context:
+- `<category>` — inferred from content. Common values:
+  - `prd` (Product Requirements Document) — feature specs, requirements
+  - `adr` (Architecture Decision Record) — design decisions with trade-offs
+  - `issues` — tracked work items, bug write-ups, task breakdowns
+  - `auth`, `api`, `architecture` — technical feature docs by domain
+- `<topic>` — kebab-case, 2–5 words describing the subject
 
-- If an Obsidian vault is identifiable in the working directory or a parent path, suggest a relevant folder inside it
-- If the user is in a project repo, suggest `docs/` within that project
-- If neither is clear, ask the user where to save
+Examples:
+- `docs/artifacts/auth/2026-05-23-jwt-sign-in-api.md`
+- `docs/artifacts/adr/2026-05-23-caching-strategy.md`
+- `docs/artifacts/prd/2026-05-23-background-jobs.md`
 
-Always confirm the path and filename with the user before writing.
+If the user is in an Obsidian vault, hand off to the `obsidian-markdown` skill to write the file — it owns vault-specific formatting (wikilinks, callouts, frontmatter, tags).
 
-### Markdown flavour
+If neither a project repo nor a vault is identifiable, ask the user where to save.
 
-Infer the markdown flavour from the save destination:
-
-- **Obsidian vault path** → use Obsidian-flavored markdown: `[[wikilinks]]`, callouts (`> [!note]`), tags, frontmatter
-- **Anywhere else** → use standard markdown
+Always confirm the full path and filename with the user before writing.
 
 ### Creating the file
 
@@ -160,43 +155,86 @@ Write engineer-to-engineer for Mode 2, and peer-to-peer for Mode 1.
 
 ## Worked example — Mode 2 (explore and document)
 
-**Trigger:** *"Explore the auth flow in this repo and write the doc. Deep technical detail. Focus on token validation only — skip OAuth."*
+**Trigger:** *"Explore the sign-in flow in this Django REST repo and write the doc. Deep technical detail. Focus on the JWT sign-in API — what happens when the frontend calls it and what it returns."*
 
-**Skill asks:** *(already answered in trigger — depth: deep, scope: token validation only)*
+**Skill asks:** *(already answered in trigger — depth: deep, scope: sign-in API only)*
 
-**Skill explores:** traces `POST /login` → `AuthController` → `TokenService.validate()` → `JwtStrategy` → finds guard decorators, expiry logic, and a refresh path.
+**Skill explores:** traces `POST /api/auth/sign-in/` → `urls.py` → `SignInView` → `serializers.py` → `SimpleJWT TokenObtainPairView` → finds custom claims, response shape, and token storage guidance.
 
 **Draft produced:**
 
 ```markdown
-# Token Validation
+# JWT Sign-In API
 
 ## Overview
-The token validation flow verifies JWTs on every protected route using a Passport `JwtStrategy`. Tokens are checked for signature, expiry, and scope before the request reaches the controller.
+When the frontend sign-in page submits credentials, it calls `POST /api/auth/sign-in/`. Django REST Framework validates the credentials via `djangorestframework-simplejwt`, then returns an access token and a refresh token. The frontend stores these tokens and attaches the access token as a `Bearer` header on subsequent requests.
 
 ## How It Works
 
 ```mermaid
 sequenceDiagram
-    Client->>Guard: HTTP request + Bearer token
-    Guard->>JwtStrategy: validate(token)
-    JwtStrategy->>TokenService: verify signature + expiry
-    TokenService-->>JwtStrategy: decoded payload
-    JwtStrategy->>ScopeGuard: check required scopes
-    ScopeGuard-->>Controller: pass or 403
+    participant Browser
+    participant DRF as Django REST API
+    participant DB as Database
+
+    Browser->>DRF: POST /api/auth/sign-in/ {username, password}
+    DRF->>DB: Authenticate user (check username + hashed password)
+    DB-->>DRF: User object (or None)
+    DRF->>DRF: Generate JWT access + refresh tokens (SimpleJWT)
+    DRF-->>Browser: 200 OK { access, refresh }
+    Browser->>Browser: Store tokens (localStorage / cookie)
+    Browser->>DRF: GET /api/protected/ Authorization: Bearer <access>
+    DRF->>DRF: Validate JWT signature + expiry
+    DRF-->>Browser: 200 OK { ...data }
+```
+
+## Request
+
+`POST /api/auth/sign-in/`
+
+```json
+{
+  "username": "alice",
+  "password": "s3cr3t"
+}
+```
+
+## Response
+
+**Success — `200 OK`**
+
+```json
+{
+  "access": "jwt-access-token",
+  "refresh": "jwt-refresh-token"
+}
+```
+
+- `access` — short-lived JWT (default 5 min). Send as `Authorization: Bearer <access>` on protected requests.
+- `refresh` — long-lived JWT (default 1 day). Use `POST /api/auth/token/refresh/` to get a new access token without re-entering credentials.
+
+**Failure — `401 Unauthorized`**
+
+```json
+{
+  "detail": "No active account found with the given credentials"
+}
 ```
 
 ## Key Files / Entry Points
-- `src/auth/jwt.strategy.ts` — Passport strategy; calls `TokenService.validate()`
-- `src/auth/token.service.ts` — signature verification and expiry logic
-- `src/auth/scope.guard.ts` — checks `@RequireScopes()` decorator against payload
+
+- `urls.py` — registers `POST /api/auth/sign-in/` → `SignInView`
+- `views.py` — `SignInView` extends `TokenObtainPairView`; overrides `post()` to attach custom user fields to the response
+- `serializers.py` — `CustomTokenObtainPairSerializer` extends `TokenObtainPairSerializer`; injects `user_id` and `role` into the JWT payload via `get_token()`
+- `settings.py` — `SIMPLE_JWT` block controls `ACCESS_TOKEN_LIFETIME`, `REFRESH_TOKEN_LIFETIME`, `ALGORITHM`, and `SIGNING_KEY`
 
 ## Notes / Caveats
-- Tokens are not revoked on logout — only expiry enforced. A stolen valid token remains usable until it expires.
-- Clock skew tolerance is set to 30 s in `token.service.ts:42`; adjust if clients show spurious 401s.
+- Access tokens are stateless — logout on the client by discarding the token. The token remains valid server-side until it expires.
+- Refresh tokens are not rotated by default; enable `ROTATE_REFRESH_TOKENS = True` in `SIMPLE_JWT` if you need single-use refresh tokens.
+- Custom claims added in `get_token()` are encoded in the JWT but not re-validated on each request — keep them stable (e.g. do not put mutable roles in the token without a short expiry).
 ```
 
-**Skill then asks:** *"Happy with this draft? Where should I save it — I can suggest `docs/auth/token-validation.md` if that fits."*
+**Skill then asks:** *"Happy with this draft? Where should I save it — I can suggest `docs/auth/sign-in-api.md` if that fits."*
 
 ---
 
