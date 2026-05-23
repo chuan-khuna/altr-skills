@@ -28,6 +28,6 @@ Examples:
 
 ## References
 
-Resources for building skills are stored in `references/`. Consult these when creating or improving skills:
+Resources for building skills are stored in `.references/`. Consult these when creating or improving skills:
 
-- `references/The-Complete-Guide-to-Building-Skill-for-Claude.pdf` — authoritative guide covering skill structure, `SKILL.md` authoring, triggers, prompts, and best practices.
+- `.references/The-Complete-Guide-to-Building-Skill-for-Claude.pdf` — authoritative guide covering skill structure, `SKILL.md` authoring, triggers, prompts, and best practices.
