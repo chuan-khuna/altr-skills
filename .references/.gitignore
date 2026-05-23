@@ -1,0 +1,5 @@
+*
+!.gitignore
+
+# include these files
+!The-Complete-Guide-to-Building-Skill-for-Claude.pdf
