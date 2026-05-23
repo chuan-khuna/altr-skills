@@ -5,3 +5,4 @@ set windows-shell := ["pwsh", "-NoLogo", "-Command"]
 install-skills:
     bunx skills@1.5.0 add anthropics/skills --skill skill-creator --agent 'universal claude-code' -y -p
     bunx skills@1.5.0 add github/awesome-copilot --skill git-commit --agent 'universal claude-code' -y -p
+    bunx skills@1.5.0 add mattpocock/skills --skill grill-me --agent 'universal claude-code' -y -p
