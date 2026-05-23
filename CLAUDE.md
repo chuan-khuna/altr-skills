@@ -8,6 +8,18 @@ Every group must appear in the top-level `README.md` with a short description. E
 
 Each skill must also have an entry in `.claude-plugin/plugin.json`.
 
+## Artifacts
+
+LLM-generated artifacts (PRDs, issues, specs, etc.) are stored under `docs/artifacts/<category>/` using the naming convention:
+
+```
+docs/artifacts/<category>/yyyy-mm-dd-topic.md
+```
+
+Examples:
+- `docs/artifacts/prd/2026-05-23-skill-creator.md`
+- `docs/artifacts/issues/2026-05-23-add-git-commit-skill.md`
+
 ## References
 
 Resources for building skills are stored in `.references/`. Consult these when creating or improving skills:
