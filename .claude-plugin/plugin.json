@@ -9,6 +9,7 @@
     "./skills/productivity/quill-edit",
     "./skills/productivity/revise-prompt",
     "./skills/work/jira-standup-meeting",
-    "./skills/work/progress-summary"
+    "./skills/work/progress-summary",
+    "./skills/productivity/write-doc"
   ]
 }
