@@ -6,3 +6,6 @@ install-skills:
     bunx skills@1.5.0 add anthropics/skills --skill skill-creator --agent 'universal claude-code' -y -p
     bunx skills@1.5.0 add github/awesome-copilot --skill git-commit --agent 'universal claude-code' -y -p
     bunx skills@1.5.0 add mattpocock/skills --skill grill-me --agent 'universal claude-code' -y -p
+    bunx skills@1.5.0 add anthropics/skills --skill doc-coauthoring --agent 'universal claude-code' -y -p
+    bunx skills@1.5.0 add github/awesome-copilot --skill documentation-writer --agent 'universal claude-code' -y -p
+    bunx skills@1.5.0 add anthropics/knowledge-work-plugins --skill documentation --agent 'universal claude-code' -y -p
