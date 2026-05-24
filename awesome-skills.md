@@ -1,5 +1,7 @@
 # Awesome Skills
 
+A personal curation of agent skills I use across projects. These are skills from various authors that I've found useful and install regularly. Organised by category for quick reference.
+
 ## Skill installation command
 
 ```bash
