@@ -20,14 +20,18 @@ To install at the project level (saves to `.agents/` and symlinks to `.claude/`)
 ## Coding Skills
 
 Sources:
+
 - https://github.com/mattpocock/skills
 - https://github.com/thananon/9arm-skills
+- https://github.com/multica-ai/andrej-karpathy-skills
 
 ```bash
 bunx skills@1.5.0 add github/awesome-copilot --skill git-commit --agent 'universal claude-code' -y -p
 bunx skills@1.5.0 add mattpocock/skills --skill grill-me --agent 'universal claude-code' -y -p
 bunx skills@1.5.0 add mattpocock/skills --skill handoff --agent 'universal claude-code' -y -p
 bunx skills@1.5.0 add thananon/9arm-skills --skill scrutinize --agent 'universal claude-code' -y -p
+
+bunx skills@1.5.0 add multica-ai/andrej-karpathy-skills --agent 'universal claude-code' -y -p
 ```
 
 ## Documentation Skills
@@ -46,6 +50,7 @@ bunx skills@1.5.0 add kepano/obsidian-skills --agent 'universal claude-code' -y 
 ## Frontend Skills
 
 Sources:
+
 - https://vercel.com/docs/agent-resources/skills
 - https://www.usehallmark.com/
 - https://impeccable.style/
