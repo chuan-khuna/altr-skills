@@ -14,7 +14,7 @@ bunx skills@latest add <repo> --skill <skill-name>
 To install at the project level (saves to `.agents/` and symlinks to `.claude/`), append these flags to any install command:
 
 ```bash
---agent 'universal claude-code' -y -p
+-a 'universal' -a 'claude-code' -y -p
 ```
 
 ## Coding Skills
@@ -26,25 +26,25 @@ Sources:
 - https://github.com/multica-ai/andrej-karpathy-skills
 
 ```bash
-bunx skills@1.5.0 add github/awesome-copilot --skill git-commit --agent 'universal claude-code' -y -p
-bunx skills@1.5.0 add mattpocock/skills --skill grill-me --agent 'universal claude-code' -y -p
-bunx skills@1.5.0 add mattpocock/skills --skill handoff --agent 'universal claude-code' -y -p
-bunx skills@1.5.0 add thananon/9arm-skills --skill scrutinize --agent 'universal claude-code' -y -p
+bunx skills@1.5.0 add github/awesome-copilot --skill git-commit -a 'universal' -a 'claude-code' -y -p
+bunx skills@1.5.0 add mattpocock/skills --skill grill-me -a 'universal' -a 'claude-code' -y -p
+bunx skills@1.5.0 add mattpocock/skills --skill handoff -a 'universal' -a 'claude-code' -y -p
+bunx skills@1.5.0 add thananon/9arm-skills --skill scrutinize -a 'universal' -a 'claude-code' -y -p
 
-bunx skills@1.5.0 add multica-ai/andrej-karpathy-skills --agent 'universal claude-code' -y -p
+bunx skills@1.5.0 add multica-ai/andrej-karpathy-skills -a 'universal' -a 'claude-code' -y -p
 ```
 
 ## Documentation Skills
 
 ```bash
-bunx skills@1.5.0 add anthropics/skills --skill doc-coauthoring --agent 'universal claude-code' -y -p
+bunx skills@1.5.0 add anthropics/skills --skill doc-coauthoring -a 'universal' -a 'claude-code' -y -p
 ```
 
 ## Obsidian Skills
 
 ```bash
 # Installs all skills from the repo
-bunx skills@1.5.0 add kepano/obsidian-skills --agent 'universal claude-code' -y -p
+bunx skills@1.5.0 add kepano/obsidian-skills -a 'universal' -a 'claude-code' -y -p
 ```
 
 ## Frontend Skills
@@ -57,17 +57,17 @@ Sources:
 
 ```bash
 # Design taste skills
-bunx skills@1.5.0 add pbakaus/impeccable --agent 'universal claude-code' -y -p
-bunx skills@1.5.0 add Leonxlnx/taste-skill --agent 'universal claude-code' -y -p
-bunx skills@1.5.0 add nutlope/hallmark --agent 'universal claude-code' -y -p
+bunx skills@1.5.0 add pbakaus/impeccable -a 'universal' -a 'claude-code' -y -p
+bunx skills@1.5.0 add Leonxlnx/taste-skill -a 'universal' -a 'claude-code' -y -p
+bunx skills@1.5.0 add nutlope/hallmark -a 'universal' -a 'claude-code' -y -p
 
 # Vercel skills
-bunx skills@1.5.0 add vercel-labs/agent-skills --skill vercel-react-best-practices --agent 'universal claude-code' -y -p
-bunx skills@1.5.0 add vercel-labs/agent-skills --skill web-design-guidelines --agent 'universal claude-code' -y -p
-bunx skills@1.5.0 add vercel/components.build --skill building-components --agent 'universal claude-code' -y -p
-bunx skills@1.5.0 add vercel-labs/agent-browser --agent 'universal claude-code' -y -p
+bunx skills@1.5.0 add vercel-labs/agent-skills --skill vercel-react-best-practices -a 'universal' -a 'claude-code' -y -p
+bunx skills@1.5.0 add vercel-labs/agent-skills --skill web-design-guidelines -a 'universal' -a 'claude-code' -y -p
+bunx skills@1.5.0 add vercel/components.build --skill building-components -a 'universal' -a 'claude-code' -y -p
+bunx skills@1.5.0 add vercel-labs/agent-browser -a 'universal' -a 'claude-code' -y -p
 
-bunx skills@1.5.0 add anthropics/skills --skill frontend-design --agent 'universal claude-code' -y -p
+bunx skills@1.5.0 add anthropics/skills --skill frontend-design -a 'universal' -a 'claude-code' -y -p
 ```
 
 ## Other Tools & Skills Worth Exploring
