@@ -4,8 +4,6 @@
 > Search for every `<placeholder>` and fill it in, or delete the section if it doesn't apply to the project.
 > Remove this instruction block before committing.
 
----
-
 ## Project
 
 <project-description-paragraph-1: what is this project and who is it for?>
@@ -32,8 +30,6 @@ Use `bun` as the package manager (preferred). `npm` and `npx` are acceptable alt
 - `bunx skills@1.5.0 add ./project-skills -y -p` — installs local skills
   Delete this block if there are no project-specific scripts.>
 
----
-
 ## Adding shadcn components
 
 shadcn/ui requires the `@astrojs/react` integration and `tailwindcss`. Add components via:
@@ -43,8 +39,6 @@ bunx shadcn@latest add <component>
 ```
 
 Components land in `src/components/ui/`. Import them in `.astro` files using the `client:load` (or `client:visible`) directive since they are React components.
-
----
 
 ## Import alias
 
@@ -60,8 +54,6 @@ import { MyComponent } from "../../../components/MyComponent";
 ```
 
 This applies to `.astro`, `.tsx`, `.ts` — all source files.
-
----
 
 ## Architecture
 
@@ -82,8 +74,6 @@ public/                     # static assets served at /
 
 <architecture-notes: describe any non-obvious conventions, or delete this line>
 
----
-
 ## File & folder naming
 
 | What                     | Format       | Examples                      |
@@ -94,11 +84,7 @@ public/                     # static assets served at /
 | Data / config files      | `kebab-case` | `site.ts`, `menu-items.ts`    |
 | <other-naming-rules>     | <format>     | <examples>                    |
 
----
-
 ## Content collections
-
-<delete-if-unused: remove this entire section if the project does not use Astro content collections>
 
 ### Naming convention
 
@@ -144,23 +130,11 @@ When adding a new collection: create the definition file, add the content folder
 
 **Documentation rule:** Whenever you change `src/collection-definitions/**` or `src/data/**`, update the matching reference doc in `project-skills/manage-content/references/<topic>.md`. A task is not complete until the reference docs are in sync.
 
----
-
 ## Fonts
-
-<delete-if-unused: remove this entire section if the project has no custom font setup>
 
 **Font loading:** Astro Font API (`astro.config.mjs` → `fonts[]` with `fontProviders.google()`) + `FontLoader.astro` injected in `Layout.astro` `<head>`. CSS variables follow the `--font-<kebab-name>` convention (e.g. `--font-lato`).
 
 Do **not** add Google Fonts `@import` to CSS — configure new fonts in `astro.config.mjs` and add a `<Font cssVariable="..." />` entry in `src/components/FontLoader.astro`.
-
-Fonts in use:
-
-| Role   | Family        | CSS variable          |
-| ------ | ------------- | --------------------- |
-| <role> | <font-family> | `--font-<kebab-name>` |
-
----
 
 ## Styling
 
@@ -168,8 +142,6 @@ Fonts in use:
 - Define brand colours in `tailwind.config.*` (or as CSS variables for Tailwind v4) rather than hardcoding hex values in class names.
 - Use `cn()` from `@/lib/utils` for conditional or overridden class names.
 - <additional-styling-notes: e.g. "Use oklch CSS variables per theme" — or delete this line>
-
----
 
 ## Troubleshooting display and animation issues
 
@@ -184,8 +156,6 @@ When animations, visual effects, or interactive behavior don't work, the cause i
 
 If an animation works in isolation but breaks on the site, first check whether the component has the right `client:*` directive.
 
----
-
 ## Content management skill for LLM agent
 
 **Purpose:** Guide for adding or updating site content.
@@ -199,8 +169,6 @@ project-skills/manage-content/SKILL.md
 That file is the single source of truth for collection schemas, content formats, and doc-sync rules. It also acts as a routing table — pointing the agent to the correct reference doc for each collection or config.
 
 Reference docs live alongside the skill at `project-skills/manage-content/references/<topic>.md` — where `<topic>` matches the collection or config it describes (e.g. `books.md`, `site-config.md`). Whenever you change `src/collection-definitions/**` or `src/data/**`, update the matching reference doc. A task touching content is not complete until the skill and its reference docs are in sync.
-
----
 
 ## Special directories
 
@@ -226,13 +194,9 @@ docs/<type>/yyyy-mm-dd-<topic>.md
 
 The `<type>` folder is not limited to a fixed list — use whatever noun best describes the artifact. Common types include `prd`, `plan`, `research`, and `design`, but create new type folders as needed. Do not place artifacts directly in `docs/`.
 
----
-
 ## Deployment
 
 <deployment-notes: e.g. "Cloudflare Workers via @astrojs/cloudflare" | "Vercel — push to main triggers deploy" — or delete this section>
-
----
 
 ## Project-specific notes
 
