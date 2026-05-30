@@ -13,7 +13,7 @@
 ## Tech stack
 
 - **Astro** — <astro-use-case>
-- **Tailwind CSS** — <tailwind-use-case>
+- **Tailwind CSS v4** — <tailwind-use-case>
 - **shadcn/ui** — <shadcn-use-case>
 - **TypeScript (strict)** — <typescript-use-case>
 - **@tailwindcss/typography** — prose styles for rich-text / markdown content _(delete if unused)_
@@ -141,10 +141,21 @@ Do **not** add Google Fonts `@import` to CSS — configure new fonts in `astro.c
 
 ## Styling
 
-- Use **Tailwind** for all styling. Do not write custom CSS unless Tailwind cannot cover it.
-- Define brand colours in `tailwind.config.*` (or as CSS variables for Tailwind v4) rather than hardcoding hex values in class names.
+- Use **Tailwind CSS v4** for all styling. Do not write custom CSS unless Tailwind cannot cover it.
+- Tailwind v4 uses CSS-first configuration — there is no `tailwind.config.*` file. All theme tokens (colors, fonts, spacing, etc.) are defined as CSS custom properties inside `@theme { … }` in the global stylesheet.
+- Define brand colours as **oklch** CSS variables inside `@theme`:
+
+  ```css
+  @import "tailwindcss";
+
+  @theme {
+    --color-brand: oklch(55% 0.2 250);
+    --color-brand-light: oklch(75% 0.15 250);
+  }
+  ```
+
+- Never hardcode hex or hsl colour values in class names or inline styles — always reference a theme variable.
 - Use `cn()` from `@/lib/utils` for conditional or overridden class names.
-- <additional-styling-notes: e.g. "Use oklch CSS variables per theme" — or delete this line>
 
 ## Troubleshooting display and animation issues
 
