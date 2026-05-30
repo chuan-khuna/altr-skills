@@ -16,6 +16,7 @@
 - **Tailwind CSS** — <tailwind-use-case>
 - **shadcn/ui** — <shadcn-use-case>
 - **TypeScript (strict)** — <typescript-use-case>
+- **@tailwindcss/typography** — prose styles for rich-text / markdown content _(delete if unused)_
 - <additional-dependency: e.g. "**Framer Motion** — page and scroll animations"> _(delete if unused)_
 
 ---
@@ -160,7 +161,16 @@ If an animation works in isolation but breaks on the site, first check whether t
 
 ## Content management skill for LLM agent
 
-**Purpose:** Guide for adding or updating site content.
+```yaml
+---
+name: manage-content
+description: >
+  Guide for adding or editing site content. Use this skill when the user asks to:
+  - Add or edit <content-type: e.g. "a quote entry", "a blog post">
+  - Configure the site (title, description, social links)
+  - Know the correct frontmatter format for any content type
+---
+```
 
 Before adding, editing, or restructuring any content (collection definitions, data files, static config), read the skill file first:
 
