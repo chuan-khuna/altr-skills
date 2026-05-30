@@ -208,6 +208,8 @@ The `<type>` folder is not limited to a fixed list — use whatever noun best de
 
 ## Deployment
 
+Cloudflare: https://docs.astro.build/en/guides/integrations-guide/cloudflare/
+
 <deployment-notes: e.g. "Cloudflare Workers via @astrojs/cloudflare" | "Vercel — push to main triggers deploy" — or delete this section>
 
 ## Project-specific notes
