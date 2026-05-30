@@ -86,6 +86,8 @@ public/                     # static assets served at /
 
 ## Content collections
 
+https://docs.astro.build/en/guides/content-collections/
+
 ### Naming convention
 
 Definition file is **singular**; exported variable and content folder are **plural** — all three are trivially derivable from each other:
