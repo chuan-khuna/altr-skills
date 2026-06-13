@@ -26,25 +26,32 @@ Sources:
 - https://github.com/multica-ai/andrej-karpathy-skills
 
 ```bash
-bunx skills@1.5.0 add github/awesome-copilot --skill git-commit -a 'universal' -a 'claude-code' -y -p
-bunx skills@1.5.0 add mattpocock/skills --skill grill-me -a 'universal' -a 'claude-code' -y -p
-bunx skills@1.5.0 add mattpocock/skills --skill handoff -a 'universal' -a 'claude-code' -y -p
-bunx skills@1.5.0 add thananon/9arm-skills --skill scrutinize -a 'universal' -a 'claude-code' -y -p
+npx skills add github/awesome-copilot --skill git-commit -a 'universal' -a 'claude-code' -y -p
+npx skills add mattpocock/skills --skill grill-me -a 'universal' -a 'claude-code' -y -p
+npx skills add mattpocock/skills --skill handoff -a 'universal' -a 'claude-code' -y -p
+npx skills add thananon/9arm-skills --skill scrutinize -a 'universal' -a 'claude-code' -y -p
 
-bunx skills@1.5.0 add multica-ai/andrej-karpathy-skills -a 'universal' -a 'claude-code' -y -p
+npx skills add multica-ai/andrej-karpathy-skills -a 'universal' -a 'claude-code' -y -p
 ```
+
+Mattpocock's sets
+
+```bash
+npx skills add mattpocock/skills --skill 'handoff grill-me grill-with-docs to-prd to-issues' -a 'universal' -a 'claude-code' -y -p
+```
+
 
 ## Documentation Skills
 
 ```bash
-bunx skills@1.5.0 add anthropics/skills --skill doc-coauthoring -a 'universal' -a 'claude-code' -y -p
+npx skills add anthropics/skills --skill doc-coauthoring -a 'universal' -a 'claude-code' -y -p
 ```
 
 ## Obsidian Skills
 
 ```bash
 # Installs all skills from the repo
-bunx skills@1.5.0 add kepano/obsidian-skills -a 'universal' -a 'claude-code' -y -p
+npx skills add kepano/obsidian-skills -a 'universal' -a 'claude-code' -y -p
 ```
 
 ## Frontend Skills
@@ -57,17 +64,17 @@ Sources:
 
 ```bash
 # Design taste skills
-bunx skills@1.5.0 add pbakaus/impeccable -a 'universal' -a 'claude-code' -y -p
-bunx skills@1.5.0 add Leonxlnx/taste-skill -a 'universal' -a 'claude-code' -y -p
-bunx skills@1.5.0 add nutlope/hallmark -a 'universal' -a 'claude-code' -y -p
+npx skills add pbakaus/impeccable -a 'universal' -a 'claude-code' -y -p
+npx skills add Leonxlnx/taste-skill -a 'universal' -a 'claude-code' -y -p
+npx skills add nutlope/hallmark -a 'universal' -a 'claude-code' -y -p
 
 # Vercel skills
-bunx skills@1.5.0 add vercel-labs/agent-skills --skill vercel-react-best-practices -a 'universal' -a 'claude-code' -y -p
-bunx skills@1.5.0 add vercel-labs/agent-skills --skill web-design-guidelines -a 'universal' -a 'claude-code' -y -p
-bunx skills@1.5.0 add vercel/components.build --skill building-components -a 'universal' -a 'claude-code' -y -p
-bunx skills@1.5.0 add vercel-labs/agent-browser -a 'universal' -a 'claude-code' -y -p
+npx skills add vercel-labs/agent-skills --skill vercel-react-best-practices -a 'universal' -a 'claude-code' -y -p
+npx skills add vercel-labs/agent-skills --skill web-design-guidelines -a 'universal' -a 'claude-code' -y -p
+npx skills add vercel/components.build --skill building-components -a 'universal' -a 'claude-code' -y -p
+npx skills add vercel-labs/agent-browser -a 'universal' -a 'claude-code' -y -p
 
-bunx skills@1.5.0 add anthropics/skills --skill frontend-design -a 'universal' -a 'claude-code' -y -p
+npx skills add anthropics/skills --skill frontend-design -a 'universal' -a 'claude-code' -y -p
 ```
 
 ## Other Tools & Skills Worth Exploring
