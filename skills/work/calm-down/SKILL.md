@@ -73,6 +73,7 @@ For **html**, do **not** write the file from scratch. Copy the template and fill
    - Replace the single example `<article class="task-card">` with one per task. Give each a unique `id` (`task-1`, `task-2`, …) and keep the `spy-target` class.
    - Mirror every task in the TOC `<ul class="toc-sub">`, with each `href` matching its article `id`.
    - Add `<pre><code class="language-*">` code blocks or `<div class="diagram-wrapper"><pre class="mermaid">` diagrams inside task cards only where needed. Uncomment the mermaid `<script>` block at the bottom only if a diagram is present.
+   - For a real gotcha, add a red heads-up callout inside the task card: `<div class="callout warn"><span class="callout-label">Heads up</span><p>…</p></div>`. Use the green `.callout.done` variant only to flag an already-completed state. Blue is the primary colour for all other accents — do not repurpose red/green decoratively.
    - Leave the `<style>` block and the shiki / scroll-spy scripts untouched.
 
 The boilerplate already implements the full design system in `references/DESIGN.md`; `references/DESIGN.md` is the spec and `references/DESIGN.html` is the rendered reference. Do not re-derive the CSS.

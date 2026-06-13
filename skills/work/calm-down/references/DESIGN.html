@@ -7,27 +7,39 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inconsolata:wght@400;500&display=swap"
     rel="stylesheet"
   />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --canvas: oklch(0.984 0.003 247.858);
+      /* Neutrals — tuned to the primary blue hue (246) so everything harmonises */
+      --canvas: oklch(0.984 0.003 246);
       --surface: oklch(1 0 0);
-      --surface-alt: oklch(0.968 0.005 247.9);
-      --ink: oklch(0.208 0.042 265.755);
-      --body: oklch(0.446 0.043 257.281);
-      --muted: oklch(0.554 0.041 257.417);
-      --border: oklch(0.929 0.013 255.508);
-      --border-strong: oklch(0.869 0.022 252.894);
-      --accent: oklch(0.488 0.243 264.376);
-      --accent-strong: oklch(0.424 0.199 265.638);
-      --accent-soft: oklch(0.962 0.018 272.314);
+      --surface-alt: oklch(0.967 0.006 246);
+      --ink: oklch(0.23 0.03 246);
+      --body: oklch(0.45 0.03 246);
+      --muted: oklch(0.56 0.028 246);
+      --border: oklch(0.928 0.012 246);
+      --border-strong: oklch(0.865 0.022 246);
+
+      /* Primary — blue. Used for all structural accents (borders, links, active states). */
+      --accent: oklch(0.6276 0.0839 246.04);
+      --accent-strong: oklch(0.52 0.092 246.04);
+      --accent-soft: oklch(0.955 0.022 246.04);
       --on-accent: oklch(1 0 0);
+
+      /* Semantic — specific situations only. Green = done/success, red = warning/heads-up. */
+      --success: oklch(0.7188 0.1184 147.57);
+      --success-strong: oklch(0.55 0.11 147.57);
+      --success-soft: oklch(0.955 0.04 147.57);
+      --danger: oklch(0.5923 0.1677 21.57);
+      --danger-strong: oklch(0.52 0.16 21.57);
+      --danger-soft: oklch(0.955 0.035 21.57);
+
       --rounded: 0px;
-      --mono: "JetBrains Mono", ui-monospace, monospace;
+      --mono: "Inconsolata", ui-monospace, monospace;
     }
 
     body {
@@ -65,7 +77,7 @@
 
     /* ── Sections ── */
     .section { margin-bottom: 2.5rem; }
-    .section > h2 { font-size: 1.125rem; font-weight: 600; color: var(--ink); padding-left: 0.75rem; border-left: 3px solid var(--accent); margin-bottom: 0.875rem; line-height: 1.4; }
+    .section > h2 { font-size: 1.125rem; font-weight: 600; color: var(--ink); margin-bottom: 0.875rem; line-height: 1.4; }
     .section > h3 { font-size: 1rem; font-weight: 600; color: var(--ink); margin: 1.5rem 0 0.75rem; }
     .section p { font-size: 0.9375rem; color: var(--body); margin-bottom: 0.75rem; }
     .section p:last-child { margin-bottom: 0; }
@@ -106,12 +118,15 @@
     .tasks { display: flex; flex-direction: column; gap: 1rem; }
     .task-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rounded); padding: 24px; }
     .task-card h4 { font-size: 1rem; font-weight: 600; color: var(--ink); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.125rem; line-height: 1.4; }
-    .task-num { display: inline-flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; background: var(--accent-soft); color: var(--accent); border-radius: var(--rounded); font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; flex-shrink: 0; line-height: 1; }
+    .task-num { display: inline-flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; background: var(--accent-soft); color: var(--accent-strong); border-radius: var(--rounded); font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; flex-shrink: 0; line-height: 1; }
 
-    .io-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .io-row { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; }
     .io-block { background: var(--surface-alt); border-radius: var(--rounded); padding: 12px 16px; }
     .io-label { display: block; font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.3rem; }
     .io-block p { font-size: 0.875rem; color: var(--body); line-height: 1.55; margin: 0; }
+    .io-block ul { list-style: none; display: flex; flex-direction: column; gap: 0.25rem; }
+    .io-block li { position: relative; padding-left: 0.875rem; font-size: 0.875rem; color: var(--body); line-height: 1.55; }
+    .io-block li::before { content: ""; position: absolute; left: 0; top: 0.5em; width: 0.25rem; height: 0.25rem; background: var(--accent); }
 
     .checklist-heading { font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.5rem; }
     .checklist ul { list-style: none; display: flex; flex-direction: column; gap: 0.375rem; }
@@ -123,11 +138,20 @@
       transition: background 0.15s, border-color 0.15s;
     }
     .checklist li input[type="checkbox"]:checked {
-      background-color: var(--accent); border-color: var(--accent);
+      background-color: var(--success); border-color: var(--success);
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='white' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
       background-size: 75%; background-position: center; background-repeat: no-repeat;
     }
     .checklist li input[type="checkbox"]:checked + span { color: var(--muted); text-decoration: line-through; }
+
+    /* ── Callouts — semantic, optional. .warn = red (heads-up), .done = green (success). ── */
+    .callout { border-left: 3px solid; border-radius: var(--rounded); padding: 12px 16px; margin-bottom: 1.25rem; }
+    .callout-label { display: block; font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem; }
+    .callout p { font-size: 0.875rem; color: var(--body); line-height: 1.55; margin: 0; }
+    .callout.warn { background: var(--danger-soft); border-left-color: var(--danger); }
+    .callout.warn .callout-label { color: var(--danger-strong); }
+    .callout.done { background: var(--success-soft); border-left-color: var(--success-strong); }
+    .callout.done .callout-label { color: var(--success-strong); }
 
     /* ── Code (shiki) ── */
     .shiki { border-radius: var(--rounded); overflow: hidden; margin: 1rem 0; font-family: var(--mono); font-size: 0.875rem; line-height: 1.6; }
@@ -162,7 +186,6 @@
     }
     @media (max-width: 559px) {
       .shell { padding: 2rem 1rem 4rem; }
-      .io-row { grid-template-columns: 1fr; }
       .dos-donts { grid-template-columns: 1fr; }
     }
   </style>
@@ -172,7 +195,7 @@
     <header class="page-header">
       <h1>Calm-Down Assignment Paper</h1>
       <span class="meta">Design System · v alpha · DESIGN.md</span>
-      <p class="lede">A quiet, paper-like document theme for calm-down assignment hand-offs. Cool off-white canvas, slate ink, a single slate-blue accent, clear hairline borders, and crisp near-square corners. This page is the design system rendered in its own theme.</p>
+      <p class="lede">A quiet, paper-like document theme for calm-down assignment hand-offs. Cool off-white canvas, slate ink, one blue primary accent (green and red for semantic states only), clear hairline borders, and square corners. This page is the design system rendered in its own theme.</p>
     </header>
 
     <div class="layout">
@@ -180,41 +203,60 @@
 
         <section class="section spy-target" id="overview">
           <h2>Overview</h2>
-          <p>The personality is calm, legible, and structural — a teammate should be able to pick a document up cold and read it like a printed memo. The page floor is a cool off-white (<code>canvas</code>) rather than pure white, giving the surface a soft "paper" quality. There is no decoration, no gradient, and no atmospheric depth — <strong>structure is carried entirely by clear 1px hairline borders and near-square corners</strong>, never by shadow.</p>
-          <p>A single slate-blue accent is the only chromatic voltage in the system. It marks the one thing the reader's eye should follow: the active table-of-contents entry, a checked task, a task-number badge. Everything else is slate ink on paper.</p>
+          <p>The personality is calm, legible, and structural — a teammate should be able to pick a document up cold and read it like a printed memo. The page floor is a cool off-white (<code>canvas</code>) rather than pure white, giving the surface a soft "paper" quality. There is no decoration, no gradient, and no atmospheric depth — <strong>structure is carried entirely by clear 1px hairline borders and square corners</strong>, never by shadow.</p>
+          <p>One blue accent is the system's primary voltage — it marks the structure the reader's eye should follow: the active table-of-contents entry, the task-number badge, IO bullets. Two semantic colours sit beside it for specific situations only: green for a done/success state (a checked task, a done callout) and red for a warning (a heads-up callout). Everything else is slate ink on paper.</p>
           <p>The document is a two-column broadsheet: wide content on the left, a narrow sticky table of contents on the right, with equal gutters outside both. On narrow screens the layout collapses to a single column and the TOC folds into a "Contents" disclosure at the top.</p>
         </section>
 
         <section class="section spy-target" id="colors">
           <h2>Colors</h2>
-          <p>A cool-paper neutral ramp anchored by one slate-blue accent. All tokens are authored in <code>oklch()</code>.</p>
+          <p>Three token groups, authored in <code>oklch()</code>: a cool-paper <strong>neutral</strong> ramp, one <strong>primary</strong> blue for all structure, and a <strong>semantic</strong> pair — green for done/success, red for warnings — used only in specific situations.</p>
+
+          <h3 class="spy-target" id="colors-neutral">Neutral</h3>
+          <p>The paper ramp. Every neutral is tuned to the primary blue hue (246) so the greys carry a faint cool cast and the page reads as one family.</p>
           <div class="swatch-grid">
-            <div class="swatch"><div class="chip" style="background: var(--canvas)"></div><div class="info"><div class="name">canvas</div><div class="val">oklch(0.984 0.003 247.858)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--canvas)"></div><div class="info"><div class="name">canvas</div><div class="val">oklch(0.984 0.003 246)</div></div></div>
             <div class="swatch"><div class="chip" style="background: var(--surface)"></div><div class="info"><div class="name">surface</div><div class="val">oklch(1 0 0)</div></div></div>
-            <div class="swatch"><div class="chip" style="background: var(--surface-alt)"></div><div class="info"><div class="name">surface-alt</div><div class="val">oklch(0.968 0.005 247.9)</div></div></div>
-            <div class="swatch"><div class="chip" style="background: var(--ink)"></div><div class="info"><div class="name">ink</div><div class="val">oklch(0.208 0.042 265.755)</div></div></div>
-            <div class="swatch"><div class="chip" style="background: var(--body)"></div><div class="info"><div class="name">body</div><div class="val">oklch(0.446 0.043 257.281)</div></div></div>
-            <div class="swatch"><div class="chip" style="background: var(--muted)"></div><div class="info"><div class="name">muted</div><div class="val">oklch(0.554 0.041 257.417)</div></div></div>
-            <div class="swatch"><div class="chip" style="background: var(--border)"></div><div class="info"><div class="name">border</div><div class="val">oklch(0.929 0.013 255.508)</div></div></div>
-            <div class="swatch"><div class="chip" style="background: var(--border-strong)"></div><div class="info"><div class="name">border-strong</div><div class="val">oklch(0.869 0.022 252.894)</div></div></div>
-            <div class="swatch"><div class="chip" style="background: var(--accent)"></div><div class="info"><div class="name">accent</div><div class="val">oklch(0.488 0.243 264.376)</div></div></div>
-            <div class="swatch"><div class="chip" style="background: var(--accent-strong)"></div><div class="info"><div class="name">accent-strong</div><div class="val">oklch(0.424 0.199 265.638)</div></div></div>
-            <div class="swatch"><div class="chip" style="background: var(--accent-soft)"></div><div class="info"><div class="name">accent-soft</div><div class="val">oklch(0.962 0.018 272.314)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--surface-alt)"></div><div class="info"><div class="name">surface-alt</div><div class="val">oklch(0.967 0.006 246)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--ink)"></div><div class="info"><div class="name">ink</div><div class="val">oklch(0.23 0.03 246)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--body)"></div><div class="info"><div class="name">body</div><div class="val">oklch(0.45 0.03 246)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--muted)"></div><div class="info"><div class="name">muted</div><div class="val">oklch(0.56 0.028 246)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--border)"></div><div class="info"><div class="name">border</div><div class="val">oklch(0.928 0.012 246)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--border-strong)"></div><div class="info"><div class="name">border-strong</div><div class="val">oklch(0.865 0.022 246)</div></div></div>
+          </div>
+
+          <h3 class="spy-target" id="colors-primary">Primary — Blue</h3>
+          <p>The only structural colour: links, the active TOC entry, task-number badges, IO bullets, focus.</p>
+          <div class="swatch-grid">
+            <div class="swatch"><div class="chip" style="background: var(--accent)"></div><div class="info"><div class="name">accent</div><div class="val">oklch(0.6276 0.0839 246.04)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--accent-strong)"></div><div class="info"><div class="name">accent-strong</div><div class="val">oklch(0.52 0.092 246.04)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--accent-soft)"></div><div class="info"><div class="name">accent-soft</div><div class="val">oklch(0.955 0.022 246.04)</div></div></div>
             <div class="swatch"><div class="chip" style="background: var(--on-accent)"></div><div class="info"><div class="name">on-accent</div><div class="val">oklch(1 0 0)</div></div></div>
+          </div>
+
+          <h3 class="spy-target" id="colors-semantic">Semantic — Green &amp; Red</h3>
+          <p>Reserved for specific situations. <strong>Green</strong> = done/success (checked items, <code>.callout.done</code>). <strong>Red</strong> = warning (<code>.callout.warn</code> heads-up). Never decorative.</p>
+          <div class="swatch-grid">
+            <div class="swatch"><div class="chip" style="background: var(--success)"></div><div class="info"><div class="name">success</div><div class="val">oklch(0.7188 0.1184 147.57)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--success-strong)"></div><div class="info"><div class="name">success-strong</div><div class="val">oklch(0.55 0.11 147.57)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--success-soft)"></div><div class="info"><div class="name">success-soft</div><div class="val">oklch(0.955 0.04 147.57)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--danger)"></div><div class="info"><div class="name">danger</div><div class="val">oklch(0.5923 0.1677 21.57)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--danger-strong)"></div><div class="info"><div class="name">danger-strong</div><div class="val">oklch(0.52 0.16 21.57)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--danger-soft)"></div><div class="info"><div class="name">danger-soft</div><div class="val">oklch(0.955 0.035 21.57)</div></div></div>
           </div>
         </section>
 
         <section class="section spy-target" id="typography">
           <h2>Typography</h2>
-          <p><strong>Inter</strong> for headings and body; <strong>JetBrains Mono</strong> for labels, the table of contents, the date, and IO tags. The proportional/monospace split is the system's editorial signature.</p>
+          <p><strong>Inter</strong> for headings and body; <strong>Inconsolata</strong> for labels, the table of contents, the date, and IO tags. The proportional/monospace split is the system's editorial signature.</p>
 
           <div class="specimen"><div class="tag">title · Inter 700 · 1.75rem</div><div class="sp-title">Automated Deployment Setup</div></div>
           <div class="specimen"><div class="tag">section · Inter 600 · 1.125rem</div><div class="sp-section">Background</div></div>
           <div class="specimen"><div class="tag">task · Inter 600 · 1rem</div><div class="sp-task">Write the deploy script</div></div>
           <div class="specimen"><div class="tag">body-md · Inter 400 · 0.9375rem</div><div class="sp-body-md">Wire up the existing CI to handle deploys automatically on every push to main.</div></div>
           <div class="specimen"><div class="tag">body-sm · Inter 400 · 0.875rem</div><div class="sp-body-sm">SSH access to the production server and the docker-compose file.</div></div>
-          <div class="specimen"><div class="tag">label · JetBrains Mono 500 · 0.6875rem</div><div class="sp-label">Checklist</div></div>
-          <div class="specimen"><div class="tag">meta · JetBrains Mono 400 · 0.8125rem</div><div class="sp-meta">2026-06-13</div></div>
+          <div class="specimen"><div class="tag">label · Inconsolata 500 · 0.6875rem</div><div class="sp-label">Checklist</div></div>
+          <div class="specimen"><div class="tag">meta · Inconsolata 400 · 0.8125rem</div><div class="sp-meta">2026-06-13</div></div>
         </section>
 
         <section class="section spy-target" id="layout">
@@ -241,7 +283,8 @@
               <tr><td class="mono">Paper</td><td>canvas background, no border</td><td>Page floor</td></tr>
               <tr><td class="mono">Hairline</td><td>1px border</td><td>Cards, header rule, dividers</td></tr>
               <tr><td class="mono">Tinted fill</td><td>surface-alt, no border</td><td>IO blocks inside cards</td></tr>
-              <tr><td class="mono">Accent rule</td><td>3px accent left border</td><td>Section headings, active TOC</td></tr>
+              <tr><td class="mono">Accent rule</td><td>2px accent left border</td><td>Active TOC entry</td></tr>
+              <tr><td class="mono">Semantic rule</td><td>3px danger / success left border</td><td>Callouts (.warn / .done)</td></tr>
             </tbody>
           </table>
         </section>
@@ -267,7 +310,11 @@
               <div class="io-row">
                 <div class="io-block">
                   <span class="io-label">Input</span>
-                  <p>SSH access to the production server, the <code>docker-compose.yml</code>, and the list of services to restart.</p>
+                  <ul>
+                    <li>SSH access to the production server</li>
+                    <li>The <code>docker-compose.yml</code></li>
+                    <li>The list of services to restart</li>
+                  </ul>
                 </div>
                 <div class="io-block">
                   <span class="io-label">Output</span>
@@ -282,8 +329,14 @@
                   <li><label><input type="checkbox" /><span>Idempotent — running twice produces the same result</span></label></li>
                 </ul>
               </div>
+              <div class="callout warn"><span class="callout-label">Heads up</span><p>The old <code>deploy.sh</code> still lives on the server — delete it before the first run or both will fire.</p></div>
             </article>
           </div>
+
+          <h3 class="spy-target" id="comp-callout">Callouts</h3>
+          <p>Semantic blocks for specific situations only. <strong>Red (<code>.warn</code>)</strong> flags a gotcha; <strong>green (<code>.done</code>)</strong> marks an already-finished state. Input/Output may be written as a paragraph or, as above, a bullet list. Blue stays the primary colour everywhere else — never use red or green decoratively.</p>
+          <div class="callout warn"><span class="callout-label">Heads up</span><p>Rotating the API key invalidates every staging token — coordinate with QA before you do it.</p></div>
+          <div class="callout done"><span class="callout-label">Done</span><p>The S3 bucket and IAM role already exist from the previous migration; no need to recreate them.</p></div>
 
           <h3 class="spy-target" id="comp-code">Code Block</h3>
           <p>Inline <code>&lt;pre&gt;&lt;code class="language-*"&gt;</code> blocks render via shiki <strong>catppuccin-mocha</strong> — deliberate dark islands on the paper.</p>
@@ -318,9 +371,9 @@ graph LR
               <h4>Do</h4>
               <ul>
                 <li>Keep the canvas as paper and let 1px hairlines carry structure.</li>
-                <li>Use the slate-blue accent only for interaction, active TOC, and checked items.</li>
-                <li>Set every label, the TOC, and the date in uppercase JetBrains Mono.</li>
-                <li>Keep corners crisp — 0px or 4px, never softer.</li>
+                <li>Use blue for structure; green for done/success (checked items, done callouts), red for warnings.</li>
+                <li>Set every label, the TOC, and the date in uppercase Inconsolata.</li>
+                <li>Keep every corner square — 0px, no exceptions.</li>
                 <li>Keep the header to title + date only.</li>
               </ul>
             </div>
@@ -329,7 +382,7 @@ graph LR
               <ul>
                 <li>Don't add drop shadows — depth is borders, never shadow.</li>
                 <li>Don't use pure white as the page floor.</li>
-                <li>Don't introduce a second accent hue.</li>
+                <li>Don't add a fourth hue — blue is primary, green and red are semantic-only, never decorative.</li>
                 <li>Don't set body in mono, or labels in Inter.</li>
                 <li>Don't give the code block a light theme — the dark island is intentional.</li>
               </ul>
@@ -345,7 +398,7 @@ graph LR
             <tbody>
               <tr><td class="mono">Desktop</td><td class="mono">≥ 1024px</td><td>Content + sticky TOC, 48px gap</td></tr>
               <tr><td class="mono">Narrow</td><td class="mono">&lt; 1024px</td><td>Single column; TOC folds to a Contents block</td></tr>
-              <tr><td class="mono">Mobile</td><td class="mono">&lt; 560px</td><td>IO blocks stack one-up; reduced padding</td></tr>
+              <tr><td class="mono">Mobile</td><td class="mono">&lt; 560px</td><td>Reduced shell padding (IO blocks are always stacked)</td></tr>
             </tbody>
           </table>
         </section>

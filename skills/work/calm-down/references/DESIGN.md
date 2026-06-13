@@ -1,21 +1,30 @@
 ---
 version: alpha
 name: Calm-Down Assignment Paper
-description: A quiet, paper-like document theme for calm-down assignment hand-offs. A cool off-white canvas holds slate-ink Inter prose with JetBrains Mono for labels and navigation. Structure comes from clear 1px hairline borders and fully square (0px) corners rather than shadow or color. A single slate-blue accent marks interaction and the active table-of-contents entry. The page reads as a two-column broadsheet — content left, a sticky table of contents right — collapsing to a single column with a foldable Contents block on narrow screens.
+description: A quiet, paper-like document theme for calm-down assignment hand-offs. A cool off-white canvas holds slate-ink Inter prose with Inconsolata for labels and navigation. Structure comes from clear 1px hairline borders and fully square (0px) corners rather than shadow or color. A single blue accent (the primary colour) marks interaction and the active table-of-contents entry; green and red are reserved for specific situations — green for done/success states (checked items, success callouts), red for warnings (heads-up callouts). The page reads as a two-column broadsheet — content left, a sticky table of contents right — collapsing to a single column with a foldable Contents block on narrow screens.
 
 colors:
-  canvas: "oklch(0.984 0.003 247.858)"
+  # Neutrals — tuned to the primary blue hue (246) so everything harmonises
+  canvas: "oklch(0.984 0.003 246)"
   surface: "oklch(1 0 0)"
-  surface-alt: "oklch(0.968 0.005 247.9)"
-  ink: "oklch(0.208 0.042 265.755)"
-  body: "oklch(0.446 0.043 257.281)"
-  muted: "oklch(0.554 0.041 257.417)"
-  border: "oklch(0.929 0.013 255.508)"
-  border-strong: "oklch(0.869 0.022 252.894)"
-  accent: "oklch(0.488 0.243 264.376)"
-  accent-strong: "oklch(0.424 0.199 265.638)"
-  accent-soft: "oklch(0.962 0.018 272.314)"
+  surface-alt: "oklch(0.967 0.006 246)"
+  ink: "oklch(0.23 0.03 246)"
+  body: "oklch(0.45 0.03 246)"
+  muted: "oklch(0.56 0.028 246)"
+  border: "oklch(0.928 0.012 246)"
+  border-strong: "oklch(0.865 0.022 246)"
+  # Primary — blue. All structural accents.
+  accent: "oklch(0.6276 0.0839 246.04)"
+  accent-strong: "oklch(0.52 0.092 246.04)"
+  accent-soft: "oklch(0.955 0.022 246.04)"
   on-accent: "oklch(1 0 0)"
+  # Semantic — specific situations only. Green = done/success, red = warning.
+  success: "oklch(0.7188 0.1184 147.57)"
+  success-strong: "oklch(0.55 0.11 147.57)"
+  success-soft: "oklch(0.955 0.04 147.57)"
+  danger: "oklch(0.5923 0.1677 21.57)"
+  danger-strong: "oklch(0.52 0.16 21.57)"
+  danger-soft: "oklch(0.955 0.035 21.57)"
 
 typography:
   title:
@@ -45,24 +54,24 @@ typography:
     fontWeight: 400
     lineHeight: 1.55
   label:
-    fontFamily: "'JetBrains Mono', ui-monospace, monospace"
+    fontFamily: "'Inconsolata', ui-monospace, monospace"
     fontSize: 0.6875rem
     fontWeight: 500
     lineHeight: 1.3
     letterSpacing: 0.08em
   toc-link:
-    fontFamily: "'JetBrains Mono', ui-monospace, monospace"
+    fontFamily: "'Inconsolata', ui-monospace, monospace"
     fontSize: 0.8125rem
     fontWeight: 500
     lineHeight: 1.5
   meta:
-    fontFamily: "'JetBrains Mono', ui-monospace, monospace"
+    fontFamily: "'Inconsolata', ui-monospace, monospace"
     fontSize: 0.8125rem
     fontWeight: 400
     lineHeight: 1.4
     letterSpacing: 0.02em
   code:
-    fontFamily: "'JetBrains Mono', ui-monospace, monospace"
+    fontFamily: "'Inconsolata', ui-monospace, monospace"
     fontSize: 0.875rem
     fontWeight: 400
     lineHeight: 1.6
@@ -127,7 +136,7 @@ components:
     padding: 24px
   task-num:
     backgroundColor: "{colors.accent-soft}"
-    textColor: "{colors.accent}"
+    textColor: "{colors.accent-strong}"
     typography: "{typography.label}"
     rounded: "{rounded.none}"
     size: 24px
@@ -155,9 +164,21 @@ components:
     rounded: "{rounded.none}"
     size: 16px
   checkbox-checked:
-    backgroundColor: "{colors.accent}"
+    backgroundColor: "{colors.success}"
     textColor: "{colors.on-accent}"
     rounded: "{rounded.none}"
+  callout-warn:
+    backgroundColor: "{colors.danger-soft}"
+    textColor: "{colors.body}"
+    borderColor: "{colors.danger}"
+    rounded: "{rounded.none}"
+    padding: 12px 16px
+  callout-done:
+    backgroundColor: "{colors.success-soft}"
+    textColor: "{colors.body}"
+    borderColor: "{colors.success-strong}"
+    rounded: "{rounded.none}"
+    padding: 12px 16px
   code-block:
     backgroundColor: "#1e1e2e"
     textColor: "#cdd6f4"
@@ -175,7 +196,7 @@ components:
 
 This is a **quiet, paper-like** document theme for calm-down assignment hand-offs. The personality is calm, legible, and structural — a teammate should be able to pick the document up cold and read it like a printed memo. The page floor is a cool off-white (`{colors.canvas}`) rather than pure white, giving the surface a soft "paper" quality. There is no decoration, no gradient, and no atmospheric depth — **structure is carried entirely by clear 1px hairline borders and square (0px) corners**, never by shadow.
 
-A single **slate-blue accent** (`{colors.accent}`) is the only chromatic voltage in the system. It marks the one thing the reader's eye should follow at any moment: the active table-of-contents entry, a checked task, a task number badge. Everything else is slate ink on paper.
+One **blue accent** (`{colors.accent}`) is the system's primary voltage — it marks the structure the reader's eye should follow: the active table-of-contents entry, the task number badge, IO bullets. Two **semantic** colours sit beside it for specific situations only: **green** (`{colors.success}`) for a done/success state — a checked task, a done callout — and **red** (`{colors.danger}`) for a warning heads-up callout. Everything else is slate ink on paper.
 
 The document is a **two-column broadsheet**: wide content on the left, a narrow **sticky table of contents** on the right, with equal gutters outside both. On narrow screens the layout collapses to a single column and the TOC folds into a "Contents" disclosure at the top.
 
@@ -184,13 +205,13 @@ The document is a **two-column broadsheet**: wide content on the left, a narrow 
 - Cool paper canvas (`{colors.canvas}`) with slate ink (`{colors.ink}`) — never pure white, never pure black.
 - Clear, visible 1px hairline borders (`{colors.border}` / `{colors.border-strong}`) do all the structural work. No drop shadows anywhere.
 - Square corners: every element uses `{rounded.none}` (0px). There is no rounding anywhere — `{rounded.full}` is reserved and unused.
-- A single slate-blue accent (`{colors.accent}`) for interaction, active TOC state, and checked items — used sparingly.
-- **Inter** for headings and body; **JetBrains Mono** for labels, the table of contents, the date, and IO tags — the mono gives a "technical document" voice.
+- One blue accent (`{colors.accent}`) for all structure — interaction, active TOC state, task-number badge, IO bullets. Green (`{colors.success}`) and red (`{colors.danger}`) are semantic-only: green for done/success (checked items, done callouts), red for warnings.
+- **Inter** for headings and body; **Inconsolata** for labels, the table of contents, the date, and IO tags — the mono gives a "technical document" voice.
 - Two-column layout (content + sticky TOC) with outer gutters, collapsing to one column with a foldable Contents block below `{spacing.shell-max}`-class breakpoints.
 
 ## Colors
 
-The palette is a cool-paper neutral ramp anchored by one slate-blue accent. All values are authored in `oklch()` for perceptual uniformity; the listed sRGB hex are for reference only.
+The palette is a cool-paper neutral ramp anchored by one blue primary accent, with green and red reserved for semantic states only. All values are authored in `oklch()` for perceptual uniformity; the listed sRGB hex are for reference only.
 
 ### Surface
 
@@ -207,14 +228,27 @@ The palette is a cool-paper neutral ramp anchored by one slate-blue accent. All 
 ### Borders
 
 - **Border** (`{colors.border}` — ≈#E2E8F0): The default 1px hairline — card outlines, section dividers, the rule under the header. This is the system's primary structural line.
-- **Border Strong** (`{colors.border-strong}` — ≈#CBD5E1): One step darker, for emphasis — the left rule on section headings, focused input borders.
+- **Border Strong** (`{colors.border-strong}` — ≈#CBD5E1): One step darker, for emphasis — the checkbox outline, focused input borders.
 
-### Accent
+### Accent — Primary (Blue)
 
-- **Accent** (`{colors.accent}` — ≈#1D4ED8): The sole interaction color. Active TOC entry, checked checkbox fill, task-number text, links.
-- **Accent Strong** (`{colors.accent-strong}` — ≈#1E40AF): Hover/pressed deepening of the accent.
-- **Accent Soft** (`{colors.accent-soft}` — ≈#EEF2FF): A pale blue tint used as the task-number badge fill.
+The one structural color. Marks what the eye should follow; never used decoratively.
+
+- **Accent** (`{colors.accent}` — ≈#5B7FC4): The primary blue. Active TOC entry, IO bullets, links, focus.
+- **Accent Strong** (`{colors.accent-strong}` — ≈#3F5C9E): Darker, for small text on light tints — the task-number digit — and hover/pressed states.
+- **Accent Soft** (`{colors.accent-soft}` — ≈#ECF0FB): A pale blue tint used as the task-number badge fill.
 - **On Accent** (`{colors.on-accent}` — #FFFFFF): The checkmark glyph on a filled checkbox.
+
+### Semantic — Green & Red
+
+Reserved for specific situations only — never decorative.
+
+- **Success** (`{colors.success}` — green): The checked-checkbox fill and the `.callout.done` left rule — a done/finished state.
+- **Success Strong** (`{colors.success-strong}`): The `.callout.done` label and bar, dark enough to read on the soft tint.
+- **Success Soft** (`{colors.success-soft}`): The `.callout.done` background.
+- **Danger** (`{colors.danger}` — red): The `.callout.warn` left rule — a warning / heads-up.
+- **Danger Strong** (`{colors.danger-strong}`): The `.callout.warn` label, dark enough to read on the soft tint.
+- **Danger Soft** (`{colors.danger-soft}`): The `.callout.warn` background.
 
 ## Typography
 
@@ -223,13 +257,13 @@ The palette is a cool-paper neutral ramp anchored by one slate-blue accent. All 
 Two families, loaded from Google Fonts:
 
 - **Inter** — headings, body, and all prose. Neutral, highly legible at small sizes.
-- **JetBrains Mono** — labels (`IO`, `Checklist`), the table-of-contents links, the document date, and IO tags. The monospace gives metadata a "technical document" register and pairs naturally with the code blocks.
+- **Inconsolata** — labels (`IO`, `Checklist`), the table-of-contents links, the document date, and IO tags. The monospace gives metadata a "technical document" register and pairs naturally with the code blocks.
 
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inconsolata:wght@400;500&display=swap"
   rel="stylesheet"
 />
 ```
@@ -243,14 +277,14 @@ Two families, loaded from Google Fonts:
 | `{typography.task}`    | Inter          | 1rem      | 600    | 0        | Task card headings                   |
 | `{typography.body-md}` | Inter          | 0.9375rem | 400    | 0        | Default body, checklist items        |
 | `{typography.body-sm}` | Inter          | 0.875rem  | 400    | 0        | IO block text                        |
-| `{typography.label}`   | JetBrains Mono | 0.6875rem | 500    | 0.08em   | Uppercase labels (IO, Checklist)     |
-| `{typography.toc-link}`| JetBrains Mono | 0.8125rem | 500    | 0        | Table-of-contents links              |
-| `{typography.meta}`    | JetBrains Mono | 0.8125rem | 400    | 0.02em   | Document date in header              |
-| `{typography.code}`    | JetBrains Mono | 0.875rem  | 400    | 0        | Code blocks (shiki inherits)         |
+| `{typography.label}`   | Inconsolata | 0.6875rem | 500    | 0.08em   | Uppercase labels (IO, Checklist)     |
+| `{typography.toc-link}`| Inconsolata | 0.8125rem | 500    | 0        | Table-of-contents links              |
+| `{typography.meta}`    | Inconsolata | 0.8125rem | 400    | 0.02em   | Document date in header              |
+| `{typography.code}`    | Inconsolata | 0.875rem  | 400    | 0        | Code blocks (shiki inherits)         |
 
 ### Principles
 
-Headings are Inter semibold/bold in slate ink; body is Inter regular in slate-600. All **labels and navigation are uppercase JetBrains Mono** with `0.08em` tracking — the mono + tracking is what signals "metadata, not prose." Never set body or headings in mono, and never set labels in Inter. The contrast between proportional prose and monospace chrome is the system's editorial signature.
+Headings are Inter semibold/bold in slate ink; body is Inter regular in slate-600. All **labels and navigation are uppercase Inconsolata** with `0.08em` tracking — the mono + tracking is what signals "metadata, not prose." Never set body or headings in mono, and never set labels in Inter. The contrast between proportional prose and monospace chrome is the system's editorial signature.
 
 ## Layout
 
@@ -287,9 +321,10 @@ This system is **flat**. There are no drop shadows anywhere.
 | Paper         | `{colors.canvas}` background, no border                | Page floor                           |
 | Hairline      | 1px `{colors.border}` border                           | Card outlines, header rule, dividers |
 | Tinted fill   | `{colors.surface-alt}` background, no border           | IO blocks nested inside cards        |
-| Accent rule   | 3px `{colors.accent}` left border                      | Section headings, active TOC entry   |
+| Accent rule   | 2px `{colors.accent}` left border                      | Active TOC entry                     |
+| Semantic rule | 3px `{colors.danger}` / `{colors.success-strong}` left border | Callouts (`.warn` / `.done`)  |
 
-Depth is conveyed by **borders and a single accent rule**, never by shadow or layering. A task card is distinguished from the paper by its white `{colors.surface}` fill and 1px `{colors.border}` outline — nothing more.
+Depth is conveyed by **borders and the accent/semantic rules**, never by shadow or layering. A task card is distinguished from the paper by its white `{colors.surface}` fill and 1px `{colors.border}` outline — nothing more.
 
 ## Shapes
 
@@ -316,19 +351,23 @@ A sticky `<aside>` in the right column. A `{typography.label}` "CONTENTS" headin
 
 ### Content Section (`content-section` + `section-heading`)
 
-Background and Current State are prose sections. The `{typography.section}` heading carries a 3px `{colors.accent}` left rule and `{spacing.sm}` left padding; body follows in `{typography.body-md}` (`{colors.body}`).
+Background and Current State are prose sections. The `{typography.section}` heading is plain Inter 600 in slate ink — no marker or rule; body follows in `{typography.body-md}` (`{colors.body}`).
 
 ### Task Card (`task-card`)
 
-White `{colors.surface}` card, 1px `{colors.border}`, `{rounded.none}` corners, `{spacing.lg}` padding. Header is a `{typography.task}` title preceded by a `{component.task-num}` badge — a 24px `{colors.accent-soft}` square (`{rounded.none}`) holding the index in `{colors.accent}` mono.
+White `{colors.surface}` card, 1px `{colors.border}`, `{rounded.none}` corners, `{spacing.lg}` padding. Header is a `{typography.task}` title preceded by a `{component.task-num}` badge — a 24px `{colors.accent-soft}` square (`{rounded.none}`) holding the index in `{colors.accent-strong}` mono. A task card may close with an optional `.callout.warn` heads-up.
 
 ### IO Block (`io-block`)
 
-Inside each task card, a two-up grid of Input / Output. Each block is a `{colors.surface-alt}` tinted fill (no border), `{rounded.none}`, with a `{typography.label}` uppercase caption (`Input` / `Output`) and `{typography.body-sm}` text. Collapses to one column under the card breakpoint.
+Inside each task card, Input and Output stacked as full-width rows. Each block is a `{colors.surface-alt}` tinted fill (no border), `{rounded.none}`, with a `{typography.label}` uppercase caption (`Input` / `Output`) and `{typography.body-sm}` text — written as a paragraph or a square-bulleted list (`{colors.accent}` bullets).
 
 ### Checklist (`checklist-item` + `checkbox`)
 
-A `{typography.label}` "CHECKLIST" heading, then a list of items. Each `{component.checkbox}` is a 16px `{rounded.none}` box with a 1.5px `{colors.border-strong}` outline; when checked it fills `{colors.accent}` with a white checkmark and the label text goes `{colors.muted}` with a strike-through.
+A `{typography.label}` "CHECKLIST" heading, then a list of items. Each `{component.checkbox}` is a 16px `{rounded.none}` box with a 1.5px `{colors.border-strong}` outline; when checked it fills `{colors.success}` (green — a done state) with a white checkmark and the label text goes `{colors.muted}` with a strike-through.
+
+### Callout (`callout-warn` / `callout-done`)
+
+A semantic block for specific situations only, with a `{typography.label}` uppercase tag over `{typography.body-sm}` text and a 3px left rule. `.warn` (red — `{colors.danger}` rule on `{colors.danger-soft}`) flags a gotcha or heads-up; `.done` (green — `{colors.success-strong}` rule on `{colors.success-soft}`) marks an already-finished state. Most commonly a single `.warn` heads-up at the foot of a task card. Never use the semantic colors decoratively.
 
 ### Code Block (`code-block`)
 
@@ -343,8 +382,8 @@ Inline `<pre><code class="language-*">` blocks, rendered by shiki **catppuccin-m
 ### Do
 
 - Keep the canvas as paper (`{colors.canvas}`) and let 1px hairline borders carry all structure.
-- Use the slate-blue accent (`{colors.accent}`) only for interaction, the active TOC entry, and checked items.
-- Set every label, the TOC, and the date in uppercase JetBrains Mono.
+- Use the blue accent (`{colors.accent}`) for structure only — interaction, the active TOC entry, the task-number badge, IO bullets. Use green (`{colors.success}`) for done/success (checked items, done callouts) and red (`{colors.danger}`) for warnings.
+- Set every label, the TOC, and the date in uppercase Inconsolata.
 - Keep every corner square — `{rounded.none}` (0px), with no exceptions.
 - Keep the header to title + date only.
 - Mirror the content section order in the sticky TOC, with tasks nested under Tasks.
@@ -353,7 +392,7 @@ Inline `<pre><code class="language-*">` blocks, rendered by shiki **catppuccin-m
 
 - Don't add drop shadows — depth is borders and one accent rule, never shadow.
 - Don't use pure white as the page floor; the paper canvas is `{colors.canvas}`.
-- Don't introduce a second accent hue. One slate-blue is the whole chromatic budget.
+- Don't introduce a fourth hue. Blue is primary; green and red are the only semantic colours, and only for done/warning states — never decorative.
 - Don't set body or headings in monospace, or labels in Inter — the family split is the signature.
 - Don't round any corner — the system is fully square.
 - Don't let the code block adopt a light theme — the dark mocha island is intentional contrast on paper.
@@ -366,7 +405,7 @@ Inline `<pre><code class="language-*">` blocks, rendered by shiki **catppuccin-m
 | ------- | -------- | --------------------------------------------------------------------------------------- |
 | Desktop | ≥ 1024px | Two columns: content (≤720px) + sticky TOC (220px), 48px gap, outer gutters via auto margin |
 | Narrow  | < 1024px | Single column; TOC becomes a foldable `<details>` "Contents" block above the content     |
-| Mobile  | < 560px  | IO blocks collapse from two-up to one-up; reduced shell padding                          |
+| Mobile  | < 560px  | Reduced shell padding (IO blocks are always stacked rows at every width)                 |
 
 ### TOC Collapse
 
@@ -413,7 +452,7 @@ Write code in standard `<pre><code class="language-{lang}">` blocks inline in th
   border-radius: var(--rounded);
   overflow: hidden;
   margin: 1rem 0;
-  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-family: "Inconsolata", ui-monospace, monospace;
   font-size: 0.875rem;
   line-height: 1.6;
 }
@@ -505,26 +544,38 @@ A complete, self-contained template. Replace `{placeholders}`; the CSS below is 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inconsolata:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       :root {
-        --canvas: oklch(0.984 0.003 247.858);
+        /* Neutrals — tuned to the primary blue hue (246) so everything harmonises */
+        --canvas: oklch(0.984 0.003 246);
         --surface: oklch(1 0 0);
-        --surface-alt: oklch(0.968 0.005 247.9);
-        --ink: oklch(0.208 0.042 265.755);
-        --body: oklch(0.446 0.043 257.281);
-        --muted: oklch(0.554 0.041 257.417);
-        --border: oklch(0.929 0.013 255.508);
-        --border-strong: oklch(0.869 0.022 252.894);
-        --accent: oklch(0.488 0.243 264.376);
-        --accent-strong: oklch(0.424 0.199 265.638);
-        --accent-soft: oklch(0.962 0.018 272.314);
+        --surface-alt: oklch(0.967 0.006 246);
+        --ink: oklch(0.23 0.03 246);
+        --body: oklch(0.45 0.03 246);
+        --muted: oklch(0.56 0.028 246);
+        --border: oklch(0.928 0.012 246);
+        --border-strong: oklch(0.865 0.022 246);
+
+        /* Primary — blue. Used for all structural accents (borders, links, active states). */
+        --accent: oklch(0.6276 0.0839 246.04);
+        --accent-strong: oklch(0.52 0.092 246.04);
+        --accent-soft: oklch(0.955 0.022 246.04);
         --on-accent: oklch(1 0 0);
+
+        /* Semantic — specific situations only. Green = done/success, red = warning/heads-up. */
+        --success: oklch(0.7188 0.1184 147.57);
+        --success-strong: oklch(0.55 0.11 147.57);
+        --success-soft: oklch(0.955 0.04 147.57);
+        --danger: oklch(0.5923 0.1677 21.57);
+        --danger-strong: oklch(0.52 0.16 21.57);
+        --danger-soft: oklch(0.955 0.035 21.57);
+
         --rounded: 0px;
-        --mono: "JetBrains Mono", ui-monospace, monospace;
+        --mono: "Inconsolata", ui-monospace, monospace;
       }
       body {
         background: var(--canvas);
@@ -533,6 +584,7 @@ A complete, self-contained template. Replace `{placeholders}`; the CSS below is 
         font-size: 16px;
         line-height: 1.6;
       }
+      :not(pre) > code { font-family: var(--mono); font-size: 0.85em; background: var(--surface-alt); border: 1px solid var(--border); border-radius: var(--rounded); padding: 0.1em 0.35em; color: var(--ink); }
 
       /* ── Shell + two-column layout ── */
       .shell { max-width: 1040px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
@@ -557,19 +609,22 @@ A complete, self-contained template. Replace `{placeholders}`; the CSS below is 
 
       /* ── Sections ── */
       .section { margin-bottom: 2.5rem; }
-      .section > h2 { font-size: 1.125rem; font-weight: 600; color: var(--ink); padding-left: 0.75rem; border-left: 3px solid var(--accent); margin-bottom: 0.875rem; line-height: 1.4; }
+      .section > h2 { font-size: 1.125rem; font-weight: 600; color: var(--ink); margin-bottom: 0.875rem; line-height: 1.4; }
       .section > p { font-size: 0.9375rem; color: var(--body); margin-bottom: 0.5rem; }
 
       /* ── Task cards ── */
       .tasks { display: flex; flex-direction: column; gap: 1rem; }
       .task-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rounded); padding: 24px; }
       .task-card h3 { font-size: 1rem; font-weight: 600; color: var(--ink); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.125rem; line-height: 1.4; }
-      .task-num { display: inline-flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; background: var(--accent-soft); color: var(--accent); border-radius: var(--rounded); font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; flex-shrink: 0; line-height: 1; }
+      .task-num { display: inline-flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; background: var(--accent-soft); color: var(--accent-strong); border-radius: var(--rounded); font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; flex-shrink: 0; line-height: 1; }
 
-      .io-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem; }
+      .io-row { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; }
       .io-block { background: var(--surface-alt); border-radius: var(--rounded); padding: 12px 16px; }
       .io-label { display: block; font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.3rem; }
       .io-block p { font-size: 0.875rem; color: var(--body); line-height: 1.55; }
+      .io-block ul { list-style: none; display: flex; flex-direction: column; gap: 0.25rem; }
+      .io-block li { position: relative; padding-left: 0.875rem; font-size: 0.875rem; color: var(--body); line-height: 1.55; }
+      .io-block li::before { content: ""; position: absolute; left: 0; top: 0.5em; width: 0.25rem; height: 0.25rem; background: var(--accent); }
 
       .checklist-heading { font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.5rem; }
       .checklist ul { list-style: none; display: flex; flex-direction: column; gap: 0.375rem; }
@@ -581,11 +636,20 @@ A complete, self-contained template. Replace `{placeholders}`; the CSS below is 
         transition: background 0.15s, border-color 0.15s;
       }
       .checklist li input[type="checkbox"]:checked {
-        background-color: var(--accent); border-color: var(--accent);
+        background-color: var(--success); border-color: var(--success);
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='white' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
         background-size: 75%; background-position: center; background-repeat: no-repeat;
       }
       .checklist li input[type="checkbox"]:checked + span { color: var(--muted); text-decoration: line-through; }
+
+      /* ── Callouts — semantic, optional. .warn = red (heads-up), .done = green (success). ── */
+      .callout { border-left: 3px solid; border-radius: var(--rounded); padding: 12px 16px; margin-bottom: 1.25rem; }
+      .callout-label { display: block; font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem; }
+      .callout p { font-size: 0.875rem; color: var(--body); line-height: 1.55; }
+      .callout.warn { background: var(--danger-soft); border-left-color: var(--danger); }
+      .callout.warn .callout-label { color: var(--danger-strong); }
+      .callout.done { background: var(--success-soft); border-left-color: var(--success-strong); }
+      .callout.done .callout-label { color: var(--success-strong); }
 
       /* ── Code (shiki) ── */
       .shiki { border-radius: var(--rounded); overflow: hidden; margin: 1rem 0; font-family: var(--mono); font-size: 0.875rem; line-height: 1.6; }
@@ -602,14 +666,13 @@ A complete, self-contained template. Replace `{placeholders}`; the CSS below is 
         .toc details { padding: 0; }
         .toc summary { display: block; list-style: none; cursor: pointer; padding: 12px 16px; font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
         .toc summary::-webkit-details-marker { display: none; }
-        .toc summary::before { content: "▸ "; }
-        .toc details[open] summary::before { content: "▾ "; }
+        .toc summary::before { content: "\25B8  "; }
+        .toc details[open] summary::before { content: "\25BE  "; }
         .toc .toc-heading { display: none; }
         .toc-nav { padding: 0 16px 16px; }
       }
       @media (max-width: 559px) {
         .shell { padding: 2rem 1rem 4rem; }
-        .io-row { grid-template-columns: 1fr; }
       }
     </style>
   </head>
@@ -635,6 +698,7 @@ A complete, self-contained template. Replace `{placeholders}`; the CSS below is 
           <section class="section" id="tasks">
             <h2>Tasks</h2>
             <div class="tasks">
+              <!-- Repeat one <article> per task; give each a unique id (task-1, task-2, …). -->
               <article class="task-card spy-target" id="task-1">
                 <h3><span class="task-num">1</span>{Task name}</h3>
                 <div class="io-row">
@@ -653,6 +717,9 @@ A complete, self-contained template. Replace `{placeholders}`; the CSS below is 
                     <li><label><input type="checkbox" /><span>{criterion}</span></label></li>
                   </ul>
                 </div>
+                <!-- Optional, only when there is a real gotcha:
+                <div class="callout warn"><span class="callout-label">Heads up</span><p>{the one thing easy to get wrong}</p></div>
+                -->
               </article>
             </div>
           </section>
@@ -669,6 +736,7 @@ A complete, self-contained template. Replace `{placeholders}`; the CSS below is 
                 <li>
                   <a href="#tasks">Tasks</a>
                   <ul class="toc-sub">
+                    <!-- One <li> per task, href matching the article id. -->
                     <li><a href="#task-1">1. {Task name}</a></li>
                   </ul>
                 </li>
