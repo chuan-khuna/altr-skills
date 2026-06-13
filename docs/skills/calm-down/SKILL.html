@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>calm-down — Stop. Think. Act.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inconsolata:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+        --canvas: oklch(0.984 0.003 246);
+        --surface: oklch(1 0 0);
+        --surface-alt: oklch(0.967 0.006 246);
+        --ink: oklch(0.23 0.03 246);
+        --body: oklch(0.45 0.03 246);
+        --muted: oklch(0.56 0.028 246);
+        --border: oklch(0.928 0.012 246);
+        --border-strong: oklch(0.865 0.022 246);
+        --accent: oklch(0.6276 0.0839 246.04);
+        --accent-strong: oklch(0.52 0.092 246.04);
+        --accent-soft: oklch(0.955 0.022 246.04);
+        --on-accent: oklch(1 0 0);
+        --success: oklch(0.7188 0.1184 147.57);
+        --success-strong: oklch(0.55 0.11 147.57);
+        --success-soft: oklch(0.955 0.04 147.57);
+        --danger: oklch(0.5923 0.1677 21.57);
+        --danger-strong: oklch(0.52 0.16 21.57);
+        --danger-soft: oklch(0.955 0.035 21.57);
+        --rounded: 0px;
+        --mono: "Inconsolata", ui-monospace, monospace;
+      }
+      body { background: var(--canvas); color: var(--body); font-family: "Inter", system-ui, sans-serif; font-size: 16px; line-height: 1.6; }
+      :not(pre) > code { font-family: var(--mono); font-size: 0.85em; background: var(--surface-alt); border: 1px solid var(--border); border-radius: var(--rounded); padding: 0.1em 0.35em; color: var(--ink); }
+
+      .shell { max-width: 1040px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+      .page-header { padding-bottom: 1.5rem; margin-bottom: 2.5rem; border-bottom: 1px solid var(--border); }
+      .page-header .eyebrow { font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+      .page-header h1 { font-size: 1.75rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 0.5rem; }
+      .page-header .lede { font-size: 0.9375rem; color: var(--body); max-width: 620px; }
+      .page-header .date { display: block; font-family: var(--mono); font-size: 0.8125rem; letter-spacing: 0.02em; color: var(--muted); margin-top: 0.9rem; }
+
+      .layout { display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 48px; align-items: start; }
+      .content { max-width: 720px; min-width: 0; }
+
+      .toc { position: sticky; top: 2rem; }
+      .toc details { border: 0; }
+      .toc summary { display: none; }
+      .toc-heading { font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+      .toc-nav ul { list-style: none; display: flex; flex-direction: column; gap: 0.125rem; }
+      .toc-nav a { display: block; font-family: var(--mono); font-size: 0.8125rem; font-weight: 500; color: var(--body); text-decoration: none; padding: 4px 0 4px 12px; border-left: 2px solid transparent; }
+      .toc-nav a:hover { color: var(--ink); }
+      .toc-nav a.active { color: var(--accent); border-left-color: var(--accent); }
+
+      .section { margin-bottom: 2.75rem; }
+      .section > h2 { font-size: 1.125rem; font-weight: 600; color: var(--ink); margin-bottom: 0.875rem; line-height: 1.4; }
+      .section > p { font-size: 0.9375rem; color: var(--body); margin-bottom: 0.75rem; }
+      .section > p:last-child { margin-bottom: 0; }
+      .section strong { color: var(--ink); font-weight: 600; }
+
+      /* Stop / Think / Act rail */
+      .sta { display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem; }
+      .sta-step { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--rounded); padding: 18px 20px; }
+      .sta-step h3 { font-size: 1rem; font-weight: 600; color: var(--ink); display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.4rem; }
+      .sta-step .n { font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.08em; color: var(--accent-strong); background: var(--accent-soft); padding: 0.15rem 0.4rem; }
+      .sta-step p { font-size: 0.9375rem; color: var(--body); }
+
+      /* mode cards */
+      .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem; }
+      .mode-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rounded); padding: 22px; display: flex; flex-direction: column; }
+      .mode-card .cmd { font-family: var(--mono); font-size: 0.8125rem; color: var(--accent-strong); background: var(--accent-soft); padding: 0.3rem 0.5rem; align-self: flex-start; margin-bottom: 0.9rem; }
+      .mode-card h3 { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 0.5rem; }
+      .mode-card p { font-size: 0.875rem; color: var(--body); line-height: 1.55; margin-bottom: 0.75rem; }
+      .mode-card .out { font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-top: auto; }
+      .mode-card .out b { color: var(--ink); font-weight: 600; }
+
+      /* priority chips */
+      .prios { display: flex; flex-direction: column; gap: 0.625rem; margin-top: 0.5rem; }
+      .prio { display: flex; gap: 0.75rem; align-items: baseline; background: var(--surface); border: 1px solid var(--border); border-radius: var(--rounded); padding: 12px 16px; }
+      .prio .tag { font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.06em; padding: 0.15rem 0.45rem; flex-shrink: 0; }
+      .prio .tag.p0 { background: var(--danger-soft); color: var(--danger-strong); }
+      .prio .tag.p1 { background: var(--accent-soft); color: var(--accent-strong); }
+      .prio .tag.cut { background: var(--surface-alt); color: var(--muted); }
+      .prio p { font-size: 0.875rem; color: var(--body); line-height: 1.5; }
+      .prio p b { color: var(--ink); font-weight: 600; }
+
+      .steps { list-style: none; counter-reset: s; display: flex; flex-direction: column; gap: 0.625rem; margin-top: 0.25rem; }
+      .steps li { counter-increment: s; position: relative; padding-left: 2rem; font-size: 0.9375rem; color: var(--body); line-height: 1.55; }
+      .steps li::before { content: counter(s); position: absolute; left: 0; top: 0.05rem; width: 1.4rem; height: 1.4rem; display: inline-flex; align-items: center; justify-content: center; background: var(--accent-soft); color: var(--accent-strong); font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; }
+      .steps li b { color: var(--ink); font-weight: 600; }
+
+      .callout { border-left: 3px solid; border-radius: var(--rounded); padding: 12px 16px; margin-top: 1rem; }
+      .callout-label { display: block; font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem; }
+      .callout p { font-size: 0.875rem; color: var(--body); line-height: 1.55; }
+      .callout.done { background: var(--success-soft); border-left-color: var(--success-strong); }
+      .callout.done .callout-label { color: var(--success-strong); }
+
+      pre.flow { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rounded); padding: 20px 24px; font-family: var(--mono); font-size: 0.8125rem; color: var(--ink); line-height: 1.7; overflow-x: auto; margin-top: 0.5rem; }
+
+      @media (max-width: 1023px) {
+        .layout { grid-template-columns: 1fr; gap: 1.5rem; }
+        .toc { position: static; margin-bottom: 1rem; border: 1px solid var(--border); border-radius: var(--rounded); }
+        .toc summary { display: block; list-style: none; cursor: pointer; padding: 12px 16px; font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+        .toc summary::-webkit-details-marker { display: none; }
+        .toc summary::before { content: "\25B8  "; }
+        .toc details[open] summary::before { content: "\25BE  "; }
+        .toc .toc-heading { display: none; }
+        .toc-nav { padding: 0 16px 16px; }
+        .modes { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 559px) { .shell { padding: 2rem 1rem 4rem; } }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="page-header">
+        <p class="eyebrow">work skill · calm-down</p>
+        <h1>calm-down — Stop. Think. Act.</h1>
+        <p class="lede">A two-mode work-structuring skill. It interviews you, then writes a structured document that turns a rough idea — or a wave of panic — into work someone can actually execute.</p>
+        <span class="date">2026-06-13</span>
+      </header>
+
+      <div class="layout">
+        <main class="content">
+          <section class="section spy-target" id="what">
+            <h2>What it does</h2>
+            <p><strong>calm-down</strong> sits between &ldquo;I have a vague pile of work&rdquo; and &ldquo;the work is being done well.&rdquo; Instead of letting you (or a teammate) dive in half-blind, it runs a short interview and produces a single structured document.</p>
+            <p>It has two modes for the two ways that gap shows up: handing work <em>off</em> to someone else, and steering <em>yourself</em> through work that is already on fire.</p>
+          </section>
+
+          <section class="section spy-target" id="principle">
+            <h2>The principle</h2>
+            <p>Both a cold handoff and a panicked sprint fail for the same reason: <strong>acting before the work is understood</strong>. A teammate gets a one-line ticket and guesses. A person under deadline opens fifteen tabs and does the loudest task first. calm-down inserts one deliberate pause and walks through three moves.</p>
+            <div class="sta">
+              <div class="sta-step">
+                <h3><span class="n">01</span> Stop</h3>
+                <p>Interrupt the reflex to start typing. Name the task and the time you actually have. The pause is reframed as a speed-up, not a delay.</p>
+              </div>
+              <div class="sta-step">
+                <h3><span class="n">02</span> Think</h3>
+                <p>Get grilled — one question at a time, each with a recommended answer — until the work is decomposed and understood. Vague answers get probed, not accepted.</p>
+              </div>
+              <div class="sta-step">
+                <h3><span class="n">03</span> Act</h3>
+                <p>Generate the document and execute from clarity. The thinking is now on paper, not rattling around in your head.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section spy-target" id="modes">
+            <h2>Two modes</h2>
+            <p>One principle, two situations. You pick the mode by what you're trying to do.</p>
+            <div class="modes">
+              <div class="mode-card">
+                <span class="cmd">calm-down assign</span>
+                <h3>Hand work off</h3>
+                <p>Produces a handoff document a teammate &mdash; or an AI agent &mdash; can pick up cold, with zero prior context. Background, current state, suggested assignee, and a per-task breakdown of input, output, checklist, scope, and gotchas.</p>
+                <span class="out">Output → <b>Handoff document</b></span>
+              </div>
+              <div class="mode-card">
+                <span class="cmd">calm-down triage</span>
+                <h3>Calm yourself down</h3>
+                <p>A calming grill for urgent work you're about to do yourself. It decomposes the panic, makes the hard prioritization call, and hands you a battle plan with time estimates and an opinionated approach per task.</p>
+                <span class="out">Output → <b>Battle plan</b></span>
+              </div>
+            </div>
+          </section>
+
+          <section class="section spy-target" id="loop">
+            <h2>How it works</h2>
+            <p>Both modes share the same four-beat loop. It never asks you to write the task list from scratch &mdash; it proposes one and makes you react.</p>
+            <ol class="steps">
+              <li><b>Propose the breakdown.</b> Read your brief, guess the tasks, and confirm before going further.</li>
+              <li><b>Grill, one question at a time.</b> Each question carries a recommended answer; ambiguous answers get challenged. It stops the moment the document would be self-sufficient.</li>
+              <li><b>Pick a format.</b> Markdown or HTML (this paper theme).</li>
+              <li><b>Generate immediately.</b> No preview step &mdash; the document is written and saved, and you're told the exact path.</li>
+            </ol>
+          </section>
+
+          <section class="section spy-target" id="triage-call">
+            <h2>The triage call</h2>
+            <p>Triage mode borrows the engineering discipline of <strong>triage</strong> &mdash; deciding what gets treated now, what waits, and what you walk away from. Every task lands in exactly one bucket:</p>
+            <div class="prios">
+              <div class="prio"><span class="tag p0">P0</span><p><b>Must ship.</b> If this slips, the whole thing fails. These come first.</p></div>
+              <div class="prio"><span class="tag p1">P1</span><p><b>Should ship.</b> Real value, but droppable if time runs out &mdash; without failing.</p></div>
+              <div class="prio"><span class="tag cut">CUT</span><p><b>Not this run.</b> Explicitly named and set down.</p></div>
+            </div>
+            <div class="callout done">
+              <span class="callout-label">Why the cut list calms</span>
+              <p>Most panic is just unsorted scope. Naming what you are <em>not</em> doing is the move that settles it &mdash; it gives you permission to stop carrying everything at once. If everything is still P0, the triage hasn't happened yet.</p>
+            </div>
+          </section>
+
+          <section class="section spy-target" id="output">
+            <h2>What you get</h2>
+            <p>A saved document under <code>docs/</code>, in Markdown or in this quiet, paper-like HTML theme &mdash; structure carried by hairline borders and one blue accent, never decoration. The flow, end to end:</p>
+            <pre class="flow">brief  →  propose tasks  →  grill (Q &amp; A)  →  [triage: P0 / P1 / cut]  →  generate  →  docs/yyyy-mm-dd-topic.{md,html}</pre>
+          </section>
+        </main>
+
+        <aside class="toc">
+          <details open>
+            <summary>Contents</summary>
+            <p class="toc-heading">Contents</p>
+            <nav class="toc-nav">
+              <ul>
+                <li><a href="#what">What it does</a></li>
+                <li><a href="#principle">The principle</a></li>
+                <li><a href="#modes">Two modes</a></li>
+                <li><a href="#loop">How it works</a></li>
+                <li><a href="#triage-call">The triage call</a></li>
+                <li><a href="#output">What you get</a></li>
+              </ul>
+            </nav>
+          </details>
+        </aside>
+      </div>
+    </div>
+
+    <script>
+      const links = [...document.querySelectorAll(".toc-nav a")];
+      const byId = new Map(links.map((a) => [a.getAttribute("href").slice(1), a]));
+      const spy = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              links.forEach((l) => l.classList.remove("active"));
+              byId.get(e.target.id)?.classList.add("active");
+            }
+          });
+        },
+        { rootMargin: "0px 0px -70% 0px", threshold: 0 }
+      );
+      document.querySelectorAll("[id].spy-target").forEach((s) => spy.observe(s));
+    </script>
+  </body>
+</html>
