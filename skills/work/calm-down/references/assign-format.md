@@ -1,12 +1,8 @@
-# Assign / Triage Document Formats
-
----
-
-## `assign` — Handoff document
+# Assign — Handoff document format
 
 Output file: `docs/yyyy-mm-dd-topic.{md,html}`
 
-```
+<assign-template>
 # {Topic}
 
 ## Background
@@ -49,9 +45,9 @@ Output file: `docs/yyyy-mm-dd-topic.{md,html}`
 
 **Gotchas:**
 - {…}
-```
+</assign-template>
 
-### Rules (assign)
+## Rules
 
 - Background and Current State: 2–5 sentences each
 - Input and Output: concrete — paths, formats, states, commands — not abstract descriptions
@@ -59,64 +55,3 @@ Output file: `docs/yyyy-mm-dd-topic.{md,html}`
 - Out of scope: required — state at least one thing per task that should NOT be done
 - Gotchas: required — at least one per task; surface failure modes, non-obvious constraints, common mistakes
 - Suggested Assignee: name access requirements and skills needed, even if "unknown"
-
----
-
-## `triage` — Battle plan
-
-Output file: `docs/yyyy-mm-dd-topic-triage.{md,html}`
-
-```
-# {Topic}
-
-**Assigned:** {time} | **Due:** {deadline} | **Remaining:** {X hours}
-
-## Situation
-
-{What this is, why it's urgent, and what success looks like. 2–3 sentences.}
-
-## What We Have
-
-{What already exists — code, designs, data, partial work. "Nothing yet" is valid.}
-
-## What's Still Missing
-
-{Blockers: information, approvals, or assets not yet in hand. Be specific — vague blockers can't be resolved.}
-
-## Tasks
-
-### Task 1: {name} — ~{estimated time}
-
-**Need to start:** {concrete prerequisite — what must be true or in hand before this task begins}
-**Done when:** {specific, verifiable outcome}
-**Approach:** {Opinionated tool/framework/method recommendation in 1–2 sentences}
-
-**Steps:**
-- [ ] {Concrete step}
-- [ ] {Concrete step}
-
-**Gotchas:**
-- {Non-obvious thing that will cost time if missed}
-
-### Task 2: {name} — ~{estimated time}
-
-**Need to start:** {…}
-**Done when:** {…}
-**Approach:** {…}
-
-**Steps:**
-- [ ] {…}
-
-**Gotchas:**
-- {…}
-```
-
-### Rules (triage)
-
-- Remaining time header: always show assigned time, deadline, and hours remaining
-- Situation: 2–3 sentences only — orient, don't elaborate
-- What We Have / What's Still Missing: concrete, not "TBD" — missing info that can't be named isn't a useful blocker
-- Estimated time per task: required — even a rough estimate helps prioritize
-- Approach: one opinionated recommendation per task, not a list of options
-- Gotchas: required — at least one per task
-- Steps: actionable and ordered, not high-level categories

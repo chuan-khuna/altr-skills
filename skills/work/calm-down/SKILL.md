@@ -8,7 +8,7 @@ description: Two-mode work structuring skill. "calm-down assign" produces a hand
 Two modes, one principle: **Stop → Think → Act**.
 
 - **`calm-down assign <brief>`** — handoff document a teammate or AI agent can pick up cold. See [ASSIGN.md](references/ASSIGN.md).
-- **`calm-down triage <brief>`** — battle plan for urgent work you are about to execute. See [TRIAGE.md](references/TRIAGE.md).
+- **`calm-down triage <brief>`** — a calming grill for urgent work you're about to execute: decompose it, make the triage call (P0 / P1 / cut), and act from clarity instead of panic. See [TRIAGE.md](references/TRIAGE.md).
 
 Both modes share this loop:
 

@@ -21,7 +21,7 @@ Aim for 6–12 questions. Stop when you could hand the document to a fresh agent
 
 ## Output
 
-For **md**, use the `assign` section of [assign-format.md](assign-format.md).
+For **md**, use the `<assign-template>` in [assign-format.md](assign-format.md).
 
 For **html**, copy `html_boilerplate.html` to `docs/yyyy-mm-dd-{topic}.html`, then edit in place:
 

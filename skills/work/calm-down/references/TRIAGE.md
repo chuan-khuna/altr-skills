@@ -1,32 +1,40 @@
 # Triage mode
 
-Help the user slow down, decompose urgent work, and act from clarity instead of panic.
+Someone is under pressure with urgent work and a sense that there's too much to do. Your job is to get them to **stop**, **think**, then **act** from clarity instead of panic.
 
-## Opening
+This is a grilling session in the spirit of grill-me and grill-with-docs — relentless enough to reach shared understanding — but shorter, and pointed at one outcome: replacing unsorted scope with a prioritized battle plan. The engineering principle of **triage** drives it: decide what gets treated now, what waits, and what you walk away from.
 
-Name the task and time remaining in one sentence:
+## Stop — interrupt the panic
 
-> You've got {X hours} to {task}. Let's take 5 minutes to think so the next {X−0.5} go faster.
+Open by naming the task and the time remaining, and reframe the pause as a speed-up, not a delay:
 
-Then propose the task breakdown using `AskUserQuestion`.
+> You've got {X hours} to {task}. Five minutes thinking now buys back the next {X−0.5}. Let's triage.
 
-## Grilling order (≤ 6 questions)
+Then propose the task breakdown using `AskUserQuestion` and confirm it before going further.
 
-The user is under pressure — keep it short. Provide your recommended answer with each question.
+## Think — grill, then make the triage call
+
+Grill one question at a time, the way grill-me does: each question carries your recommended answer, and you probe a vague answer instead of accepting it. But the user is under pressure — keep it tight (≤ 6 questions) and stop the moment the plan is clear. Don't fill the quota.
+
+Resolve, in order, skipping anything the brief already answers:
 
 1. What already exists? (code, designs, data, partial work — "nothing yet" is valid)
-2. What information or assets are still missing that you'll need to gather?
-3. Is anyone's approval or input required, and when?
-4. Any hard technical constraints? (stack, system compatibility, access restrictions)
+2. What's still missing that you must gather or unblock?
+3. Whose approval or input is needed, and when?
+4. Any hard constraint? (stack, compatibility, access)
 
-Skip questions the brief already answers. Stop as soon as you have enough — don't fill the quota.
+Then make the **triage call** — sort every task into:
 
-## Approach suggestion
+- **P0 — must ship** for this to count as a success
+- **P1 — should ship** if time allows, droppable without failing
+- **Cut this run** — explicitly not doing it now
 
-Before generating, suggest tools, framework, or method for each task in 1–2 sentences. Be opinionated — one direction, not a list. Let the user push back.
+Challenge over-scoping directly. If everything is P0, push back: *"If you only had half the time, which one would you keep?"* Most panic is just unsorted scope — naming the cut list is what calms it, because it gives the user permission to stop carrying things.
 
-## Output
+## Act — hand them the plan
 
-Use the `triage` section of [assign-format.md](assign-format.md). Save to `docs/yyyy-mm-dd-{topic}-triage.{md,html}`.
+Suggest an opinionated approach (tool, framework, or method, 1–2 sentences) for each P0 and P1 task — one direction, not a menu. Let the user push back.
 
-For **html**, follow the same process as ASSIGN.md — copy the boilerplate, fill in placeholders, use `.callout.warn` for blockers and missing info.
+Then generate immediately using the `<triage-template>` in [triage-format.md](triage-format.md). Save to `docs/yyyy-mm-dd-{topic}-triage.{md,html}`. No preview.
+
+For **html**, follow the same boilerplate process as [ASSIGN.md](ASSIGN.md) — copy `html_boilerplate.html`, fill the placeholders, and use `.callout.warn` for blockers, missing info, and the cut list.
