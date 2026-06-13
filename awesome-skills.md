@@ -37,9 +37,8 @@ npx skills add multica-ai/andrej-karpathy-skills -a 'universal' -a 'claude-code'
 Mattpocock's sets
 
 ```bash
-npx skills add mattpocock/skills --skill 'handoff grill-me grill-with-docs to-prd to-issues' -a 'universal' -a 'claude-code' -y -p
+npx skills add mattpocock/skills -s 'handoff' -s 'grill-me' -s 'grill-with-docs' -a 'universal' -a 'claude-code' -y -p
 ```
-
 
 ## Documentation Skills
 
