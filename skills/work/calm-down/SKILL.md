@@ -62,7 +62,22 @@ Tell the user the exact path after saving. If they want a different location, th
 
 ### Step 5 — Generate
 
-Write the document using the format in `references/assign-format.md`. Do not preview or ask for approval — generate and save immediately.
+For **md**, write the document using the format in `references/assign-format.md`.
+
+For **html**, do **not** write the file from scratch. Copy the template and fill it in:
+
+1. Copy `references/html_boilerplate.html` to `docs/yyyy-mm-dd-{topic}.html`.
+2. Edit the copy in place:
+   - Replace `{Topic}` (in `<title>` and `<h1>`) and `{YYYY-MM-DD}`.
+   - Fill the Background and Current State `<p>` placeholders.
+   - Replace the single example `<article class="task-card">` with one per task. Give each a unique `id` (`task-1`, `task-2`, …) and keep the `spy-target` class.
+   - Mirror every task in the TOC `<ul class="toc-sub">`, with each `href` matching its article `id`.
+   - Add `<pre><code class="language-*">` code blocks or `<div class="diagram-wrapper"><pre class="mermaid">` diagrams inside task cards only where needed. Uncomment the mermaid `<script>` block at the bottom only if a diagram is present.
+   - Leave the `<style>` block and the shiki / scroll-spy scripts untouched.
+
+The boilerplate already implements the full design system in `references/DESIGN.md`; `references/DESIGN.md` is the spec and `references/DESIGN.html` is the rendered reference. Do not re-derive the CSS.
+
+Do not preview or ask for approval — generate and save immediately.
 
 ## Rules
 

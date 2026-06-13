@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calm-Down Assignment Paper — Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --canvas: oklch(0.984 0.003 247.858);
+      --surface: oklch(1 0 0);
+      --surface-alt: oklch(0.968 0.005 247.9);
+      --ink: oklch(0.208 0.042 265.755);
+      --body: oklch(0.446 0.043 257.281);
+      --muted: oklch(0.554 0.041 257.417);
+      --border: oklch(0.929 0.013 255.508);
+      --border-strong: oklch(0.869 0.022 252.894);
+      --accent: oklch(0.488 0.243 264.376);
+      --accent-strong: oklch(0.424 0.199 265.638);
+      --accent-soft: oklch(0.962 0.018 272.314);
+      --on-accent: oklch(1 0 0);
+      --rounded: 0px;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+    }
+
+    body {
+      background: var(--canvas);
+      color: var(--body);
+      font-family: "Inter", system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    code, .mono { font-family: var(--mono); }
+    :not(pre) > code { font-size: 0.85em; background: var(--surface-alt); border: 1px solid var(--border); border-radius: var(--rounded); padding: 0.1em 0.35em; color: var(--ink); }
+
+    /* ── Shell + two-column layout ── */
+    .shell { max-width: 1040px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+    .page-header { padding-bottom: 1.5rem; margin-bottom: 2.5rem; border-bottom: 1px solid var(--border); }
+    .page-header h1 { font-size: 1.75rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 0.5rem; }
+    .page-header .meta { font-family: var(--mono); font-size: 0.8125rem; letter-spacing: 0.02em; color: var(--muted); text-transform: uppercase; }
+    .page-header .lede { margin-top: 1rem; max-width: 60ch; font-size: 0.9375rem; color: var(--body); }
+
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 48px; align-items: start; }
+    .content { max-width: 720px; min-width: 0; }
+
+    /* ── Table of contents ── */
+    .toc { position: sticky; top: 2rem; }
+    .toc details { border: 0; }
+    .toc summary { display: none; }
+    .toc-heading { font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+    .toc-nav ul { list-style: none; display: flex; flex-direction: column; gap: 0.125rem; }
+    .toc-nav a { display: block; font-family: var(--mono); font-size: 0.8125rem; font-weight: 500; color: var(--body); text-decoration: none; padding: 4px 0 4px 12px; border-left: 2px solid transparent; }
+    .toc-nav a:hover { color: var(--ink); }
+    .toc-nav a.active { color: var(--accent); border-left-color: var(--accent); }
+    .toc-nav .toc-sub a { padding-left: 24px; color: var(--muted); }
+    .toc-nav .toc-sub a.active { color: var(--accent); }
+
+    /* ── Sections ── */
+    .section { margin-bottom: 2.5rem; }
+    .section > h2 { font-size: 1.125rem; font-weight: 600; color: var(--ink); padding-left: 0.75rem; border-left: 3px solid var(--accent); margin-bottom: 0.875rem; line-height: 1.4; }
+    .section > h3 { font-size: 1rem; font-weight: 600; color: var(--ink); margin: 1.5rem 0 0.75rem; }
+    .section p { font-size: 0.9375rem; color: var(--body); margin-bottom: 0.75rem; }
+    .section p:last-child { margin-bottom: 0; }
+
+    /* ── Token tables ── */
+    .token-table { width: 100%; border-collapse: collapse; margin: 0.5rem 0 1rem; font-size: 0.875rem; }
+    .token-table th { font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 0 12px 8px; border-bottom: 1px solid var(--border-strong); }
+    .token-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--body); vertical-align: top; }
+    .token-table td.mono { font-family: var(--mono); font-size: 0.8125rem; color: var(--ink); white-space: nowrap; }
+
+    /* ── Color swatches ── */
+    .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.75rem; margin: 0.5rem 0 1rem; }
+    .swatch { border: 1px solid var(--border); border-radius: var(--rounded); overflow: hidden; background: var(--surface); }
+    .swatch .chip { height: 56px; border-bottom: 1px solid var(--border); }
+    .swatch .info { padding: 8px 10px; }
+    .swatch .name { font-family: var(--mono); font-size: 0.75rem; font-weight: 500; color: var(--ink); }
+    .swatch .val { font-family: var(--mono); font-size: 0.625rem; color: var(--muted); line-height: 1.4; margin-top: 2px; word-break: break-all; }
+
+    /* ── Type specimens ── */
+    .specimen { border-top: 1px solid var(--border); padding: 0.875rem 0; }
+    .specimen:first-of-type { border-top: 0; }
+    .specimen .tag { font-family: var(--mono); font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.35rem; }
+    .sp-title { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); line-height: 1.25; }
+    .sp-section { font-size: 1.125rem; font-weight: 600; color: var(--ink); }
+    .sp-task { font-size: 1rem; font-weight: 600; color: var(--ink); }
+    .sp-body-md { font-size: 0.9375rem; color: var(--body); }
+    .sp-body-sm { font-size: 0.875rem; color: var(--body); }
+    .sp-label { font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
+    .sp-meta { font-family: var(--mono); font-size: 0.8125rem; letter-spacing: 0.02em; color: var(--muted); }
+
+    /* ── Radius + spacing samples ── */
+    .sample-grid { display: flex; flex-wrap: wrap; gap: 1rem; margin: 0.5rem 0 1rem; }
+    .radius-sample { text-align: center; }
+    .radius-sample .box { width: 72px; height: 56px; background: var(--accent-soft); border: 1px solid var(--accent); }
+    .radius-sample .lbl { font-family: var(--mono); font-size: 0.6875rem; color: var(--muted); margin-top: 6px; }
+
+    /* ── Task card (live component) ── */
+    .tasks { display: flex; flex-direction: column; gap: 1rem; }
+    .task-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rounded); padding: 24px; }
+    .task-card h4 { font-size: 1rem; font-weight: 600; color: var(--ink); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.125rem; line-height: 1.4; }
+    .task-num { display: inline-flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; background: var(--accent-soft); color: var(--accent); border-radius: var(--rounded); font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; flex-shrink: 0; line-height: 1; }
+
+    .io-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .io-block { background: var(--surface-alt); border-radius: var(--rounded); padding: 12px 16px; }
+    .io-label { display: block; font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.3rem; }
+    .io-block p { font-size: 0.875rem; color: var(--body); line-height: 1.55; margin: 0; }
+
+    .checklist-heading { font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.5rem; }
+    .checklist ul { list-style: none; display: flex; flex-direction: column; gap: 0.375rem; }
+    .checklist li label { display: flex; align-items: flex-start; gap: 0.625rem; font-size: 0.9375rem; color: var(--body); cursor: pointer; line-height: 1.5; }
+    .checklist li input[type="checkbox"] {
+      appearance: none; -webkit-appearance: none;
+      width: 1rem; height: 1rem; border: 1.5px solid var(--border-strong);
+      border-radius: var(--rounded); flex-shrink: 0; margin-top: 0.2rem; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .checklist li input[type="checkbox"]:checked {
+      background-color: var(--accent); border-color: var(--accent);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='white' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-size: 75%; background-position: center; background-repeat: no-repeat;
+    }
+    .checklist li input[type="checkbox"]:checked + span { color: var(--muted); text-decoration: line-through; }
+
+    /* ── Code (shiki) ── */
+    .shiki { border-radius: var(--rounded); overflow: hidden; margin: 1rem 0; font-family: var(--mono); font-size: 0.875rem; line-height: 1.6; }
+    .shiki code { display: block; padding: 20px 24px; overflow-x: auto; }
+
+    /* ── Diagrams (mermaid) ── */
+    .diagram-wrapper { margin: 1rem 0; padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--rounded); display: flex; justify-content: center; overflow: auto; }
+    pre.mermaid { background: none; }
+
+    /* ── Do's & Don'ts ── */
+    .dos-donts { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 0.5rem 0 1rem; }
+    .dd { border: 1px solid var(--border); border-radius: var(--rounded); padding: 16px 18px; background: var(--surface); }
+    .dd h4 { font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.75rem; }
+    .dd.do h4 { color: var(--accent); }
+    .dd.dont h4 { color: var(--muted); }
+    .dd ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .dd li { font-size: 0.875rem; color: var(--body); padding-left: 1.1rem; position: relative; line-height: 1.5; }
+    .dd.do li::before { content: "+"; position: absolute; left: 0; color: var(--accent); font-family: var(--mono); }
+    .dd.dont li::before { content: "\2212"; position: absolute; left: 0; color: var(--muted); font-family: var(--mono); }
+
+    /* ── Responsive ── */
+    @media (max-width: 1023px) {
+      .layout { grid-template-columns: 1fr; gap: 1.5rem; }
+      .toc { position: static; margin-bottom: 1rem; border: 1px solid var(--border); border-radius: var(--rounded); }
+      .toc details { padding: 0; }
+      .toc summary { display: block; list-style: none; cursor: pointer; padding: 12px 16px; font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+      .toc summary::-webkit-details-marker { display: none; }
+      .toc summary::before { content: "\25B8  "; }
+      .toc details[open] summary::before { content: "\25BE  "; }
+      .toc .toc-heading { display: none; }
+      .toc-nav { padding: 0 16px 16px; }
+    }
+    @media (max-width: 559px) {
+      .shell { padding: 2rem 1rem 4rem; }
+      .io-row { grid-template-columns: 1fr; }
+      .dos-donts { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="page-header">
+      <h1>Calm-Down Assignment Paper</h1>
+      <span class="meta">Design System · v alpha · DESIGN.md</span>
+      <p class="lede">A quiet, paper-like document theme for calm-down assignment hand-offs. Cool off-white canvas, slate ink, a single slate-blue accent, clear hairline borders, and crisp near-square corners. This page is the design system rendered in its own theme.</p>
+    </header>
+
+    <div class="layout">
+      <main class="content">
+
+        <section class="section spy-target" id="overview">
+          <h2>Overview</h2>
+          <p>The personality is calm, legible, and structural — a teammate should be able to pick a document up cold and read it like a printed memo. The page floor is a cool off-white (<code>canvas</code>) rather than pure white, giving the surface a soft "paper" quality. There is no decoration, no gradient, and no atmospheric depth — <strong>structure is carried entirely by clear 1px hairline borders and near-square corners</strong>, never by shadow.</p>
+          <p>A single slate-blue accent is the only chromatic voltage in the system. It marks the one thing the reader's eye should follow: the active table-of-contents entry, a checked task, a task-number badge. Everything else is slate ink on paper.</p>
+          <p>The document is a two-column broadsheet: wide content on the left, a narrow sticky table of contents on the right, with equal gutters outside both. On narrow screens the layout collapses to a single column and the TOC folds into a "Contents" disclosure at the top.</p>
+        </section>
+
+        <section class="section spy-target" id="colors">
+          <h2>Colors</h2>
+          <p>A cool-paper neutral ramp anchored by one slate-blue accent. All tokens are authored in <code>oklch()</code>.</p>
+          <div class="swatch-grid">
+            <div class="swatch"><div class="chip" style="background: var(--canvas)"></div><div class="info"><div class="name">canvas</div><div class="val">oklch(0.984 0.003 247.858)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--surface)"></div><div class="info"><div class="name">surface</div><div class="val">oklch(1 0 0)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--surface-alt)"></div><div class="info"><div class="name">surface-alt</div><div class="val">oklch(0.968 0.005 247.9)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--ink)"></div><div class="info"><div class="name">ink</div><div class="val">oklch(0.208 0.042 265.755)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--body)"></div><div class="info"><div class="name">body</div><div class="val">oklch(0.446 0.043 257.281)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--muted)"></div><div class="info"><div class="name">muted</div><div class="val">oklch(0.554 0.041 257.417)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--border)"></div><div class="info"><div class="name">border</div><div class="val">oklch(0.929 0.013 255.508)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--border-strong)"></div><div class="info"><div class="name">border-strong</div><div class="val">oklch(0.869 0.022 252.894)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--accent)"></div><div class="info"><div class="name">accent</div><div class="val">oklch(0.488 0.243 264.376)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--accent-strong)"></div><div class="info"><div class="name">accent-strong</div><div class="val">oklch(0.424 0.199 265.638)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--accent-soft)"></div><div class="info"><div class="name">accent-soft</div><div class="val">oklch(0.962 0.018 272.314)</div></div></div>
+            <div class="swatch"><div class="chip" style="background: var(--on-accent)"></div><div class="info"><div class="name">on-accent</div><div class="val">oklch(1 0 0)</div></div></div>
+          </div>
+        </section>
+
+        <section class="section spy-target" id="typography">
+          <h2>Typography</h2>
+          <p><strong>Inter</strong> for headings and body; <strong>JetBrains Mono</strong> for labels, the table of contents, the date, and IO tags. The proportional/monospace split is the system's editorial signature.</p>
+
+          <div class="specimen"><div class="tag">title · Inter 700 · 1.75rem</div><div class="sp-title">Automated Deployment Setup</div></div>
+          <div class="specimen"><div class="tag">section · Inter 600 · 1.125rem</div><div class="sp-section">Background</div></div>
+          <div class="specimen"><div class="tag">task · Inter 600 · 1rem</div><div class="sp-task">Write the deploy script</div></div>
+          <div class="specimen"><div class="tag">body-md · Inter 400 · 0.9375rem</div><div class="sp-body-md">Wire up the existing CI to handle deploys automatically on every push to main.</div></div>
+          <div class="specimen"><div class="tag">body-sm · Inter 400 · 0.875rem</div><div class="sp-body-sm">SSH access to the production server and the docker-compose file.</div></div>
+          <div class="specimen"><div class="tag">label · JetBrains Mono 500 · 0.6875rem</div><div class="sp-label">Checklist</div></div>
+          <div class="specimen"><div class="tag">meta · JetBrains Mono 400 · 0.8125rem</div><div class="sp-meta">2026-06-13</div></div>
+        </section>
+
+        <section class="section spy-target" id="layout">
+          <h2>Layout</h2>
+          <p>The document is centered in a shell of 1040px with equal outer gutters. Inside: a content column (≤720px) on the left, a 48px gap, and a 220px sticky TOC on the right. The page header spans the full shell width above both columns.</p>
+          <table class="token-table">
+            <thead><tr><th>Token</th><th>Value</th><th>Use</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">shell-max</td><td class="mono">1040px</td><td>Centered shell width</td></tr>
+              <tr><td class="mono">content-max</td><td class="mono">720px</td><td>Content column max width</td></tr>
+              <tr><td class="mono">toc-width</td><td class="mono">220px</td><td>Sticky TOC column</td></tr>
+              <tr><td class="mono">gutter</td><td class="mono">48px</td><td>Gap between columns</td></tr>
+              <tr><td class="mono">xl / xxl</td><td class="mono">40px / 64px</td><td>Section &amp; band rhythm</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section spy-target" id="elevation">
+          <h2>Elevation &amp; Depth</h2>
+          <p>The system is flat — there are no drop shadows anywhere. Depth is conveyed by borders and a single accent rule.</p>
+          <table class="token-table">
+            <thead><tr><th>Level</th><th>Treatment</th><th>Use</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">Paper</td><td>canvas background, no border</td><td>Page floor</td></tr>
+              <tr><td class="mono">Hairline</td><td>1px border</td><td>Cards, header rule, dividers</td></tr>
+              <tr><td class="mono">Tinted fill</td><td>surface-alt, no border</td><td>IO blocks inside cards</td></tr>
+              <tr><td class="mono">Accent rule</td><td>3px accent left border</td><td>Section headings, active TOC</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section spy-target" id="shapes">
+          <h2>Shapes</h2>
+          <p>The system has <strong>no border radius</strong>. Every element uses square <code>none</code> (0px) corners — the sharp rectangles reinforce the clear-border, paper-document feel.</p>
+          <div class="sample-grid">
+            <div class="radius-sample"><div class="box" style="border-radius: 0"></div><div class="lbl">none · 0px</div></div>
+            <div class="radius-sample"><div class="box" style="border-radius: 9999px"></div><div class="lbl">full · unused</div></div>
+          </div>
+        </section>
+
+        <section class="section" id="components">
+          <h2>Components</h2>
+          <p>The assignment document is assembled from the components below. A generated document always follows the order: page header → Background → Current State → Tasks.</p>
+
+          <h3 class="spy-target" id="comp-task-card">Task Card</h3>
+          <p>White surface card, 1px border, crisp corners. A mono task-number badge precedes the title; Input/Output sit in tinted blocks; a checklist closes the card.</p>
+          <div class="tasks">
+            <article class="task-card">
+              <h4><span class="task-num">1</span>Write the deploy script</h4>
+              <div class="io-row">
+                <div class="io-block">
+                  <span class="io-label">Input</span>
+                  <p>SSH access to the production server, the <code>docker-compose.yml</code>, and the list of services to restart.</p>
+                </div>
+                <div class="io-block">
+                  <span class="io-label">Output</span>
+                  <p><code>scripts/deploy.sh</code> committed to the repo root.</p>
+                </div>
+              </div>
+              <div class="checklist">
+                <p class="checklist-heading">Checklist</p>
+                <ul>
+                  <li><label><input type="checkbox" checked /><span>Accepts <code>SERVICE</code> as an argument, defaults to all three</span></label></li>
+                  <li><label><input type="checkbox" /><span>Pulls latest image, restarts container, prints timestamp</span></label></li>
+                  <li><label><input type="checkbox" /><span>Idempotent — running twice produces the same result</span></label></li>
+                </ul>
+              </div>
+            </article>
+          </div>
+
+          <h3 class="spy-target" id="comp-code">Code Block</h3>
+          <p>Inline <code>&lt;pre&gt;&lt;code class="language-*"&gt;</code> blocks render via shiki <strong>catppuccin-mocha</strong> — deliberate dark islands on the paper.</p>
+          <pre><code class="language-yaml">name: Deploy
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest</code></pre>
+
+          <h3 class="spy-target" id="comp-diagram">Diagram</h3>
+          <p><code>&lt;pre class="mermaid"&gt;</code> wrapped in a white card with a hairline border. Mermaid theme <code>neutral</code> reads cleanly on the paper canvas.</p>
+          <div class="diagram-wrapper">
+            <pre class="mermaid">
+graph LR
+  A[Brief] --> B[Propose tasks]
+  B --> C[Interview]
+  C --> D[Generate doc]
+            </pre>
+          </div>
+        </section>
+
+        <section class="section spy-target" id="dos-donts">
+          <h2>Do's and Don'ts</h2>
+          <div class="dos-donts">
+            <div class="dd do">
+              <h4>Do</h4>
+              <ul>
+                <li>Keep the canvas as paper and let 1px hairlines carry structure.</li>
+                <li>Use the slate-blue accent only for interaction, active TOC, and checked items.</li>
+                <li>Set every label, the TOC, and the date in uppercase JetBrains Mono.</li>
+                <li>Keep corners crisp — 0px or 4px, never softer.</li>
+                <li>Keep the header to title + date only.</li>
+              </ul>
+            </div>
+            <div class="dd dont">
+              <h4>Don't</h4>
+              <ul>
+                <li>Don't add drop shadows — depth is borders, never shadow.</li>
+                <li>Don't use pure white as the page floor.</li>
+                <li>Don't introduce a second accent hue.</li>
+                <li>Don't set body in mono, or labels in Inter.</li>
+                <li>Don't give the code block a light theme — the dark island is intentional.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section spy-target" id="responsive">
+          <h2>Responsive Behavior</h2>
+          <p>Two columns at desktop; below 1024px the layout drops to a single column and the TOC becomes a foldable "Contents" disclosure above the content. Resize this window to see it.</p>
+          <table class="token-table">
+            <thead><tr><th>Breakpoint</th><th>Width</th><th>Layout</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">Desktop</td><td class="mono">≥ 1024px</td><td>Content + sticky TOC, 48px gap</td></tr>
+              <tr><td class="mono">Narrow</td><td class="mono">&lt; 1024px</td><td>Single column; TOC folds to a Contents block</td></tr>
+              <tr><td class="mono">Mobile</td><td class="mono">&lt; 560px</td><td>IO blocks stack one-up; reduced padding</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+      </main>
+
+      <aside class="toc">
+        <details open>
+          <summary>Contents</summary>
+          <p class="toc-heading">Contents</p>
+          <nav class="toc-nav">
+            <ul>
+              <li><a href="#overview">Overview</a></li>
+              <li><a href="#colors">Colors</a></li>
+              <li><a href="#typography">Typography</a></li>
+              <li><a href="#layout">Layout</a></li>
+              <li><a href="#elevation">Elevation &amp; Depth</a></li>
+              <li><a href="#shapes">Shapes</a></li>
+              <li>
+                <a href="#components">Components</a>
+                <ul class="toc-sub">
+                  <li><a href="#comp-task-card">Task Card</a></li>
+                  <li><a href="#comp-code">Code Block</a></li>
+                  <li><a href="#comp-diagram">Diagram</a></li>
+                </ul>
+              </li>
+              <li><a href="#dos-donts">Do's and Don'ts</a></li>
+              <li><a href="#responsive">Responsive</a></li>
+            </ul>
+          </nav>
+        </details>
+      </aside>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createHighlighter } from "https://esm.sh/shiki@1";
+    const hl = await createHighlighter({
+      themes: ["catppuccin-mocha"],
+      langs: ["javascript","typescript","python","bash","shell","json","yaml","sql","text"],
+    });
+    document.querySelectorAll("pre code[class]").forEach((el) => {
+      const lang = el.className.replace("language-", "") || "text";
+      el.closest("pre").outerHTML = hl.codeToHtml(el.textContent.trimEnd(), { lang, theme: "catppuccin-mocha" });
+    });
+    hl.dispose();
+  </script>
+
+  <script>
+    const links = [...document.querySelectorAll(".toc-nav a")];
+    const byId = new Map(links.map((a) => [a.getAttribute("href").slice(1), a]));
+    const spy = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            links.forEach((l) => l.classList.remove("active"));
+            byId.get(e.target.id)?.classList.add("active");
+          }
+        });
+      },
+      { rootMargin: "0px 0px -70% 0px", threshold: 0 }
+    );
+    document.querySelectorAll("[id].spy-target").forEach((s) => spy.observe(s));
+  </script>
+
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true, theme: "neutral" });
+  </script>
+
+</body>
+</html>
