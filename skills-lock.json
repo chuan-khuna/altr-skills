@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "calm-down": {
+      "source": "D:\\code\\altr-skills\\skills",
+      "sourceType": "local",
+      "computedHash": "0c836c455c3ef1318759586b19f57f6ca5f95931534a9f01d07bb8ea57791a3f"
+    },
     "doc-coauthoring": {
       "source": "anthropics/skills",
       "sourceType": "github",
