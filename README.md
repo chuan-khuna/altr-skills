@@ -10,7 +10,7 @@ bunx skills add https://github.com/chuan-khuna/altr-skills
 ## Skills
 
 - [productivity](skills/productivity/README.md) — Daily non-code workflow tools.
-- [work](skills/work/README.md) — Day-to-day work communication — standups, progress updates, and JIRA workflows.
+- [work](skills/work/README.md) — Day-to-day work — standups, progress updates, JIRA workflows, and project setup.
 
 ## References
 

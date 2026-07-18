@@ -11,6 +11,7 @@
     "./skills/work/jira-standup-meeting",
     "./skills/work/progress-summary",
     "./skills/productivity/write-doc",
-    "./skills/work/calm-down"
+    "./skills/work/calm-down",
+    "./skills/work/harden-js-dependencies"
   ]
 }
