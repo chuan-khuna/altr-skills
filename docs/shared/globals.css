@@ -1,13 +1,36 @@
 /* Shared styles for HTML documents in docs/.
-   Theme: Rosé Pine Moon (dark) and Dawn (light). Colours in oklch() only.
-   Pair with docs/shared/doc.js. */
+   Themes: Rosé Pine, Catppuccin, Everforest, Kanagawa — one light and one dark
+   variant each, chosen in the theme dropdown (doc.js sets data-theme and
+   data-mode on <html>). Colours in oklch() only. Pair with docs/shared/doc.js. */
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Thai+Looped:wght@400;500;600;700&display=swap");
 
 /* ---------- Tokens ---------- */
 
+/* Shared tokens. Each theme below fills the same colour roles
+   (named after Rosé Pine: base, surface, overlay, muted, subtle, text,
+   love, gold, rose, pine, foam, iris, hl-low/med/high, accent). */
 :root {
-  /* Rosé Pine Dawn */
+  --ink: color-mix(in oklch, var(--text) 85%, black);
+  --border: var(--hl-med);
+  --code-bg: var(--surface);
+
+  --radius: 4px;
+  --radius-sm: 3px;
+  --font-sans: "Inter", "Noto Sans Thai Looped", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  color-scheme: light;
+}
+:root[data-mode="dark"] {
+  --ink: color-mix(in oklch, var(--text) 90%, white);
+  --code-bg: color-mix(in oklch, var(--base) 70%, black);
+  color-scheme: dark;
+}
+
+/* Rosé Pine Dawn (light) */
+:root,
+:root[data-theme="rose-pine-dawn"] {
   --base: oklch(97% 0.011 71.9);
   --surface: oklch(98.7% 0.011 76.6);
   --overlay: oklch(93.9% 0.015 64.3);
@@ -23,21 +46,71 @@
   --hl-low: oklch(95% 0.01 58.2);
   --hl-med: oklch(89.2% 0.006 31.1);
   --hl-high: oklch(84.3% 0.006 334);
-
-  --ink: color-mix(in oklch, var(--text) 85%, black);
   --accent: var(--pine);
-  --border: var(--hl-med);
-  --code-bg: var(--surface);
-
-  --radius: 4px;
-  --radius-sm: 3px;
-  --font-sans: "Inter", "Noto Sans Thai Looped", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-
-  color-scheme: light;
 }
 
-:root[data-theme="moon"] {
+/* Catppuccin Latte (light) */
+:root[data-theme="catppuccin-latte"] {
+  --base: oklch(95.8% 0.006 264.5);
+  --surface: oklch(97.9% 0.003 264.5);
+  --overlay: oklch(93.3% 0.009 264.5);
+  --muted: oklch(70.8% 0.024 274.6);
+  --subtle: oklch(54.7% 0.034 279.1);
+  --text: oklch(43.5% 0.043 279.3);
+  --love: oklch(55% 0.216 19.8);
+  --gold: oklch(71.4% 0.149 67.8);
+  --rose: oklch(68.6% 0.126 20.9);
+  --pine: oklch(55.9% 0.226 262.1);
+  --foam: oklch(60.2% 0.098 201.1);
+  --iris: oklch(55.5% 0.25 297);
+  --hl-low: oklch(93.3% 0.009 264.5);
+  --hl-med: oklch(85.7% 0.014 268.5);
+  --hl-high: oklch(80.8% 0.017 271.2);
+  --accent: var(--pine);
+}
+
+/* Everforest Light (light) */
+:root[data-theme="everforest-light"] {
+  --base: oklch(97.4% 0.026 90.1);
+  --surface: oklch(98.8% 0.016 91.5);
+  --overlay: oklch(95.2% 0.031 98.9);
+  --muted: oklch(74.5% 0.025 133.5);
+  --subtle: oklch(64% 0.029 143.5);
+  --text: oklch(51.5% 0.021 232.9);
+  --love: oklch(67.1% 0.2 25.2);
+  --gold: oklch(74.7% 0.155 80.3);
+  --rose: oklch(71.5% 0.173 50.7);
+  --pine: oklch(65.3% 0.121 163.9);
+  --foam: oklch(63.4% 0.112 236.3);
+  --iris: oklch(68.7% 0.174 341);
+  --hl-low: oklch(93.7% 0.031 98.9);
+  --hl-med: oklch(91% 0.03 98.5);
+  --hl-high: oklch(80.7% 0.028 120.6);
+  --accent: var(--pine);
+}
+
+/* Kanagawa Lotus (light) */
+:root[data-theme="kanagawa-lotus"] {
+  --base: oklch(93.6% 0.063 101.6);
+  --surface: oklch(95.3% 0.047 100.7);
+  --overlay: oklch(89.3% 0.06 99.1);
+  --muted: oklch(62.8% 0.013 101.6);
+  --subtle: oklch(53.7% 0.02 96.3);
+  --text: oklch(45.2% 0.026 285.3);
+  --love: oklch(57.1% 0.171 16.5);
+  --gold: oklch(71.9% 0.163 63.8);
+  --rose: oklch(58.5% 0.118 359.8);
+  --pine: oklch(52.1% 0.086 261.5);
+  --foam: oklch(55.5% 0.04 182.7);
+  --iris: oklch(46.3% 0.09 301.4);
+  --hl-low: oklch(88.7% 0.077 98);
+  --hl-med: oklch(84.6% 0.058 99.8);
+  --hl-high: oklch(79.4% 0.056 99.4);
+  --accent: var(--pine);
+}
+
+/* Rosé Pine Moon (dark) */
+:root[data-theme="rose-pine-moon"] {
   --base: oklch(26% 0.039 287.7);
   --surface: oklch(28.8% 0.043 289.1);
   --overlay: oklch(34.6% 0.05 289.8);
@@ -53,12 +126,101 @@
   --hl-low: oklch(28.9% 0.04 287.8);
   --hl-med: oklch(38.9% 0.042 289.8);
   --hl-high: oklch(45.4% 0.045 291);
-
-  --ink: color-mix(in oklch, var(--text) 90%, white);
   --accent: var(--foam);
-  --code-bg: color-mix(in oklch, var(--base) 70%, black);
+}
 
-  color-scheme: dark;
+/* Catppuccin Macchiato (dark) */
+:root[data-theme="catppuccin-macchiato"] {
+  --base: oklch(27.9% 0.035 276.9);
+  --surface: oklch(30.9% 0.04 277.8);
+  --overlay: oklch(35.4% 0.037 276);
+  --muted: oklch(56.1% 0.041 276.5);
+  --subtle: oklch(75.1% 0.044 273.5);
+  --text: oklch(87.1% 0.048 273.7);
+  --love: oklch(73.7% 0.125 11.2);
+  --gold: oklch(87.9% 0.074 84.8);
+  --rose: oklch(86.1% 0.083 336.2);
+  --pine: oklch(75% 0.11 263.8);
+  --foam: oklch(82.1% 0.076 184.1);
+  --iris: oklch(77.2% 0.126 303.9);
+  --hl-low: oklch(24.9% 0.03 278.4);
+  --hl-med: oklch(35.4% 0.037 276);
+  --hl-high: oklch(42.6% 0.039 276.9);
+  --accent: var(--pine);
+}
+
+/* Everforest Dark (dark) */
+:root[data-theme="everforest-dark"] {
+  --base: oklch(32.4% 0.015 240.4);
+  --surface: oklch(36% 0.017 227.1);
+  --overlay: oklch(39.4% 0.017 227);
+  --muted: oklch(60.1% 0.021 140.5);
+  --subtle: oklch(72.3% 0.019 153.4);
+  --text: oklch(83% 0.041 86.1);
+  --love: oklch(70.9% 0.128 19.6);
+  --gold: oklch(80.8% 0.086 83.7);
+  --rose: oklch(75% 0.106 44.9);
+  --pine: oklch(75.4% 0.091 151.4);
+  --foam: oklch(77.3% 0.091 125.8);
+  --iris: oklch(75% 0.082 349.2);
+  --hl-low: oklch(36% 0.017 227.1);
+  --hl-med: oklch(43.1% 0.017 231.6);
+  --hl-high: oklch(48.7% 0.017 175.1);
+  --accent: var(--foam);
+}
+
+/* Kanagawa Wave (dark) */
+:root[data-theme="kanagawa-wave"] {
+  --base: oklch(24.3% 0.017 285.1);
+  --surface: oklch(29.1% 0.024 284.8);
+  --overlay: oklch(34% 0.028 284.8);
+  --muted: oklch(54.7% 0.012 101);
+  --subtle: oklch(72.2% 0.014 106.7);
+  --text: oklch(87.6% 0.039 99.1);
+  --love: oklch(67.1% 0.154 15.3);
+  --gold: oklch(83.3% 0.09 81.6);
+  --rose: oklch(69% 0.108 359.6);
+  --pine: oklch(69.4% 0.095 263.7);
+  --foam: oklch(74.1% 0.064 225.7);
+  --iris: oklch(63.8% 0.087 301.7);
+  --hl-low: oklch(29.1% 0.024 284.8);
+  --hl-med: oklch(34% 0.028 284.8);
+  --hl-high: oklch(45.6% 0.041 284.7);
+  --accent: var(--pine);
+}
+
+/* Shiki: each theme's colours arrive as --shiki-<theme-id> (defaultColor: false). */
+:root[data-theme="rose-pine-dawn"] .shiki,
+:root[data-theme="rose-pine-dawn"] .shiki span {
+  color: var(--shiki-rose-pine-dawn);
+}
+:root[data-theme="catppuccin-latte"] .shiki,
+:root[data-theme="catppuccin-latte"] .shiki span {
+  color: var(--shiki-catppuccin-latte);
+}
+:root[data-theme="everforest-light"] .shiki,
+:root[data-theme="everforest-light"] .shiki span {
+  color: var(--shiki-everforest-light);
+}
+:root[data-theme="kanagawa-lotus"] .shiki,
+:root[data-theme="kanagawa-lotus"] .shiki span {
+  color: var(--shiki-kanagawa-lotus);
+}
+:root[data-theme="rose-pine-moon"] .shiki,
+:root[data-theme="rose-pine-moon"] .shiki span {
+  color: var(--shiki-rose-pine-moon);
+}
+:root[data-theme="catppuccin-macchiato"] .shiki,
+:root[data-theme="catppuccin-macchiato"] .shiki span {
+  color: var(--shiki-catppuccin-macchiato);
+}
+:root[data-theme="everforest-dark"] .shiki,
+:root[data-theme="everforest-dark"] .shiki span {
+  color: var(--shiki-everforest-dark);
+}
+:root[data-theme="kanagawa-wave"] .shiki,
+:root[data-theme="kanagawa-wave"] .shiki span {
+  color: var(--shiki-kanagawa-wave);
 }
 
 /* ---------- Base ---------- */
@@ -474,32 +636,6 @@ pre {
   background: transparent !important;
 }
 
-/* Shiki renders every theme as CSS variables (defaultColor: false).
-   The active pair is picked by data-code-theme on <html> and the mode. */
-.shiki,
-.shiki span {
-  color: var(--c-light);
-}
-:root[data-theme="moon"] .shiki,
-:root[data-theme="moon"] .shiki span {
-  color: var(--c-dark);
-}
-:root[data-code-theme="rose-pine"] .shiki,
-:root[data-code-theme="rose-pine"] .shiki span {
-  --c-light: var(--shiki-rp-light);
-  --c-dark: var(--shiki-rp-dark);
-}
-:root[data-code-theme="catppuccin"] .shiki,
-:root[data-code-theme="catppuccin"] .shiki span {
-  --c-light: var(--shiki-cp-light);
-  --c-dark: var(--shiki-cp-dark);
-}
-:root[data-code-theme="everforest"] .shiki,
-:root[data-code-theme="everforest"] .shiki span {
-  --c-light: var(--shiki-ef-light);
-  --c-dark: var(--shiki-ef-dark);
-}
-
 /* ---------- Diagrams (Pele) ---------- */
 
 .diagram {
@@ -819,4 +955,65 @@ dl.glossary dd {
 }
 dl.glossary dd p {
   margin-bottom: 0.4rem;
+}
+
+/* ---------- Selection ---------- */
+
+::selection {
+  background: color-mix(in oklch, var(--iris) 40%, transparent);
+  color: var(--ink);
+}
+/* SVG text (Pele diagrams) paints with fill, not color. */
+svg text::selection,
+svg tspan::selection {
+  background: color-mix(in oklch, var(--iris) 40%, transparent);
+  fill: var(--ink);
+}
+
+/* ---------- Theme dropdown ---------- */
+
+.theme-picker {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: var(--subtle);
+}
+.theme-picker > svg {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  pointer-events: none;
+}
+.theme-picker > svg:first-child {
+  left: 0.55rem;
+}
+.theme-picker > svg:last-child {
+  right: 0.5rem;
+  width: 13px;
+  height: 13px;
+}
+.theme-picker select {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 32px;
+  padding: 0 1.9rem 0 2rem;
+  font: inherit;
+  font-size: 0.82rem;
+  color: var(--ink);
+  background: var(--overlay);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.theme-picker select:hover {
+  border-color: var(--hl-high);
+}
+.theme-picker select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.theme-picker select option,
+.theme-picker select optgroup {
+  background: var(--surface);
+  color: var(--ink);
 }

@@ -44,8 +44,8 @@ When a document is generated as HTML:
 
 - Shared assets: CSS and JS used across HTML documents live in `docs/shared/` (e.g. `docs/shared/globals.css`). Link them with relative paths instead of inlining or duplicating them per page; add new shared code there.
 
-- Theme: Rosé Pine Moon (dark) and Dawn (light) only, with an icon theme switcher: Auto (monitor), Moon (moon), Dawn (sun). Each name is the icon's tooltip and aria-label.
-- Code blocks: highlight with Shiki; one code-theme icon button cycles Rosé Pine, Catppuccin and Everforest.
+- Theme: choose from a dropdown with "Auto (system)" first, then options grouped by Light and Dark. Light: Rosé Pine Dawn, Catppuccin Latte, Everforest Light, Kanagawa Lotus. Dark: Rosé Pine Moon, Catppuccin Macchiato, Everforest Dark, Kanagawa Wave. Auto follows the system setting with Rosé Pine.
+- Code blocks: highlight with Shiki, using the Shiki theme that matches the selected page theme.
 - Diagrams: write them in Mermaid and render with Pele (pele.run/api). Make them expandable, zoomable and pannable, with expand, close and zoom icon controls.
 - Styling: small border radius (about 3–6px), and thin scrollbars styled to match the theme.
 - Include a table of contents.

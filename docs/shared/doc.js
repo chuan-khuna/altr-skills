@@ -1,9 +1,10 @@
 /* Shared behaviour for HTML documents in docs/.
    Load in <head> without defer, so the theme is set before first paint:
      <script src="../../shared/doc.js"></script>
-   Provides: theme switcher (Auto / Moon / Dawn), code-theme cycle
-   (Rosé Pine / Catppuccin / Everforest) with Shiki, Mermaid diagrams
-   rendered by Pele (expand, close, zoom, pan), and the table of contents. */
+   Provides: theme dropdown (Auto, then Light / Dark groups of Rosé Pine,
+   Catppuccin, Everforest and Kanagawa; code blocks use the matching Shiki
+   theme), Mermaid diagrams rendered by Pele (zoom, reset, expand, pan),
+   glossary pop-ups, and the table of contents. */
 
 (() => {
   "use strict";
@@ -16,17 +17,25 @@
   const SHIKI_URL = "https://esm.sh/shiki@4.5.0";
   const PELE_URL = "https://cdn.jsdelivr.net/npm/pele@1.12.0/dist/pele.global.js";
 
-  const CODE_THEMES = [
-    { id: "rose-pine", name: "Rosé Pine", light: "rose-pine-dawn", dark: "rose-pine-moon", key: "rp" },
-    { id: "catppuccin", name: "Catppuccin", light: "catppuccin-latte", dark: "catppuccin-macchiato", key: "cp" },
-    { id: "everforest", name: "Everforest", light: "everforest-light", dark: "everforest-dark", key: "ef" },
+  /* Each id is both the data-theme value (colour tokens in globals.css)
+     and the Shiki theme name used for code blocks. */
+  const THEMES = [
+    { id: "rose-pine-dawn", name: "Rosé Pine Dawn", mode: "light" },
+    { id: "catppuccin-latte", name: "Catppuccin Latte", mode: "light" },
+    { id: "everforest-light", name: "Everforest Light", mode: "light" },
+    { id: "kanagawa-lotus", name: "Kanagawa Lotus", mode: "light" },
+    { id: "rose-pine-moon", name: "Rosé Pine Moon", mode: "dark" },
+    { id: "catppuccin-macchiato", name: "Catppuccin Macchiato", mode: "dark" },
+    { id: "everforest-dark", name: "Everforest Dark", mode: "dark" },
+    { id: "kanagawa-wave", name: "Kanagawa Wave", mode: "dark" },
   ];
+  /* Auto follows the system light/dark setting with Rosé Pine. */
+  const AUTO = { light: "rose-pine-dawn", dark: "rose-pine-moon" };
+  const LEGACY = { dawn: "rose-pine-dawn", moon: "rose-pine-moon" };
 
   const ICONS = {
-    auto: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>',
-    moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>',
-    dawn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>',
-    palette: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>',
+    palette: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.65-.75 1.65-1.69 0-.44-.18-.84-.44-1.13-.29-.29-.44-.65-.44-1.13a1.64 1.64 0 0 1 1.67-1.67h2c3.05 0 5.56-2.5 5.56-5.55C21.97 6.01 17.46 2 12 2z"/></svg>',
+    chevron: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>',
     expand: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>',
     zoomIn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg>',
     zoomOut: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M8 11h6"/></svg>',
@@ -58,28 +67,18 @@
   /* ---------- Theme ---------- */
 
   let themeChoice = store.get("doc-theme") || "auto";
+  themeChoice = LEGACY[themeChoice] || themeChoice;
+  if (themeChoice !== "auto" && !THEMES.some((t) => t.id === themeChoice)) themeChoice = "auto";
 
   function applyTheme() {
-    const mode = themeChoice === "auto" ? (darkQuery.matches ? "moon" : "dawn") : themeChoice;
-    root.dataset.theme = mode;
-    document.querySelectorAll("[data-theme-choice]").forEach((b) => {
-      b.setAttribute("aria-pressed", String(b.dataset.themeChoice === themeChoice));
-    });
-  }
-
-  let codeTheme = CODE_THEMES.find((t) => t.id === store.get("doc-code-theme")) || CODE_THEMES[0];
-
-  function applyCodeTheme() {
-    root.dataset.codeTheme = codeTheme.id;
-    document.querySelectorAll("[data-code-theme-cycle]").forEach((b) => {
-      const label = `Code theme: ${codeTheme.name}`;
-      b.title = label;
-      b.setAttribute("aria-label", label);
-    });
+    const id = themeChoice === "auto" ? AUTO[darkQuery.matches ? "dark" : "light"] : themeChoice;
+    const theme = THEMES.find((t) => t.id === id);
+    root.dataset.theme = theme.id;
+    root.dataset.mode = theme.mode;
+    document.querySelectorAll("select[data-theme-select]").forEach((s) => (s.value = themeChoice));
   }
 
   applyTheme();
-  applyCodeTheme();
   darkQuery.addEventListener("change", applyTheme);
 
   /* ---------- Controls ---------- */
@@ -98,36 +97,34 @@
   function buildControls(host) {
     host.classList.add("controls");
 
-    const group = document.createElement("div");
-    group.className = "segmented";
-    group.setAttribute("role", "group");
-    group.setAttribute("aria-label", "Theme");
-    for (const [id, label] of [
-      ["auto", "Auto"],
-      ["moon", "Moon"],
-      ["dawn", "Dawn"],
-    ]) {
-      const b = button(id, label, { "data-theme-choice": id });
-      b.addEventListener("click", () => {
-        themeChoice = id;
-        store.set("doc-theme", id);
-        applyTheme();
-      });
-      group.append(b);
-    }
+    const picker = document.createElement("label");
+    picker.className = "theme-picker";
+    picker.title = "Theme";
 
-    const cycle = button("palette", "Code theme", { "data-code-theme-cycle": "" });
-    cycle.classList.add("solo");
-    cycle.addEventListener("click", () => {
-      const i = CODE_THEMES.indexOf(codeTheme);
-      codeTheme = CODE_THEMES[(i + 1) % CODE_THEMES.length];
-      store.set("doc-code-theme", codeTheme.id);
-      applyCodeTheme();
+    const select = document.createElement("select");
+    select.setAttribute("data-theme-select", "");
+    select.setAttribute("aria-label", "Theme");
+    select.append(new Option("Auto (system)", "auto"));
+    for (const [mode, label] of [
+      ["light", "Light"],
+      ["dark", "Dark"],
+    ]) {
+      const group = document.createElement("optgroup");
+      group.label = label;
+      for (const t of THEMES.filter((t) => t.mode === mode)) group.append(new Option(t.name, t.id));
+      select.append(group);
+    }
+    select.addEventListener("change", () => {
+      themeChoice = select.value;
+      store.set("doc-theme", themeChoice);
+      applyTheme();
     });
 
-    host.append(group, cycle);
+    picker.insertAdjacentHTML("afterbegin", ICONS.palette);
+    picker.append(select);
+    picker.insertAdjacentHTML("beforeend", ICONS.chevron);
+    host.append(picker);
     applyTheme();
-    applyCodeTheme();
   }
 
   /* ---------- Table of contents ---------- */
@@ -182,11 +179,7 @@
     const blocks = [...document.querySelectorAll("pre > code[class*='language-']")];
     if (!blocks.length) return;
 
-    const themes = {};
-    for (const t of CODE_THEMES) {
-      themes[`${t.key}-light`] = t.light;
-      themes[`${t.key}-dark`] = t.dark;
-    }
+    const themes = Object.fromEntries(THEMES.map((t) => [t.id, t.id]));
 
     let codeToHtml;
     try {
