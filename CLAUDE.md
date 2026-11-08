@@ -49,6 +49,7 @@ When a document is generated as HTML:
 - Diagrams: write them in Mermaid and render with Pele (pele.run/api). Make them expandable, zoomable and pannable, with expand, close and zoom icon controls.
 - Styling: small border radius (about 3–6px), and thin scrollbars styled to match the theme.
 - Include a table of contents.
+- Highlights: for a truly important passage, wrap it in `<mark>`; `doc.js` draws it with [marker-highlight](https://solarise.dev/libs/marker-highlight/) in the theme colour (default gold; `mark-love`, `mark-iris`, `mark-foam` for others). Use it rarely — at most one or two per document — and **ask the user before adding any highlight**, naming the exact passage.
 - Colour: write every colour in `oklch()` (derive with
   `color-mix(in oklch, …)`); no hex, `rgb()` or `hsl()`.
 - Thai body text: use a looped Thai font (e.g. Noto Sans Thai Looped).

@@ -30,7 +30,8 @@
 
 /* Rosé Pine Dawn (light) */
 :root,
-:root[data-theme="rose-pine-dawn"] {
+:root[data-theme="rose-pine-dawn"],
+[data-theme-preview="rose-pine-dawn"] {
   --base: oklch(97% 0.011 71.9);
   --surface: oklch(98.7% 0.011 76.6);
   --overlay: oklch(93.9% 0.015 64.3);
@@ -50,7 +51,8 @@
 }
 
 /* Catppuccin Latte (light) */
-:root[data-theme="catppuccin-latte"] {
+:root[data-theme="catppuccin-latte"],
+[data-theme-preview="catppuccin-latte"] {
   --base: oklch(95.8% 0.006 264.5);
   --surface: oklch(97.9% 0.003 264.5);
   --overlay: oklch(93.3% 0.009 264.5);
@@ -70,7 +72,8 @@
 }
 
 /* Everforest Light (light) */
-:root[data-theme="everforest-light"] {
+:root[data-theme="everforest-light"],
+[data-theme-preview="everforest-light"] {
   --base: oklch(97.4% 0.026 90.1);
   --surface: oklch(98.8% 0.016 91.5);
   --overlay: oklch(95.2% 0.031 98.9);
@@ -90,7 +93,8 @@
 }
 
 /* Kanagawa Lotus (light) */
-:root[data-theme="kanagawa-lotus"] {
+:root[data-theme="kanagawa-lotus"],
+[data-theme-preview="kanagawa-lotus"] {
   --base: oklch(93.6% 0.063 101.6);
   --surface: oklch(95.3% 0.047 100.7);
   --overlay: oklch(89.3% 0.06 99.1);
@@ -110,7 +114,8 @@
 }
 
 /* Rosé Pine Moon (dark) */
-:root[data-theme="rose-pine-moon"] {
+:root[data-theme="rose-pine-moon"],
+[data-theme-preview="rose-pine-moon"] {
   --base: oklch(26% 0.039 287.7);
   --surface: oklch(28.8% 0.043 289.1);
   --overlay: oklch(34.6% 0.05 289.8);
@@ -130,7 +135,8 @@
 }
 
 /* Catppuccin Macchiato (dark) */
-:root[data-theme="catppuccin-macchiato"] {
+:root[data-theme="catppuccin-macchiato"],
+[data-theme-preview="catppuccin-macchiato"] {
   --base: oklch(27.9% 0.035 276.9);
   --surface: oklch(30.9% 0.04 277.8);
   --overlay: oklch(35.4% 0.037 276);
@@ -150,7 +156,8 @@
 }
 
 /* Everforest Dark (dark) */
-:root[data-theme="everforest-dark"] {
+:root[data-theme="everforest-dark"],
+[data-theme-preview="everforest-dark"] {
   --base: oklch(32.4% 0.015 240.4);
   --surface: oklch(36% 0.017 227.1);
   --overlay: oklch(39.4% 0.017 227);
@@ -170,7 +177,8 @@
 }
 
 /* Kanagawa Wave (dark) */
-:root[data-theme="kanagawa-wave"] {
+:root[data-theme="kanagawa-wave"],
+[data-theme-preview="kanagawa-wave"] {
   --base: oklch(24.3% 0.017 285.1);
   --surface: oklch(29.1% 0.024 284.8);
   --overlay: oklch(34% 0.028 284.8);
@@ -233,7 +241,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 1.5rem;
+  scroll-padding-top: 4.5rem;
 }
 
 /* Thin scrollbars that match the theme, with no arrow buttons.
@@ -356,10 +364,18 @@ hr {
 .page {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 1.25rem 1.5rem 5rem;
+  padding: 0.5rem 1.5rem 5rem;
+}
+body {
+  overflow-x: clip;
 }
 
 .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  isolation: isolate;
+  padding-top: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -368,6 +384,34 @@ hr {
   margin-bottom: 2.5rem;
   border-bottom: 1px solid var(--border);
   font-size: 0.875rem;
+}
+/* Full-width frosted backdrop behind the sticky bar; it fades out at the bottom
+   so content slides under it softly instead of a hard cut. */
+.topbar::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: -1.25rem;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  background: color-mix(in oklch, var(--base) 85%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  mask-image: linear-gradient(to bottom, black calc(100% - 1.25rem), transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 1.25rem), transparent);
+  pointer-events: none;
+}
+/* Bottom rule on its own layer, above the backdrop. */
+.topbar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--border);
 }
 .topbar .crumbs {
   color: var(--subtle);
@@ -425,8 +469,8 @@ hr {
 
 .toc {
   position: sticky;
-  top: 1.5rem;
-  max-height: calc(100vh - 3rem);
+  top: 4.75rem;
+  max-height: calc(100vh - 6rem);
   overflow: auto;
   font-size: 0.85rem;
 }
@@ -972,31 +1016,15 @@ svg tspan::selection {
 
 /* ---------- Theme dropdown ---------- */
 
-.theme-picker {
+.theme-menu {
   position: relative;
+}
+.theme-trigger {
   display: inline-flex;
   align-items: center;
-  color: var(--subtle);
-}
-.theme-picker > svg {
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  pointer-events: none;
-}
-.theme-picker > svg:first-child {
-  left: 0.55rem;
-}
-.theme-picker > svg:last-child {
-  right: 0.5rem;
-  width: 13px;
-  height: 13px;
-}
-.theme-picker select {
-  appearance: none;
-  -webkit-appearance: none;
+  gap: 0.5rem;
   height: 32px;
-  padding: 0 1.9rem 0 2rem;
+  padding: 0 0.5rem 0 0.55rem;
   font: inherit;
   font-size: 0.82rem;
   color: var(--ink);
@@ -1005,15 +1033,160 @@ svg tspan::selection {
   border-radius: var(--radius);
   cursor: pointer;
 }
-.theme-picker select:hover {
+.theme-trigger:hover {
   border-color: var(--hl-high);
 }
-.theme-picker select:focus-visible {
+.theme-trigger:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
 }
-.theme-picker select option,
-.theme-picker select optgroup {
+.theme-trigger svg {
+  width: 15px;
+  height: 15px;
+  color: var(--subtle);
+}
+.theme-trigger .chev {
+  width: 13px;
+  height: 13px;
+  transition: transform 120ms ease;
+}
+.theme-trigger[aria-expanded="true"] .chev {
+  transform: rotate(180deg);
+}
+
+.theme-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 60;
+  width: 264px;
+  max-height: min(70vh, 520px);
+  overflow-y: auto;
+  margin: 0;
+  padding: 0.35rem;
+  list-style: none;
   background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 10px 28px color-mix(in oklch, black 16%, transparent), 0 1px 3px color-mix(in oklch, black 8%, transparent);
+}
+.theme-list:focus {
+  outline: none;
+}
+.theme-list[hidden] {
+  display: none;
+}
+.theme-list li + li {
+  margin-top: 0;
+}
+.theme-group {
+  padding: 0.55rem 0.55rem 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--text);
+  cursor: pointer;
+}
+.theme-option.active {
+  background: var(--overlay);
   color: var(--ink);
+}
+.theme-option[aria-selected="true"] {
+  color: var(--ink);
+  font-weight: 600;
+}
+.theme-option .check {
+  width: 14px;
+  height: 14px;
+  margin-left: auto;
+  color: var(--accent);
+  visibility: hidden;
+}
+.theme-option[aria-selected="true"] .check {
+  visibility: visible;
+}
+
+/* Preview swatch: the theme background with three overlapping colour dots
+   (accent, love, gold). [data-theme-preview] pulls that theme's tokens. */
+.theme-swatch {
+  flex: none;
+  display: flex;
+  width: 34px;
+  height: 20px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--text) 18%, transparent);
+}
+.theme-swatch > span {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--base);
+}
+.theme-swatch .dots {
+  display: flex;
+}
+.theme-swatch .dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px var(--base);
+}
+.theme-swatch .dots i + i {
+  margin-left: -4px;
+}
+.theme-swatch .dots i:nth-child(1) {
+  background: var(--accent);
+}
+.theme-swatch .dots i:nth-child(2) {
+  background: var(--love);
+}
+.theme-swatch .dots i:nth-child(3) {
+  background: var(--gold);
+}
+/* Auto: light half and dark half, two dots each. */
+.theme-swatch.split .dots i {
+  width: 8px;
+  height: 8px;
+}
+.theme-swatch.split .dots i:nth-child(3) {
+  display: none;
+}
+
+/* ---------- Marker highlight ---------- */
+/* <mark> gets a hand-drawn highlight from marker-highlight (loaded by doc.js).
+   Pick the pen with a class: default gold, or .mark-love / .mark-iris / .mark-foam.
+   --mark is resolved to rgb() by doc.js, because the library only reads rgb/hex. */
+
+mark {
+  --mark-pen: var(--gold);
+  /* Keep the pen hue; set lightness/chroma so text stays readable. */
+  --mark: oklch(from var(--mark-pen) 0.88 calc(c * 0.75) h);
+  background-color: var(--mark);
+  color: inherit;
+  padding: 0 0.1em;
+  border-radius: 2px;
+}
+:root[data-mode="dark"] mark {
+  --mark: oklch(from var(--mark-pen) 0.42 calc(c * 0.7) h);
+}
+mark.mark-love {
+  --mark-pen: var(--love);
+}
+mark.mark-iris {
+  --mark-pen: var(--iris);
+}
+mark.mark-foam {
+  --mark-pen: var(--foam);
 }

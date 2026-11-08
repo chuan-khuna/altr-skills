@@ -16,6 +16,9 @@
 
   const SHIKI_URL = "https://esm.sh/shiki@4.5.0";
   const PELE_URL = "https://cdn.jsdelivr.net/npm/pele@1.12.0/dist/pele.global.js";
+  /* MIT, not on npm: pinned to a commit of github.com/Robincodes-Sandbox/marker-highlight. */
+  const MARKER_URL =
+    "https://cdn.jsdelivr.net/gh/Robincodes-Sandbox/marker-highlight@77fb1c06495cdc09cf4c3d12710a6bc38988b050/dist/marker-highlight.min.js";
 
   /* Each id is both the data-theme value (colour tokens in globals.css)
      and the Shiki theme name used for code blocks. */
@@ -41,6 +44,7 @@
     zoomOut: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M8 11h6"/></svg>',
     reset: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>',
     book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>',
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',
     close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>',
   };
 
@@ -62,6 +66,7 @@
   };
 
   const root = document.documentElement;
+  let marker; /* MarkerHighlighter instance, set by highlightMarks() */
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
   /* ---------- Theme ---------- */
@@ -75,7 +80,8 @@
     const theme = THEMES.find((t) => t.id === id);
     root.dataset.theme = theme.id;
     root.dataset.mode = theme.mode;
-    document.querySelectorAll("select[data-theme-select]").forEach((s) => (s.value = themeChoice));
+    document.querySelectorAll("[data-theme-menu]").forEach((m) => m._sync?.());
+    refreshMarks();
   }
 
   applyTheme();
@@ -94,36 +100,130 @@
     return b;
   }
 
+  /* Swatch markup: the theme's own base, text and accent colours.
+     data-theme-preview pulls that theme's tokens from globals.css. */
+  function swatchPart(id) {
+    return `<span data-theme-preview="${id}"><span class="dots"><i></i><i></i><i></i></span></span>`;
+  }
+  function swatch(choice) {
+    if (choice === "auto") return `<span class="theme-swatch split" aria-hidden="true">${swatchPart(AUTO.light)}${swatchPart(AUTO.dark)}</span>`;
+    return `<span class="theme-swatch" aria-hidden="true">${swatchPart(choice)}</span>`;
+  }
+  const choiceName = (choice) => (choice === "auto" ? "Auto (system)" : THEMES.find((t) => t.id === choice).name);
+
+  /* Custom listbox: a native <select> list cannot show previews or take theme colours. */
+  let menuCount = 0;
   function buildControls(host) {
     host.classList.add("controls");
+    const uid = `theme-list-${++menuCount}`;
 
-    const picker = document.createElement("label");
-    picker.className = "theme-picker";
-    picker.title = "Theme";
+    const menu = document.createElement("div");
+    menu.className = "theme-menu";
+    menu.setAttribute("data-theme-menu", "");
 
-    const select = document.createElement("select");
-    select.setAttribute("data-theme-select", "");
-    select.setAttribute("aria-label", "Theme");
-    select.append(new Option("Auto (system)", "auto"));
+    const trigger = document.createElement("button");
+    trigger.type = "button";
+    trigger.className = "theme-trigger";
+    trigger.setAttribute("aria-haspopup", "listbox");
+    trigger.setAttribute("aria-expanded", "false");
+    trigger.setAttribute("aria-controls", uid);
+    trigger.title = "Theme";
+
+    const list = document.createElement("ul");
+    list.className = "theme-list";
+    list.id = uid;
+    list.hidden = true;
+    list.tabIndex = -1;
+    list.setAttribute("role", "listbox");
+    list.setAttribute("aria-label", "Theme");
+
+    const option = (choice) => {
+      const li = document.createElement("li");
+      li.className = "theme-option";
+      li.id = `${uid}-${choice}`;
+      li.dataset.choice = choice;
+      li.setAttribute("role", "option");
+      li.innerHTML = `${swatch(choice)}<span>${choiceName(choice)}</span>${ICONS.check.replace("<svg", '<svg class="check"')}`;
+      return li;
+    };
+
+    list.append(option("auto"));
     for (const [mode, label] of [
       ["light", "Light"],
       ["dark", "Dark"],
     ]) {
-      const group = document.createElement("optgroup");
-      group.label = label;
-      for (const t of THEMES.filter((t) => t.mode === mode)) group.append(new Option(t.name, t.id));
-      select.append(group);
+      const head = document.createElement("li");
+      head.className = "theme-group";
+      head.setAttribute("role", "presentation");
+      head.textContent = label;
+      list.append(head);
+      for (const t of THEMES.filter((t) => t.mode === mode)) list.append(option(t.id));
     }
-    select.addEventListener("change", () => {
-      themeChoice = select.value;
-      store.set("doc-theme", themeChoice);
+    const options = [...list.querySelectorAll(".theme-option")];
+
+    let active = -1;
+    const setActive = (i) => {
+      active = (i + options.length) % options.length;
+      options.forEach((o, n) => o.classList.toggle("active", n === active));
+      list.setAttribute("aria-activedescendant", options[active].id);
+      options[active].scrollIntoView({ block: "nearest" });
+    };
+    const open = () => {
+      list.hidden = false;
+      trigger.setAttribute("aria-expanded", "true");
+      setActive(options.findIndex((o) => o.dataset.choice === themeChoice));
+      list.focus();
+    };
+    const close = (refocus = true) => {
+      list.hidden = true;
+      trigger.setAttribute("aria-expanded", "false");
+      if (refocus) trigger.focus();
+    };
+    const choose = (choice) => {
+      themeChoice = choice;
+      store.set("doc-theme", choice);
       applyTheme();
+      close();
+    };
+
+    trigger.addEventListener("click", () => (list.hidden ? open() : close()));
+    trigger.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
+        open();
+      }
+    });
+    list.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown") setActive(active + 1);
+      else if (e.key === "ArrowUp") setActive(active - 1);
+      else if (e.key === "Home") setActive(0);
+      else if (e.key === "End") setActive(options.length - 1);
+      else if (e.key === "Enter" || e.key === " ") choose(options[active].dataset.choice);
+      else if (e.key === "Escape") close();
+      else if (e.key === "Tab") close(false);
+      else return;
+      e.preventDefault();
+    });
+    list.addEventListener("mousemove", (e) => {
+      const o = e.target.closest(".theme-option");
+      if (o) setActive(options.indexOf(o));
+    });
+    list.addEventListener("click", (e) => {
+      const o = e.target.closest(".theme-option");
+      if (o) choose(o.dataset.choice);
+    });
+    document.addEventListener("pointerdown", (e) => {
+      if (!list.hidden && !menu.contains(e.target)) close(false);
     });
 
-    picker.insertAdjacentHTML("afterbegin", ICONS.palette);
-    picker.append(select);
-    picker.insertAdjacentHTML("beforeend", ICONS.chevron);
-    host.append(picker);
+    menu._sync = () => {
+      trigger.innerHTML = `${ICONS.palette}<span>${choiceName(themeChoice)}</span>${ICONS.chevron.replace("<svg", '<svg class="chev"')}`;
+      trigger.setAttribute("aria-label", `Theme: ${choiceName(themeChoice)}`);
+      options.forEach((o) => o.setAttribute("aria-selected", String(o.dataset.choice === themeChoice)));
+    };
+
+    menu.append(trigger, list);
+    host.append(menu);
     applyTheme();
   }
 
@@ -475,12 +575,66 @@
     if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
   }
 
+  /* ---------- Marker highlight ---------- */
+
+  /* Use <mark> only for the few passages a reader must not miss. */
+
+  /* marker-highlight parses only hex/rgb, so resolve the theme colour
+     (oklch / color-mix) to rgb() through a 1px canvas. */
+  let probe;
+  function toRgb(color) {
+    probe ||= document.createElement("canvas").getContext("2d", { willReadFrequently: true });
+    probe.clearRect(0, 0, 1, 1);
+    probe.fillStyle = "#000";
+    probe.fillStyle = color;
+    probe.fillRect(0, 0, 1, 1);
+    const [r, g, b] = probe.getImageData(0, 0, 1, 1).data;
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  function markColours(marks) {
+    for (const m of marks) {
+      m.style.backgroundColor = "";
+      m.removeAttribute("data-original-bgcolor");
+      /* Computed background-color has color-mix() already resolved. */
+      m.setAttribute("data-original-bgcolor", toRgb(getComputedStyle(m).backgroundColor));
+    }
+  }
+
+  async function highlightMarks() {
+    const content = document.querySelector(".content");
+    const marks = content ? [...content.querySelectorAll("mark")] : [];
+    if (!marks.length) return;
+    let MarkerHighlighter;
+    try {
+      ({ MarkerHighlighter } = await import(MARKER_URL));
+    } catch {
+      return; /* offline: <mark> keeps its plain CSS background */
+    }
+    await document.fonts?.ready;
+    markColours(marks);
+    marker = new MarkerHighlighter(content, {
+      drawingMode: "highlight",
+      animationTrigger: "scrollIntoView",
+      animationSpeed: 900,
+      height: 0.9,
+      padding: 0.1,
+    });
+  }
+
+  function refreshMarks() {
+    if (!marker) return;
+    markColours(document.querySelectorAll(".content mark"));
+    marker.rerunHighlight();
+  }
+
   /* ---------- Boot ---------- */
 
   document.addEventListener("DOMContentLoaded", async () => {
     document.querySelectorAll("[data-doc-controls]").forEach(buildControls);
     highlightCode();
     renderDiagrams();
+    highlightMarks();
 
     const entries = await loadGlossary();
     const glossaryHost = document.querySelector("[data-glossary]");
