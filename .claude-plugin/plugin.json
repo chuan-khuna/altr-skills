@@ -12,6 +12,7 @@
     "./skills/work/progress-summary",
     "./skills/productivity/write-doc",
     "./skills/work/calm-down",
+    "./skills/design/brockmann-grid-system",
     "./skills/work/harden-js-dependencies"
   ]
 }

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>calm-down — หยุด คิด ลงมือ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inconsolata:wght@400;500&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+        --canvas: oklch(0.984 0.003 246);
+        --surface: oklch(1 0 0);
+        --surface-alt: oklch(0.967 0.006 246);
+        --ink: oklch(0.23 0.03 246);
+        --body: oklch(0.45 0.03 246);
+        --muted: oklch(0.56 0.028 246);
+        --border: oklch(0.928 0.012 246);
+        --border-strong: oklch(0.865 0.022 246);
+        --accent: oklch(0.6276 0.0839 246.04);
+        --accent-strong: oklch(0.52 0.092 246.04);
+        --accent-soft: oklch(0.955 0.022 246.04);
+        --on-accent: oklch(1 0 0);
+        --success: oklch(0.7188 0.1184 147.57);
+        --success-strong: oklch(0.55 0.11 147.57);
+        --success-soft: oklch(0.955 0.04 147.57);
+        --danger: oklch(0.5923 0.1677 21.57);
+        --danger-strong: oklch(0.52 0.16 21.57);
+        --danger-soft: oklch(0.955 0.035 21.57);
+        --rounded: 0px;
+        --mono: "Inconsolata", ui-monospace, monospace;
+        --thai: "Noto Sans Thai", "Inter", system-ui, sans-serif;
+      }
+      body { background: var(--canvas); color: var(--body); font-family: var(--thai); font-size: 16px; line-height: 1.7; }
+      :not(pre) > code { font-family: var(--mono); font-size: 0.85em; background: var(--surface-alt); border: 1px solid var(--border); border-radius: var(--rounded); padding: 0.1em 0.35em; color: var(--ink); }
+
+      .shell { max-width: 1040px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+      .page-header { padding-bottom: 1.5rem; margin-bottom: 2.5rem; border-bottom: 1px solid var(--border); }
+      .page-header .eyebrow { font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+      .page-header h1 { font-family: var(--thai); font-size: 1.75rem; font-weight: 700; line-height: 1.35; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 0.5rem; }
+      .page-header .lede { font-size: 0.9375rem; color: var(--body); max-width: 640px; }
+      .page-header .date { display: block; font-family: var(--mono); font-size: 0.8125rem; letter-spacing: 0.02em; color: var(--muted); margin-top: 0.9rem; }
+
+      .layout { display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 48px; align-items: start; }
+      .content { max-width: 720px; min-width: 0; }
+
+      .toc { position: sticky; top: 2rem; }
+      .toc details { border: 0; }
+      .toc summary { display: none; }
+      .toc-heading { font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+      .toc-nav ul { list-style: none; display: flex; flex-direction: column; gap: 0.125rem; }
+      .toc-nav a { display: block; font-family: var(--thai); font-size: 0.8125rem; font-weight: 500; color: var(--body); text-decoration: none; padding: 5px 0 5px 12px; border-left: 2px solid transparent; }
+      .toc-nav a:hover { color: var(--ink); }
+      .toc-nav a.active { color: var(--accent); border-left-color: var(--accent); }
+
+      .section { margin-bottom: 2.75rem; }
+      .section > h2 { font-family: var(--thai); font-size: 1.125rem; font-weight: 600; color: var(--ink); margin-bottom: 0.875rem; line-height: 1.5; }
+      .section > p { font-size: 0.9375rem; color: var(--body); margin-bottom: 0.75rem; }
+      .section > p:last-child { margin-bottom: 0; }
+      .section strong { color: var(--ink); font-weight: 600; }
+
+      .sta { display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem; }
+      .sta-step { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--rounded); padding: 18px 20px; }
+      .sta-step h3 { font-family: var(--thai); font-size: 1rem; font-weight: 600; color: var(--ink); display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.4rem; }
+      .sta-step .n { font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.08em; color: var(--accent-strong); background: var(--accent-soft); padding: 0.15rem 0.4rem; }
+      .sta-step p { font-size: 0.9375rem; color: var(--body); }
+
+      .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem; }
+      .mode-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rounded); padding: 22px; display: flex; flex-direction: column; }
+      .mode-card .cmd { font-family: var(--mono); font-size: 0.8125rem; color: var(--accent-strong); background: var(--accent-soft); padding: 0.3rem 0.5rem; align-self: flex-start; margin-bottom: 0.9rem; }
+      .mode-card h3 { font-family: var(--thai); font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 0.5rem; }
+      .mode-card p { font-size: 0.875rem; color: var(--body); line-height: 1.65; margin-bottom: 0.75rem; }
+      .mode-card .out { font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-top: auto; }
+      .mode-card .out b { color: var(--ink); font-weight: 600; }
+
+      .prios { display: flex; flex-direction: column; gap: 0.625rem; margin-top: 0.5rem; }
+      .prio { display: flex; gap: 0.75rem; align-items: baseline; background: var(--surface); border: 1px solid var(--border); border-radius: var(--rounded); padding: 12px 16px; }
+      .prio .tag { font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.06em; padding: 0.15rem 0.45rem; flex-shrink: 0; }
+      .prio .tag.p0 { background: var(--danger-soft); color: var(--danger-strong); }
+      .prio .tag.p1 { background: var(--accent-soft); color: var(--accent-strong); }
+      .prio .tag.cut { background: var(--surface-alt); color: var(--muted); }
+      .prio p { font-size: 0.875rem; color: var(--body); line-height: 1.6; }
+      .prio p b { color: var(--ink); font-weight: 600; }
+
+      .steps { list-style: none; counter-reset: s; display: flex; flex-direction: column; gap: 0.625rem; margin-top: 0.25rem; }
+      .steps li { counter-increment: s; position: relative; padding-left: 2rem; font-size: 0.9375rem; color: var(--body); line-height: 1.65; }
+      .steps li::before { content: counter(s); position: absolute; left: 0; top: 0.1rem; width: 1.4rem; height: 1.4rem; display: inline-flex; align-items: center; justify-content: center; background: var(--accent-soft); color: var(--accent-strong); font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; }
+      .steps li b { color: var(--ink); font-weight: 600; }
+
+      .callout { border-left: 3px solid; border-radius: var(--rounded); padding: 12px 16px; margin-top: 1rem; }
+      .callout-label { display: block; font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem; }
+      .callout p { font-size: 0.875rem; color: var(--body); line-height: 1.65; }
+      .callout.done { background: var(--success-soft); border-left-color: var(--success-strong); }
+      .callout.done .callout-label { color: var(--success-strong); }
+
+      pre.flow { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rounded); padding: 20px 24px; font-family: var(--mono); font-size: 0.8125rem; color: var(--ink); line-height: 1.7; overflow-x: auto; margin-top: 0.5rem; }
+
+      @media (max-width: 1023px) {
+        .layout { grid-template-columns: 1fr; gap: 1.5rem; }
+        .toc { position: static; margin-bottom: 1rem; border: 1px solid var(--border); border-radius: var(--rounded); }
+        .toc summary { display: block; list-style: none; cursor: pointer; padding: 12px 16px; font-family: var(--mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+        .toc summary::-webkit-details-marker { display: none; }
+        .toc summary::before { content: "\25B8  "; }
+        .toc details[open] summary::before { content: "\25BE  "; }
+        .toc .toc-heading { display: none; }
+        .toc-nav { padding: 0 16px 16px; }
+        .modes { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 559px) { .shell { padding: 2rem 1rem 4rem; } }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="page-header">
+        <p class="eyebrow">work skill · calm-down</p>
+        <h1>calm-down — หยุด · คิด · ลงมือ</h1>
+        <p class="lede">สกิลจัดโครงสร้างงานแบบสองโหมด มันจะสัมภาษณ์คุณ แล้วเขียนเอกสารที่มีโครงสร้างชัดเจน เปลี่ยนไอเดียดิบ ๆ — หรือความตื่นตระหนกตอนงานท่วม — ให้กลายเป็นงานที่ลงมือทำได้จริง</p>
+        <span class="date">2026-06-13</span>
+      </header>
+
+      <div class="layout">
+        <main class="content">
+          <section class="section spy-target" id="what">
+            <h2>สกิลนี้ทำอะไร</h2>
+            <p><strong>calm-down</strong> ยืนอยู่ตรงกลางระหว่าง &ldquo;ฉันมีกองงานที่ยังคลุมเครือ&rdquo; กับ &ldquo;งานกำลังถูกทำอย่างดี&rdquo; แทนที่จะปล่อยให้คุณ (หรือเพื่อนร่วมทีม) กระโดดลงไปทำทั้งที่ยังมองไม่ชัด มันจะสัมภาษณ์สั้น ๆ แล้วสร้างเอกสารที่มีโครงสร้างออกมาหนึ่งฉบับ</p>
+            <p>มันมีสองโหมดสำหรับสองสถานการณ์ที่ช่องว่างนี้มักโผล่ขึ้นมา: การ <em>ส่งต่อ</em> งานให้คนอื่น และการ <em>นำทางตัวเอง</em> ผ่านงานที่ไฟลนก้นอยู่แล้ว</p>
+          </section>
+
+          <section class="section spy-target" id="principle">
+            <h2>หลักการเบื้องหลัง</h2>
+            <p>ทั้งการส่งต่องานแบบเย็นชาและการรีบทำงานด้วยความตื่นตระหนก ล้มเหลวด้วยเหตุผลเดียวกัน นั่นคือ <strong>ลงมือทำก่อนที่จะเข้าใจงาน</strong> เพื่อนร่วมทีมได้ตั๋วงานบรรทัดเดียวแล้วเดาเอา ส่วนคนที่ใกล้เดดไลน์ก็เปิดสิบห้าแท็บแล้วทำงานที่เสียงดังที่สุดก่อน calm-down แทรกการหยุดพักอย่างตั้งใจหนึ่งครั้ง แล้วพาเดินผ่านสามจังหวะ</p>
+            <div class="sta">
+              <div class="sta-step">
+                <h3><span class="n">01</span> หยุด (Stop)</h3>
+                <p>ตัดวงจรสัญชาตญาณที่จะรีบลงมือ ระบุงานและเวลาที่คุณมีจริง ๆ การหยุดนี้ถูกตีกรอบใหม่ว่าเป็นการ &ldquo;เร่งให้เร็วขึ้น&rdquo; ไม่ใช่การถ่วงเวลา</p>
+              </div>
+              <div class="sta-step">
+                <h3><span class="n">02</span> คิด (Think)</h3>
+                <p>ถูกซักทีละคำถาม แต่ละคำถามมาพร้อมคำตอบที่แนะนำไว้ ซักจนกว่างานจะถูกแตกย่อยและเข้าใจชัด คำตอบที่คลุมเครือจะถูกซักต่อ ไม่ใช่รับไว้เฉย ๆ</p>
+              </div>
+              <div class="sta-step">
+                <h3><span class="n">03</span> ลงมือ (Act)</h3>
+                <p>สร้างเอกสารออกมาแล้วลงมือทำจากความชัดเจน ความคิดอยู่บนกระดาษแล้ว ไม่ใช่วนเวียนอยู่ในหัวอีกต่อไป</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section spy-target" id="modes">
+            <h2>สองโหมด</h2>
+            <p>หลักการเดียว สองสถานการณ์ คุณเลือกโหมดจากสิ่งที่คุณกำลังพยายามจะทำ</p>
+            <div class="modes">
+              <div class="mode-card">
+                <span class="cmd">calm-down assign</span>
+                <h3>ส่งต่องาน</h3>
+                <p>สร้างเอกสารส่งต่อที่เพื่อนร่วมทีม — หรือ AI agent — หยิบไปทำได้ทันทีโดยไม่ต้องมีบริบทมาก่อนเลย ครอบคลุมภูมิหลัง สถานะปัจจุบัน ผู้รับงานที่แนะนำ และรายละเอียดแต่ละงาน ทั้ง input, output, เช็กลิสต์, ขอบเขต และจุดที่พลาดง่าย</p>
+                <span class="out">ผลลัพธ์ → <b>เอกสารส่งต่องาน</b></span>
+              </div>
+              <div class="mode-card">
+                <span class="cmd">calm-down triage</span>
+                <h3>ทำให้ตัวเองใจเย็นลง</h3>
+                <p>การซักแบบช่วยให้ใจเย็น สำหรับงานเร่งด่วนที่คุณกำลังจะลงมือทำเอง มันแตกความตื่นตระหนกออกเป็นส่วน ๆ ตัดสินใจเรื่องลำดับความสำคัญที่ยากที่สุด แล้วยื่นแผนรบให้คุณ พร้อมเวลาประเมินและแนวทางที่ฟันธงต่อแต่ละงาน</p>
+                <span class="out">ผลลัพธ์ → <b>แผนรบ (Battle plan)</b></span>
+              </div>
+            </div>
+          </section>
+
+          <section class="section spy-target" id="loop">
+            <h2>มันทำงานอย่างไร</h2>
+            <p>ทั้งสองโหมดใช้ลูปสี่จังหวะเดียวกัน มันไม่เคยให้คุณเขียนรายการงานเองตั้งแต่ศูนย์ — มันเสนอรายการมาให้แล้วให้คุณตอบรับ</p>
+            <ol class="steps">
+              <li><b>เสนอการแตกงาน</b> อ่านบรีฟของคุณ เดารายการงาน แล้วขอยืนยันก่อนไปต่อ</li>
+              <li><b>ซักทีละคำถาม</b> แต่ละคำถามมาพร้อมคำตอบที่แนะนำ คำตอบที่กำกวมจะถูกท้วง และจะหยุดทันทีที่เอกสารสมบูรณ์พอจะอยู่ได้ด้วยตัวเอง</li>
+              <li><b>เลือกรูปแบบ</b> Markdown หรือ HTML (ธีมกระดาษแบบนี้)</li>
+              <li><b>สร้างทันที</b> ไม่มีขั้นตอนพรีวิว — เขียนและบันทึกเอกสารเลย แล้วบอกพาธที่แน่นอนให้คุณ</li>
+            </ol>
+          </section>
+
+          <section class="section spy-target" id="triage-call">
+            <h2>การตัดสินใจแบบ Triage</h2>
+            <p>โหมด triage หยิบยืมวินัยทางวิศวกรรมเรื่อง <strong>triage</strong> มาใช้ — คือการตัดสินใจว่าอะไรต้องจัดการเดี๋ยวนี้ อะไรรอได้ และอะไรที่เราจะเดินจากไป ทุกงานต้องลงในกล่องใดกล่องหนึ่งเท่านั้น</p>
+            <div class="prios">
+              <div class="prio"><span class="tag p0">P0</span><p><b>ต้องส่งให้ได้</b> ถ้าอันนี้พลาด ทั้งหมดล้มเหลว พวกนี้มาก่อน</p></div>
+              <div class="prio"><span class="tag p1">P1</span><p><b>ควรส่งให้ได้</b> มีคุณค่าจริง แต่ตัดออกได้ถ้าเวลาหมด — โดยไม่ถือว่าล้มเหลว</p></div>
+              <div class="prio"><span class="tag cut">CUT</span><p><b>ไม่ทำรอบนี้</b> ระบุชื่อให้ชัดแล้ววางมันลง</p></div>
+            </div>
+            <div class="callout done">
+              <span class="callout-label">ทำไมการตัดทิ้งถึงช่วยให้ใจเย็น</span>
+              <p>ความตื่นตระหนกส่วนใหญ่ก็แค่ขอบเขตงานที่ยังไม่ถูกจัดเรียง การระบุชื่อสิ่งที่คุณ <em>จะไม่</em> ทำ คือจังหวะที่ทำให้ทุกอย่างสงบลง — มันให้อนุญาตคุณหยุดแบกทุกอย่างไว้พร้อมกัน ถ้าทุกอย่างยังเป็น P0 อยู่ แปลว่าการ triage ยังไม่เกิดขึ้นจริง</p>
+            </div>
+          </section>
+
+          <section class="section spy-target" id="output">
+            <h2>สิ่งที่คุณจะได้</h2>
+            <p>เอกสารที่ถูกบันทึกไว้ใต้ <code>docs/</code> ในรูปแบบ Markdown หรือธีม HTML แบบกระดาษเงียบ ๆ แบบนี้ — โครงสร้างถูกขับด้วยเส้นขอบบาง ๆ และสีน้ำเงินเน้นเพียงสีเดียว ไม่ใช่การตกแต่ง ภาพรวมตั้งแต่ต้นจนจบ:</p>
+            <pre class="flow">บรีฟ  →  เสนองาน  →  ซักถาม (ถาม-ตอบ)  →  [triage: P0 / P1 / cut]  →  สร้าง  →  docs/yyyy-mm-dd-topic.{md,html}</pre>
+          </section>
+        </main>
+
+        <aside class="toc">
+          <details open>
+            <summary>สารบัญ</summary>
+            <p class="toc-heading">สารบัญ</p>
+            <nav class="toc-nav">
+              <ul>
+                <li><a href="#what">สกิลนี้ทำอะไร</a></li>
+                <li><a href="#principle">หลักการเบื้องหลัง</a></li>
+                <li><a href="#modes">สองโหมด</a></li>
+                <li><a href="#loop">มันทำงานอย่างไร</a></li>
+                <li><a href="#triage-call">การตัดสินใจแบบ Triage</a></li>
+                <li><a href="#output">สิ่งที่คุณจะได้</a></li>
+              </ul>
+            </nav>
+          </details>
+        </aside>
+      </div>
+    </div>
+
+    <script>
+      const links = [...document.querySelectorAll(".toc-nav a")];
+      const byId = new Map(links.map((a) => [a.getAttribute("href").slice(1), a]));
+      const spy = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              links.forEach((l) => l.classList.remove("active"));
+              byId.get(e.target.id)?.classList.add("active");
+            }
+          });
+        },
+        { rootMargin: "0px 0px -70% 0px", threshold: 0 }
+      );
+      document.querySelectorAll("[id].spy-target").forEach((s) => spy.observe(s));
+    </script>
+  </body>
+</html>

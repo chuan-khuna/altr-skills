@@ -9,6 +9,7 @@ bunx skills add https://github.com/chuan-khuna/altr-skills
 
 ## Skills
 
+- [design](skills/design/README.md) — Design and front-end craft — typography, layout systems, and the engineering to make them real.
 - [productivity](skills/productivity/README.md) — Daily non-code workflow tools.
 - [work](skills/work/README.md) — Day-to-day work — standups, progress updates, JIRA workflows, and project setup.
 

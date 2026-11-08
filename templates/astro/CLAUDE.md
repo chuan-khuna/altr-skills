@@ -28,7 +28,6 @@ Use `bun` as the package manager (preferred). `npm` and `npx` are acceptable alt
 <project-specific-scripts: list only non-obvious scripts here, e.g.:
 
 - `bun run generate:og` — regenerates Open Graph images
-- `bunx skills@1.5.0 add ./project-skills -y -p` — installs local skills
   Delete this block if there are no project-specific scripts.>
 
 ## Adding shadcn components
@@ -131,7 +130,7 @@ export const collections = { books, authors, news };
 
 When adding a new collection: create the definition file, add the content folder, then register in `content.config.ts`.
 
-**Documentation rule:** Whenever you change `src/collection-definitions/**` or `src/data/**`, update the matching reference doc in `project-skills/manage-content/references/<topic>.md`. A task is not complete until the reference docs are in sync.
+**Documentation rule:** Whenever you change `src/collection-definitions/**` or `src/data/**`, update the matching reference doc in `docs/content/<topic>.md`. A task is not complete until the reference docs are in sync.
 
 ## Fonts
 
@@ -170,52 +169,52 @@ When animations, visual effects, or interactive behavior don't work, the cause i
 
 If an animation works in isolation but breaks on the site, first check whether the component has the right `client:*` directive.
 
-## Content management skill for LLM agent
+## Content
 
-```yaml
----
-name: manage-content
-description: >
-  Guide for adding or editing site content. Use this skill when the user asks to:
-  - Add or edit <content-type: e.g. "a quote entry", "a blog post">
-  - Configure the site (title, description, social links)
-  - Know the correct frontmatter format for any content type
----
-```
-
-Before adding, editing, or restructuring any content (collection definitions, data files, static config), read the skill file first:
+Content (collection schemas, content formats, frontmatter, static config) is governed by a `docs/` knowledge base — **not** scattered across source files. Before adding, editing, or restructuring any content, read the knowledge base first:
 
 ```
-project-skills/manage-content/SKILL.md
+docs/content/                       # content knowledge base
+  content-architecture.md           # start here — collections table, schemas, formats
+  <topic>.md                        # one doc per collection or config (e.g. books.md, site-config.md)
 ```
 
-That file is the single source of truth for collection schemas, content formats, and doc-sync rules. It also acts as a routing table — pointing the agent to the correct reference doc for each collection or config.
+`docs/content/content-architecture.md` is the single source of truth for collection schemas and content formats, and acts as a routing table — pointing to the correct reference doc for each collection or config.
 
-Reference docs live alongside the skill at `project-skills/manage-content/references/<topic>.md` — where `<topic>` matches the collection or config it describes (e.g. `books.md`, `site-config.md`). Whenever you change `src/collection-definitions/**` or `src/data/**`, update the matching reference doc. A task touching content is not complete until the skill and its reference docs are in sync.
+**Static data files** (in `src/data/`, imported directly — not Astro collections):
 
-## Special directories
+- `src/data/<site-config>.ts` — site-wide config (display name, title, social links)
+- `src/data/<other-data>.ts` — other static content imported by components
 
-###
+**Documentation rule:** whenever you change `src/collection-definitions/**` or `src/data/**`, update the matching doc in `docs/content/<topic>.md`. A task touching content is not complete until the docs are in sync.
 
-`project-skills/` is a living, in-repo skill folder. Skills here are the authoritative version for this project and are updated alongside the codebase.
+## Project agents
 
-To install or re-install the latest skill versions into Claude Code:
+_(Delete this section if the project does not use project agents.)_
 
-```bash
-bunx skills@1.5.0 add ./project-skills -a 'universal' -a 'claude-code' -y -p
-```
+Project agents live in `.claude/agents/` and read from the `docs/` knowledge base. Split responsibilities so each agent owns one area:
 
-Run this after pulling changes that touched `project-skills/` so the agent uses the latest skill definitions.
+- **`developer`** — builds all Astro features: pages, components, schemas, and architecture. Owns data and collection definitions (the content *infrastructure*, not the entries themselves); reads `docs/content/` and `docs/architecture/`.
+- **`web-master`** — themes, the visual layer, and site content. Use this agent whenever the user asks to create or update web content. Owns CSS presets, theme toggling, and layout; reads the visual architecture docs.
 
-###
+`docs/README.md` is the index for the knowledge base.
+
+## LLM-generated artifacts
 
 Artifacts produced during AI-assisted sessions are stored under:
 
 ```
-docs/<type>/yyyy-mm-dd-<topic>.md
+docs/artifacts/<category>/yyyy-mm-dd-<topic>.<md|html>
 ```
 
-The `<type>` folder is not limited to a fixed list — use whatever noun best describes the artifact. Common types include `prd`, `plan`, `research`, and `design`, but create new type folders as needed. Do not place artifacts directly in `docs/`.
+Files may be **Markdown (`.md`)** or **HTML (`.html`)**. `<category>` is a free-form folder — use whatever noun best describes the artifact. Common categories:
+
+- `prd` — product requirement documents and feature specs
+- `plan` — implementation plans and architectural decisions
+- `research` — research notes, reference analysis, tech comparisons
+- `design` — design decisions, UX notes, visual direction
+
+Add new category folders as needed; the list above is a starting set, not a closed set. Do not place artifacts directly in `docs/`.
 
 ## Deployment
 
