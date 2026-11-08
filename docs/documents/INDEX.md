@@ -3,6 +3,7 @@
 One bullet per document in `docs/documents/`: `- [Title](slug.md) — one-line summary`.
 
 - [Skills](skills/INDEX.html) — Index page for the per-skill technical documents.
+- [Glossary](glossary.html) — Definitions of the jargon in the documents; source data in `docs/shared/glossary-data.js`.
 - [calm-down](skills/calm-down.html) — Assign writes a cold-start handoff; triage turns urgent work into a battle plan.
 - [jira-standup-meeting](skills/jira-standup-meeting.html) — Start-of-day summary of your Jira tasks, with recommendations.
 - [progress-summary](skills/progress-summary.html) — Turn raw notes or a git log into an update for Jira or Discord.

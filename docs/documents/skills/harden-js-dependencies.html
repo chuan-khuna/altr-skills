@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>harden-js-dependencies — altr-skills</title>
+    <meta name="description" content="Sets an install cooldown (minimum release age) for npm, bun, pnpm or yarn, so new package versions must be public for days before you can install them." />
+    <link rel="stylesheet" href="../../shared/globals.css" />
+    <script src="../../shared/doc.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="INDEX.html">skills</a> / harden-js-dependencies</nav>
+        <div data-doc-controls></div>
+      </header>
+
+      <div class="layout">
+        <main class="content">
+          <div class="header">
+            <p class="eyebrow">work · skill</p>
+            <h1>harden-js-dependencies</h1>
+            <p class="lede">Make new package versions wait before they reach your repo. Most bad releases are found and removed in hours, so a 7-day wait keeps them out.</p>
+            <div class="meta">
+              <span class="tag">skills/work/harden-js-dependencies</span>
+              <span class="tag">npm · bun · pnpm · yarn</span>
+              <span class="tag">default: 7 days</span>
+            </div>
+          </div>
+
+          <h2 id="what-it-does">What it does</h2>
+          <p>The skill sets an <em>install cooldown</em> for your project. With a cooldown, a package version must be public for N days before your package manager will install it. The default is 7 days.</p>
+          <p>It finds your package manager, checks that its version supports a cooldown, and writes one key to the correct config file. It writes for one package manager only.</p>
+          <p>Be clear about the limit. This is one control, not a security program. It does not stop a package that was already malicious a month ago, or a version that you pin yourself.</p>
+
+          <h2 id="when-to-use-it">When to use it</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Situation</th><th>Use</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>You want protection from a compromised package version that was just published.</td><td><code>harden-js-dependencies</code></td></tr>
+                <tr><td>You want to set <code>minimumReleaseAge</code>, <code>min-release-age</code> or a similar key, and you are not sure of the unit.</td><td><code>harden-js-dependencies</code></td></tr>
+                <tr><td>You want to block dangerous git commands, such as <code>push</code> or <code>reset --hard</code>, in Claude Code.</td><td><code>git-guardrails-claude-code</code></td></tr>
+                <tr><td>You want a full security review of your code changes.</td><td><code>security-review</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Short version: use it once per JavaScript repo, and commit the file it writes.</p>
+
+          <h2 id="prerequisites">Prerequisites</h2>
+          <p>Each tool ignores unknown config keys with no warning. On an old version, the file looks safe and does nothing. So the skill checks the version first.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Manager</th><th>Check</th><th>Minimum version</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>npm</td><td><code>npm --version</code></td><td>11.10.0</td></tr>
+                <tr><td>bun</td><td><code>bun --version</code></td><td>1.3</td></tr>
+                <tr><td>pnpm</td><td><code>pnpm --version</code></td><td>10.16</td></tr>
+                <tr><td>yarn</td><td><code>yarn --version</code></td><td>4.10.0</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout warn">
+            <span class="label">Too old means no file</span>
+            <p>If your version is below the minimum, the skill does not write the config. It tells you the version you have and the version you need. You decide if you upgrade first.</p>
+          </div>
+
+          <h2 id="how-it-works">How it works</h2>
+          <figure class="diagram">
+            <pre class="mermaid">
+flowchart TD
+  A[Detect package manager] -- one found --> B[Check version]
+  A -- none or many --> X[Ask you and stop]
+  B -- too old --> Y[Report versions and stop]
+  B -- supported --> C[Write or edit cooldown key]
+  C --> D[Offer exclude list]
+  D --> E[Report and flag CI]
+            </pre>
+            <figcaption>The skill stops early when it cannot write a config that works</figcaption>
+          </figure>
+          <ol>
+            <li><strong>Detect.</strong> The skill reads the <code>packageManager</code> field in <code>package.json</code> first. If there is none, it looks at the lockfile: <code>bun.lock</code> or <code>bun.lockb</code>, <code>pnpm-lock.yaml</code>, <code>yarn.lock</code>, <code>package-lock.json</code>. With no lockfile or more than one, it asks you and stops.</li>
+            <li><strong>Check the version.</strong> It runs the version command and compares the result with the minimum.</li>
+            <li><strong>Write.</strong> It writes the cooldown key in the format and unit of that tool. If the file exists, it edits only the cooldown key and keeps every other line.</li>
+            <li><strong>Offer excludes.</strong> It tells you that you can exempt packages, for example your own internal ones. It adds an exclude only when you name the package or scope.</li>
+            <li><strong>Report.</strong> It tells you the file path, the key, the value and its unit, and the manager and version. Then it flags what you will notice next.</li>
+          </ol>
+          <div class="callout tip">
+            <span class="label">Why only one file</span>
+            <p>A stray <code>.npmrc</code> in a bun repo makes the next reader think the repo has protection. So the skill writes only for the manager it detected.</p>
+          </div>
+
+          <h2 id="what-it-writes">What it writes</h2>
+          <p>Each tool uses a different key and a different unit. The skill never copies a value from one tool to another without converting it.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Manager</th><th>File</th><th>Key</th><th>Unit</th><th>7 days</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>npm</td><td><code>.npmrc</code></td><td><code>min-release-age</code></td><td>days</td><td><code>7</code></td></tr>
+                <tr><td>bun</td><td><code>bunfig.toml</code></td><td><code>minimumReleaseAge</code> under <code>[install]</code></td><td>seconds</td><td><code>604800</code></td></tr>
+                <tr><td>pnpm</td><td><code>pnpm-workspace.yaml</code></td><td><code>minimumReleaseAge</code></td><td>minutes</td><td><code>10080</code></td></tr>
+                <tr><td>yarn</td><td><code>.yarnrc.yml</code></td><td><code>npmMinimalAgeGate</code></td><td>minutes or a duration string</td><td><code>"7d"</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The exclude keys are <code>minimumReleaseAgeExcludes</code> (bun, an array under <code>[install]</code>), <code>minimumReleaseAgeExclude</code> (pnpm, a list) and <code>npmPreapprovedPackages</code> (yarn, a list). npm has no exclude support.</p>
+          <p>For npm:</p>
+          <pre><code class="language-ini"># Don't install package versions published less than 7 days ago.
+min-release-age=7</code></pre>
+          <p>For bun:</p>
+          <pre><code class="language-toml">[install]
+# Don't install package versions published less than 7 days ago.
+minimumReleaseAge = 604800</code></pre>
+          <p>For pnpm:</p>
+          <pre><code class="language-yaml"># Don't install package versions published less than 7 days ago.
+minimumReleaseAge: 10080</code></pre>
+          <p>For yarn:</p>
+          <pre><code class="language-yaml"># Don't install package versions published less than 7 days ago.
+npmMinimalAgeGate: "7d"</code></pre>
+          <p>These files often hold registry URLs and auth tokens. That is why the skill edits in place and never overwrites the whole file.</p>
+
+          <h2 id="common-questions">Common questions</h2>
+          <dl class="faq">
+            <dt>Why 7 days?</dt>
+            <dd>Most npm supply-chain compromises are found and unpublished within hours. A 7-day wait lets that window pass before the version can reach your repo.</dd>
+            <dt>I already have a cooldown with a different value. Will it change it?</dt>
+            <dd>Not without asking. The skill shows you the current value and asks what you want.</dd>
+            <dt>A new release I need is blocked. What do I do?</dt>
+            <dd>That is the cooldown working. Add the package to the exclude list, or use a temporary flag. Do not delete the config.</dd>
+            <dt>Can I exempt our internal packages on npm?</dt>
+            <dd>No. npm has no exclude support. bun, pnpm and yarn each have an exclude key.</dd>
+            <dt>Why didn’t it write a file for my repo?</dt>
+            <dd>Either your package manager is below the minimum version, or it found no lockfile or more than one. In both cases it tells you why and stops.</dd>
+            <dt>Does this protect me from all malicious packages?</dt>
+            <dd>No. It only blocks versions that are newer than the cooldown. An old malicious package, or a version you pin yourself, still installs.</dd>
+          </dl>
+
+          <h2 id="its-working-if">It’s working if</h2>
+          <ul class="checks">
+            <li>Only one config file changed, and it matches your package manager.</li>
+            <li>The value uses the correct unit for that tool, for example <code>10080</code> minutes for pnpm.</li>
+            <li>Every other line in the existing file is the same as before.</li>
+            <li>The file is committed and not in <code>.gitignore</code>, so CI uses the same cooldown.</li>
+            <li>An install of a version published today fails until the cooldown passes.</li>
+          </ul>
+
+          <h2 id="where-it-fits">Where it fits</h2>
+          <p>Use this skill when you set up a JavaScript repo, or once on a repo that you already have. After that, the cooldown works on every install, locally and in CI.</p>
+          <pre><code class="language-txt">JS repo → harden-js-dependencies → config file committed → installs wait 7 days
+release blocked → add exclude (bun / pnpm / yarn) → install</code></pre>
+          <p>CI must use the same config. If the file is not committed, or CI overrides it, the protection is local only. For other guardrails, see <code>git-guardrails-claude-code</code> and <code>security-review</code>.</p>
+          <p>Source: <a href="../../../skills/work/harden-js-dependencies/SKILL.md"><code>skills/work/harden-js-dependencies/SKILL.md</code></a></p>
+        </main>
+
+        <nav class="toc" data-auto aria-label="Table of contents"></nav>
+      </div>
+    </div>
+  </body>
+</html>

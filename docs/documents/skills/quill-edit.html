@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>quill-edit — altr-skills</title>
+    <meta name="description" content="British English editing skill: corrects grammar, spelling and style using Provost, Sayce and Shrive, and explains the main changes in Editor's Notes." />
+    <link rel="stylesheet" href="../../shared/globals.css" />
+    <script src="../../shared/doc.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="INDEX.html">skills</a> / quill-edit</nav>
+        <div data-doc-controls></div>
+      </header>
+
+      <div class="layout">
+        <main class="content">
+          <div class="header">
+            <p class="eyebrow">productivity · skill</p>
+            <h1>quill-edit</h1>
+            <p class="lede">Give it your text and get it back in correct British English, tighter and clearer, with a short note on what changed.</p>
+            <div class="meta">
+              <span class="tag">skills/productivity/quill-edit</span>
+              <span class="tag">British English</span>
+            </div>
+          </div>
+
+          <h2 id="what-it-does">What it does</h2>
+          <p>quill-edit proofreads and rephrases English text. It applies British English conventions and the principles of three writing guides:</p>
+          <ul>
+            <li><strong>Gary Provost</strong>, <em>100 Ways to Improve Your Writing</em>: rhythm, active voice, concrete language, no filler.</li>
+            <li><strong>Kay Sayce</strong>, <em>What Not to Write</em>: common errors, clarity, precise word choice.</li>
+            <li><strong>Craig Shrive</strong>, <em>Smashing Grammar</em>: grammar, punctuation and British usage.</li>
+          </ul>
+          <p>You get the full edited text, then <em>Editor's Notes</em>: a short list of the main changes, grouped by category. The skill keeps your meaning. If a passage is unclear, it flags it and does not guess.</p>
+
+          <h2 id="when-to-use-it">When to use it</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Situation</th><th>Use</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>You want an email, report or essay proofread and corrected.</td><td><code>quill-edit</code></td></tr>
+                <tr><td>You wrote in American English and need British spelling and usage.</td><td><code>quill-edit</code></td></tr>
+                <tr><td>Your text is correct but flat, wordy or full of corporate fog.</td><td><code>quill-edit</code></td></tr>
+                <tr><td>You don't have the text yet, only a conversation or some code.</td><td><a href="write-doc.html"><code>write-doc</code></a> first, then <code>quill-edit</code></td></tr>
+                <tr><td>You want to make a rough idea into a prompt for an AI.</td><td><a href="revise-prompt.html"><code>revise-prompt</code></a></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Short version: use it when the words exist and you want them better, in British English.</p>
+
+          <h2 id="how-it-works">How it works</h2>
+          <p>The skill follows five steps. Only the first and the last talk to you before the edit.</p>
+          <figure class="diagram">
+            <pre class="mermaid">
+flowchart TD
+  A[Your text] --> B{Purpose clear?}
+  B -- no --> C[Ask what the text is for]
+  B -- yes --> D[Analyse silently]
+  C --> D
+  D --> E[Edited text and Editor's Notes]
+  E --> F[Offer alternatives and invite revision]
+            </pre>
+            <figcaption>The quill-edit workflow</figcaption>
+          </figure>
+          <ol>
+            <li><strong>Understand the intent.</strong> If the purpose is not obvious, the skill asks: professional, academic, casual, or something else? The answer sets the tone.</li>
+            <li><strong>Analyse.</strong> It silently checks grammar, punctuation, spelling, style, rhythm and clarity.</li>
+            <li><strong>Edit.</strong> It returns the full corrected text, then the Editor's Notes. The notes flag patterns, not every instance.</li>
+            <li><strong>Offer alternatives (optional).</strong> If a passage has more than one good phrasing, it gives one or two, marked <em>Alternative</em>.</li>
+            <li><strong>Invite revision.</strong> It asks if you want a different tone, a simpler version, or another look at a passage.</li>
+          </ol>
+
+          <h3>British English conventions</h3>
+          <ul>
+            <li><strong>Spelling:</strong> -ise, -our, -re, -ogue, -ence. Also <em>grey</em>, <em>travelled</em>, <em>programme</em> (but <em>program</em> for software).</li>
+            <li><strong>Punctuation:</strong> single quotes first, double quotes inside them. Punctuation goes outside the closing quote unless it is part of the quote. The Oxford comma only when it helps clarity.</li>
+            <li><strong>Dashes:</strong> an en dash for ranges (2019–2023) and, with spaces, for asides. Em dashes sparingly.</li>
+            <li><strong>Grammar:</strong> collective nouns take a plural verb (<em>the team are ready</em>). Also <em>at the weekend</em> and <em>in hospital</em>.</li>
+          </ul>
+
+          <h3>Style principles</h3>
+          <ul>
+            <li><strong>Clarity:</strong> main point early, active voice, concrete nouns, no throat-clearing openers, strong verbs (<em>decide</em>, not <em>make a decision</em>).</li>
+            <li><strong>Economy:</strong> cut filler (<em>due to the fact that</em> → <em>because</em>), redundancy and hedging words.</li>
+            <li><strong>Rhythm:</strong> vary sentence length and use parallel structure in lists.</li>
+            <li><strong>Precision:</strong> <em>fewer</em> or <em>less</em>, <em>that</em> or <em>which</em>, clear pronouns, and confused pairs such as <em>practise</em> and <em>practice</em>.</li>
+            <li><strong>Tone:</strong> match formality to purpose and replace jargon and corporate fog with plain words.</li>
+          </ul>
+
+          <h2 id="what-you-get">What you get</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Part</th><th>Content</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Edited text</td><td>Your whole text, corrected and rephrased</td></tr>
+                <tr><td>Editor's Notes</td><td>Main changes under Grammar, Spelling, Style and Rhythm</td></tr>
+                <tr><td>Alternative (optional)</td><td>One or two other phrasings for a passage</td></tr>
+                <tr><td>Follow-up question</td><td>An offer to change the tone, simplify, or revisit a passage</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The skill replies in chat. It does not write a file. For the input <em>“We need to make a decision on the color of the new program due to the fact that the team is behind.”</em>, a reply looks like this:</p>
+          <pre><code class="language-markdown">---
+**Edited text**
+
+We need to decide on the colour of the new programme because the team are behind.
+
+---
+**Editor's Notes**
+
+- **Grammar:** Collective noun takes a plural verb ('the team are').
+- **Spelling:** color → colour; program → programme (not software).
+- **Style:** 'make a decision' → 'decide'; 'due to the fact that' → 'because'.
+- **Rhythm:** No structural change needed.</code></pre>
+
+          <h2 id="common-questions">Common questions</h2>
+          <dl class="faq">
+            <dt>Will it change what I mean?</dt>
+            <dd>No. If a passage is unclear, the skill flags it and asks. It does not guess at your meaning.</dd>
+            <dt>Will it remove a fragment I wrote on purpose?</dt>
+            <dd>No. It keeps deliberate stylistic choices and mentions them in the notes instead of correcting them.</dd>
+            <dt>What if my text is already good?</dt>
+            <dd>The skill says so plainly. Then it points to one or two small refinements and does not invent problems.</dd>
+            <dt>Will it reorder or cut sections of a long text?</dt>
+            <dd>Only after it asks you. Structural changes to longer texts need your approval first.</dd>
+            <dt>Does it force the Oxford comma?</dt>
+            <dd>No. In British English it is optional, so the skill uses it only when it makes a sentence clearer.</dd>
+          </dl>
+
+          <h2 id="its-working-if">It’s working if</h2>
+          <ul class="checks">
+            <li>All spelling in the edit is British, for example <em>organise</em>, <em>colour</em> and <em>centre</em>.</li>
+            <li>The Editor's Notes list patterns in a few lines, not every single change.</li>
+            <li>The edit is shorter or clearer, and it still says what you meant.</li>
+            <li>The tone matches the purpose you gave: formal stays formal, casual stays casual.</li>
+            <li>The skill asks before it changes the structure of a long text.</li>
+          </ul>
+
+          <h2 id="where-it-fits">Where it fits</h2>
+          <p>quill-edit is the last step before you send or publish text. Use it after the content is complete.</p>
+          <pre><code class="language-txt">draft text → quill-edit → edited text + Editor's Notes → adjust tone? → send / publish</code></pre>
+          <p>To make the first draft from a conversation or from code, use <a href="write-doc.html"><code>write-doc</code></a>. To shape a prompt for an AI rather than prose for people, use <a href="revise-prompt.html"><code>revise-prompt</code></a>.</p>
+          <p>Source: <a href="../../../skills/productivity/quill-edit/SKILL.md"><code>skills/productivity/quill-edit/SKILL.md</code></a></p>
+        </main>
+
+        <nav class="toc" data-auto aria-label="Table of contents"></nav>
+      </div>
+    </div>
+  </body>
+</html>

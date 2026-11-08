@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>revise-prompt — altr-skills</title>
+    <meta name="description" content="Refines a rough idea into a polished, production-ready prompt by asking a few focused questions at a time before it writes anything." />
+    <link rel="stylesheet" href="../../shared/globals.css" />
+    <script src="../../shared/doc.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="INDEX.html">skills</a> / revise-prompt</nav>
+        <div data-doc-controls></div>
+      </header>
+
+      <div class="layout">
+        <main class="content">
+          <div class="header">
+            <p class="eyebrow">productivity · skill</p>
+            <h1>revise-prompt</h1>
+            <p class="lede">Bring a vague idea. The skill asks the right questions, then writes a prompt that reads like a creative brief.</p>
+            <div class="meta">
+              <span class="tag">skills/productivity/revise-prompt</span>
+              <span class="tag">output: prompt text</span>
+            </div>
+          </div>
+
+          <h2 id="what-it-does">What it does</h2>
+          <p>revise-prompt turns a rough idea, a partial spec or a vague concept into a finished prompt. It acts as a <em>prompt engineer and creative director</em>, not as a simple expander.</p>
+          <p>It does not write the final prompt at once. First it finds what is missing or unclear, and it asks you about it. It writes the prompt only when the direction is clear.</p>
+
+          <h2 id="when-to-use-it">When to use it</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Situation</th><th>Use</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>You have a rough idea for an image, a text or an agent task, and you want a strong prompt for it.</td><td><code>revise-prompt</code></td></tr>
+                <tr><td>Your prompt gives weak results and you are not sure what is missing.</td><td><code>revise-prompt</code></td></tr>
+                <tr><td>You only want to fix the grammar or wording of text you already wrote.</td><td><code>quill-edit</code></td></tr>
+                <tr><td>You want to stress-test a plan or a design, not write a prompt.</td><td><code>grilling</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Short version: use it when the <strong>idea</strong> is still unclear, not only the words.</p>
+
+          <h2 id="how-it-works">How it works</h2>
+          <p>The skill runs a short clarify loop. It writes only when the loop has nothing important left to ask.</p>
+          <figure class="diagram">
+            <pre class="mermaid">
+flowchart TD
+  A[Rough idea] --> B[Find gaps and ambiguity]
+  B --> C[Ask 1-3 questions]
+  C --> D[Resolve contradictions]
+  D -- still unclear --> B
+  D -- direction is clear --> E[Write final prompt]
+            </pre>
+            <figcaption>The revise-prompt clarify loop</figcaption>
+          </figure>
+          <ol>
+            <li><strong>Find gaps.</strong> The skill looks for what is missing or ambiguous in your idea.</li>
+            <li><strong>Ask.</strong> It asks one to three focused questions at a time.</li>
+            <li><strong>Resolve.</strong> It points out contradictions. It suggests a stronger direction when that helps.</li>
+            <li><strong>Write.</strong> When the direction is coherent and detailed enough, it writes the final prompt.</li>
+          </ol>
+
+          <h3>The five dimensions</h3>
+          <p>The questions come from five dimensions:</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Dimension</th><th>What it asks about</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Intent</strong></td><td>What the output must achieve. Functional or expressive?</td></tr>
+                <tr><td><strong>Subject</strong></td><td>Main entities, how they relate, and their hierarchy.</td></tr>
+                <tr><td><strong>Style</strong></td><td>Tone and aesthetic: formal or casual, minimal or detailed.</td></tr>
+                <tr><td><strong>Mood</strong></td><td>For example elegant, serious, cinematic, warm, mysterious or energetic.</td></tr>
+                <tr><td><strong>Constraints</strong></td><td>Length, format, platform and output schema.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="what-you-get">What you get</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Format</th><th>When</th><th>Shape</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Natural language</td><td>Default</td><td>Polished prose, 250–500 words</td></tr>
+                <tr><td>JSON, YAML, Markdown or structured config</td><td>On request</td><td>The same content in the structure you ask for</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The result uses dense, precise language, not a list of keywords. It reads like a creative brief or a production spec. The skill gives you the prompt in the chat; it does not write a file.</p>
+          <p>Here is a short session:</p>
+          <pre><code class="language-txt">You:    A prompt for a poster about a night market.
+Skill:  1. Is it to sell tickets, or to set a mood?
+        2. Photo-real, illustrated, or graphic?
+        3. Any size or text you must include?
+You:    Mood. Illustrated. A3, title "After Dark" only.
+Skill:  Warm and busy, or quiet and mysterious?
+You:    Warm and busy.
+Skill:  [writes a 300-word brief: scene, light, palette,
+         composition, title placement, A3 portrait]</code></pre>
+
+          <h2 id="common-questions">Common questions</h2>
+          <dl class="faq">
+            <dt>Why doesn’t it just write the prompt straight away?</dt>
+            <dd>A prompt built on guesses keeps the gaps of the idea. A few questions first give a prompt that says what you actually want.</dd>
+            <dt>How many questions will it ask?</dt>
+            <dd>One to three at a time. It stops asking when the direction is coherent and detailed enough.</dd>
+            <dt>Can I get JSON or YAML instead of prose?</dt>
+            <dd>Yes. Ask for it. The default is natural language of 250–500 words.</dd>
+            <dt>Will it change my idea?</dt>
+            <dd>It keeps your core intent. It can suggest a stronger direction, and it fixes contradictions, but you decide.</dd>
+            <dt>Is it only for image prompts?</dt>
+            <dd>No. The dimensions work for any output: text, images, agent tasks or configs.</dd>
+          </dl>
+
+          <h2 id="its-working-if">It’s working if</h2>
+          <ul class="checks">
+            <li>The skill asks questions before it writes a prompt.</li>
+            <li>Each round has no more than three questions.</li>
+            <li>The final prompt reads like a brief, not a keyword list.</li>
+            <li>The final prompt has no internal contradictions.</li>
+            <li>You still recognise your original idea in the result.</li>
+          </ul>
+
+          <h2 id="where-it-fits">Where it fits</h2>
+          <p>revise-prompt sits between an idea and the tool that runs the prompt. Use it before you send a prompt to an image model, a writing model or an agent.</p>
+          <pre><code class="language-txt">rough idea → revise-prompt → creative brief → image model / LLM / agent</code></pre>
+          <p>To polish the English of the finished prompt, use <code>quill-edit</code>. To test a plan instead of a prompt, use <code>grilling</code>.</p>
+          <p>Source: <a href="../../../skills/productivity/revise-prompt/SKILL.md"><code>skills/productivity/revise-prompt/SKILL.md</code></a></p>
+        </main>
+
+        <nav class="toc" data-auto aria-label="Table of contents"></nav>
+      </div>
+    </div>
+  </body>
+</html>

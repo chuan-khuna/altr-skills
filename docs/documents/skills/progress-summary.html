@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>progress-summary — altr-skills</title>
+    <meta name="description" content="Turns raw notes, a git log or conversation context into a short, factual work update shaped for a JIRA comment or a Discord post." />
+    <link rel="stylesheet" href="../../shared/globals.css" />
+    <script src="../../shared/doc.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="INDEX.html">skills</a> / progress-summary</nav>
+        <div data-doc-controls></div>
+      </header>
+
+      <div class="layout">
+        <main class="content">
+          <div class="header">
+            <p class="eyebrow">work · skill</p>
+            <h1>progress-summary</h1>
+            <p class="lede">Tell it what you did, in any form. It gives you an update your team can read in ten seconds.</p>
+            <div class="meta">
+              <span class="tag">skills/work/progress-summary</span>
+              <span class="tag">channels: JIRA · Discord</span>
+            </div>
+          </div>
+
+          <h2 id="what-it-does">What it does</h2>
+          <p>progress-summary takes raw notes, a git log, pasted text or the current conversation. It writes a clear, factual summary of the work you did, shaped for one <em>channel</em>: a JIRA comment or a Discord post.</p>
+          <p>The audience is your teammates. They know the project, so the skill keeps names they share and strips internal detail. It only prints the draft. You copy it and post it yourself.</p>
+
+          <h2 id="when-to-use-it">When to use it</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Situation</th><th>Use</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>You finished some work and want to update the JIRA card.</td><td><code>progress-summary</code> (JIRA)</td></tr>
+                <tr><td>You want to tell your team channel what you shipped.</td><td><code>progress-summary</code> (Discord)</td></tr>
+                <tr><td>You want a start-of-day list of your own JIRA tasks, with recommendations.</td><td><code>jira-standup-meeting</code></td></tr>
+                <tr><td>You hand work to someone else and they need full context.</td><td><code>calm-down assign</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Short version: progress-summary reports <strong>what you did</strong>. It does not plan what comes next for someone else.</p>
+
+          <h2 id="prerequisites">Prerequisites</h2>
+          <p>None for notes, git logs or conversation context. To start from a JIRA key such as <code>PROJ-123</code>, the skill uses the Atlassian MCP if it is available.</p>
+
+          <h2 id="how-it-works">How it works</h2>
+          <figure class="diagram">
+            <pre class="mermaid">
+flowchart TD
+  A[Notes, git log, JIRA key or chat] --> B{Channel known?}
+  B -- no --> C[Ask: JIRA or Discord?]
+  B -- yes --> D[Keep, strip, translate]
+  D --> E[Shape for channel]
+  E --> F[Print draft]
+            </pre>
+            <figcaption>From raw input to a ready-to-paste update</figcaption>
+          </figure>
+          <ol>
+            <li><strong>Check the channel.</strong> If you did not say JIRA or Discord, the skill asks one short question and stops.</li>
+            <li><strong>Read the source.</strong> It uses pasted notes directly. From a git log, it drops noise commits such as merges, version bumps and fixups. From a JIRA key, it looks at recent activity and current state. If the source is unclear, it asks one question and stops.</li>
+            <li><strong>Filter.</strong> It keeps shared names, strips internal detail, and translates mechanics into plain cause and effect.</li>
+            <li><strong>Shape.</strong> It formats the text for the channel.</li>
+            <li><strong>Print.</strong> It gives you one block, formatted as the channel shows it.</li>
+          </ol>
+
+          <h3>Keep, strip, translate</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Action</th><th>Applies to</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Keep</strong></td><td>Task names, feature names, PR numbers, JIRA keys, component, service and tool names.</td></tr>
+                <tr><td><strong>Strip</strong></td><td>Function names, file paths, variable names, internal config detail, commit SHAs.</td></tr>
+                <tr><td><strong>Translate</strong></td><td>Implementation mechanics into one plain sentence about the impact.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>For example, not “fixed the null dereference in <code>auth/session.ts:142</code>” but “fixed a crash in the session handler that was dropping users on login.” Technical words like <em>race condition</em> or <em>regression</em> stay; your team knows them.</p>
+
+          <h2 id="what-you-get">What you get</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Channel</th><th>Shape</th><th>Length</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>JIRA comment</td><td><strong>Status</strong>, <strong>What I did</strong>, <strong>What’s next</strong>, <strong>Blockers</strong>. Empty sections are dropped.</td><td>Short bullets, easy to scan</td></tr>
+                <tr><td>Discord post</td><td>One message, no headers. A one-sentence TL;DR, then 2–3 bullets. Inline refs, no greeting or sign-off.</td><td>Under 60 words</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>From the note “Fixed the auth session bug causing logout loops on mobile. PR up. Also unblocked registration by updating token expiry config. Still need tests for the session handler,” the JIRA version is:</p>
+          <pre><code class="language-markdown">**Status:** In progress
+
+**What I did:**
+- Fixed auth session bug causing logout loops on mobile — PR #312 up for review
+- Updated token expiry config — unblocked registration flow
+
+**What's next:**
+- Write tests for the session handler
+- Merge PR #312 once reviewed</code></pre>
+          <div class="callout warn">
+            <span class="label">Print only</span>
+            <p>The skill never posts to JIRA or Discord. It prints the draft, and you paste it where it belongs.</p>
+          </div>
+
+          <h2 id="common-questions">Common questions</h2>
+          <dl class="faq">
+            <dt>Can I just give it my git log?</dt>
+            <dd>Yes. It keeps the meaningful changes and drops merges, version bumps and fixups.</dd>
+            <dt>Why did it remove my file paths?</dt>
+            <dd>File paths and function names do not tell teammates the state of the work. The skill keeps the impact and drops the address.</dd>
+            <dt>What happens if my notes are vague?</dt>
+            <dd>It writes only what it knows and marks gaps, for example “details TBC”. It does not invent facts or owners.</dd>
+            <dt>Can it post the comment for me?</dt>
+            <dd>No. The output is print-only. You copy it and post it.</dd>
+            <dt>Why does it stop and ask “JIRA or Discord?”</dt>
+            <dd>The two channels need different shapes. One short question is faster than a draft in the wrong shape.</dd>
+          </dl>
+
+          <h2 id="its-working-if">It’s working if</h2>
+          <ul class="checks">
+            <li>Every JIRA key, PR number and feature name from the source is still in the update.</li>
+            <li>The update has no file paths, function names or commit SHAs.</li>
+            <li>A Discord post is under 60 words and starts with a one-sentence TL;DR.</li>
+            <li>Nothing in the update is a fact that the source did not give.</li>
+            <li>You can paste the draft with no edits.</li>
+          </ul>
+
+          <h2 id="where-it-fits">Where it fits</h2>
+          <p>progress-summary closes the loop at the end of a piece of work. Use it after you finish or pause a task, when the team needs to know.</p>
+          <pre><code class="language-txt">morning  → jira-standup-meeting → plan your day
+work     → notes / git log / chat
+done     → progress-summary → JIRA comment or Discord post</code></pre>
+          <p>For a start-of-day view of your tasks, use <code>jira-standup-meeting</code>. To hand the work to someone else, use <code>calm-down assign</code>.</p>
+          <p>Source: <a href="../../../skills/work/progress-summary/SKILL.md"><code>skills/work/progress-summary/SKILL.md</code></a></p>
+        </main>
+
+        <nav class="toc" data-auto aria-label="Table of contents"></nav>
+      </div>
+    </div>
+  </body>
+</html>

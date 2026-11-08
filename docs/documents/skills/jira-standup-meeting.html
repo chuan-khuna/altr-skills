@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>jira-standup-meeting — altr-skills</title>
+    <meta name="description" content="Start-of-day Jira summary: reads your sprint and recent issues through the Atlassian Rovo MCP Server, then gives recommendations for the day." />
+    <link rel="stylesheet" href="../../shared/globals.css" />
+    <script src="../../shared/doc.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="INDEX.html">skills</a> / jira-standup-meeting</nav>
+        <div data-doc-controls></div>
+      </header>
+
+      <div class="layout">
+        <main class="content">
+          <div class="header">
+            <p class="eyebrow">work · skill</p>
+            <h1>jira-standup-meeting</h1>
+            <p class="lede">Open your day with one command. The skill reads your Jira tasks, groups them by status, and tells you what to do first.</p>
+            <div class="meta">
+              <span class="tag">skills/work/jira-standup-meeting</span>
+              <span class="tag">name: jira-daily-standup-meeting</span>
+              <span class="tag">needs: Atlassian Rovo MCP</span>
+            </div>
+          </div>
+
+          <h2 id="what-it-does">What it does</h2>
+          <p>The skill gives you a morning summary of your Jira issues in the <code>Tech Team</code> project. It reads two lists: your issues in the open sprint, and your issues that changed in the last 7 days.</p>
+          <ul>
+            <li><strong>Task summary.</strong> Your issues, grouped as In Progress, Ready to Review, To Do, Done and Recently Updated.</li>
+            <li><strong>Recommendations.</strong> Sprint health, carry-overs, stalled items and a numbered focus list for today. You do not have to ask for them.</li>
+          </ul>
+          <p>It only reads. It does not change an issue or write a file unless you ask.</p>
+
+          <h2 id="when-to-use-it">When to use it</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Situation</th><th>Use</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>You start your day and want to see your Jira tasks and what to do first.</td><td><code>jira-standup-meeting</code></td></tr>
+                <tr><td>You want to prepare what you will say in the standup meeting.</td><td><code>jira-standup-meeting</code></td></tr>
+                <tr><td>You finished work and want to post an update to a Jira card or Discord.</td><td><code>progress-summary</code></td></tr>
+                <tr><td>Your day has too many urgent tasks and you feel panic.</td><td><code>calm-down triage</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Short version: this skill tells you what is on your plate. <code>progress-summary</code> tells others what you did.</p>
+
+          <h2 id="prerequisites">Prerequisites</h2>
+          <ul>
+            <li>The <em>Atlassian Rovo MCP Server</em> (<code>https://mcp.atlassian.com/v1/mcp</code>) is configured in your client.</li>
+            <li>You authenticated it with OAuth 2.1.</li>
+            <li>Your issues are in the Jira project <code>Tech Team</code>. The queries use this project name.</li>
+          </ul>
+          <div class="callout warn">
+            <span class="label">No MCP, no summary</span>
+            <p>If the Rovo MCP tools are not available, the skill tells you and stops. It does not guess your tasks.</p>
+          </div>
+
+          <h2 id="how-it-works">How it works</h2>
+          <figure class="diagram">
+            <pre class="mermaid">
+flowchart TD
+  A[Ask for Jira username] --> B[Look up account ID]
+  B --> C[Run two JQL queries in parallel]
+  C --> D[Merge and remove duplicates]
+  D --> E[Compute signals]
+  E --> F[Task summary]
+  F --> G[Recommendations and offer]
+            </pre>
+            <figcaption>From your username to a plan for the day</figcaption>
+          </figure>
+          <ol>
+            <li><strong>Ask.</strong> The skill asks for your Jira username or email address. It waits for your answer.</li>
+            <li><strong>Look up.</strong> It calls <code>lookupJiraAccountId</code> and uses the <code>accountId</code>, not your display name, in every query.</li>
+            <li><strong>Query.</strong> It runs two JQL queries at the same time with <code>searchJiraIssuesUsingJql</code>: open-sprint issues, and issues updated in the last 7 days.</li>
+            <li><strong>Merge.</strong> It merges the two lists by issue key. Sprint issues win, so the Recently Updated section shows only issues outside the sprint.</li>
+            <li><strong>Compute signals.</strong> It reads the raw data for the facts that drive the recommendations (see below).</li>
+            <li><strong>Summarise.</strong> It writes the task summary in Markdown. It leaves out empty sections.</li>
+            <li><strong>Recommend and offer.</strong> It adds the recommendations, then asks if you want more detail or a status update.</li>
+          </ol>
+
+          <h3>The queries</h3>
+          <pre><code class="language-sql">-- Active sprint issues
+assignee = "{accountId}" AND project = "Tech Team" AND sprint in openSprints() ORDER BY status ASC
+
+-- Recently updated (last 7 days)
+assignee = "{accountId}" AND project = "Tech Team" AND updated >= -7d ORDER BY updated DESC</code></pre>
+          <p>Each issue comes back with <code>summary</code>, <code>status</code>, <code>priority</code>, <code>description</code>, <code>updated</code>, <code>customfield_10020</code>, <code>customfield_10014</code> and <code>parent</code>. <code>customfield_10020</code> is the sprint array. The epic comes from <code>customfield_10014</code> (classic projects) or <code>parent</code> (next-gen projects), and the summary shows it as the project name.</p>
+
+          <h3>The signals</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Signal</th><th>How the skill finds it</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Sprint end date</td><td>The sprint in <code>customfield_10020</code> with <code>state = "active"</code> gives the <code>endDate</code>. The skill counts the days from today.</td></tr>
+                <tr><td>Review bottleneck</td><td>The number of issues in <code>Ready to Review</code>.</td></tr>
+                <tr><td>Carry-over item</td><td>An issue that was in 3 or more sprints.</td></tr>
+                <tr><td>Stalled In Progress</td><td>An <code>In Progress</code> issue with no update for more than 3 days.</td></tr>
+                <tr><td>Blocker signal</td><td>The summary or description contains “blocked” or “block”.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>The focus order</h3>
+          <p>The <em>suggested focus</em> list follows fixed rules, in this order:</p>
+          <ol>
+            <li>3 or more issues in Ready to Review, and the sprint ends in 5 days or fewer: chase the reviews first.</li>
+            <li>Any In Progress issue: wrap it up and move it to Ready to Review.</li>
+            <li>A carry-over To Do with no description: add a description or defer it.</li>
+            <li>A carry-over To Do with a description: start it now.</li>
+            <li>Other To Do issues: in order of urgency from their summaries.</li>
+          </ol>
+
+          <h2 id="what-you-get">What you get</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Part</th><th>Where</th><th>Contents</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Task summary</td><td>Chat, Markdown</td><td>In Progress, Ready to Review, To Do, Done, Recently Updated (outside sprint)</td></tr>
+                <tr><td>Recommendations</td><td>Chat, Markdown</td><td>Sprint health, Carry-overs to address, Stalled items, Suggested focus for today</td></tr>
+                <tr><td>Follow-up offer</td><td>Chat</td><td>“Want me to look into any of these in more detail, or update a status?”</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Each issue line has the linked key, the summary, the priority in italics and the epic as a code label. A short result looks like this:</p>
+          <pre><code class="language-markdown">### 🔴 In Progress
+- **[TECH-412](https://…/browse/TECH-412)** Add retry to export job · *High* · `Reporting`
+
+### 🟠 Ready to Review
+- **[TECH-398](https://…/browse/TECH-398)** Fix timezone in invoice PDF · *Medium* · `Billing`
+
+---
+
+## 📋 Recommendations
+
+### ⚠️ Sprint health
+- Sprint ends in 3 days (2026-11-11) — 4 items are not yet Done
+
+### 🎯 Suggested focus for today
+1. Wrap up TECH-412 and move it to Ready to Review
+2. Start TECH-377 (carried 3 sprints — now or never)</code></pre>
+          <p>Nothing goes to disk. The skill writes a file only when you ask it to.</p>
+
+          <h2 id="common-questions">Common questions</h2>
+          <dl class="faq">
+            <dt>Why does it ask for my username every time?</dt>
+            <dd>It needs your account ID for the queries. It asks first and looks up the ID, so the filter matches you and nobody with a similar name.</dd>
+            <dt>Can it read a project other than Tech Team?</dt>
+            <dd>Not as written. Both JQL queries use <code>project = "Tech Team"</code>. To use another project, change the queries in the SKILL.md.</dd>
+            <dt>Why is an issue missing from Recently Updated?</dt>
+            <dd>It is probably in the sprint list already. The skill removes duplicates, and the sprint list wins.</dd>
+            <dt>What makes an issue a carry-over?</dt>
+            <dd>It was in 3 or more sprints. The skill counts the entries in the sprint field <code>customfield_10020</code>.</dd>
+            <dt>Will it change my Jira issues?</dt>
+            <dd>No. It only reads. At the end it offers to update a status, and it does that only if you say yes.</dd>
+          </dl>
+
+          <h2 id="its-working-if">It’s working if</h2>
+          <ul class="checks">
+            <li>Every issue key in the summary links to its Jira page.</li>
+            <li>No issue shows in both a sprint section and Recently Updated.</li>
+            <li>The Recommendations section comes right after the summary, without a request.</li>
+            <li>The first focus item is an action you can start now, with an issue key.</li>
+            <li>No file appears in your repo after the run.</li>
+          </ul>
+
+          <h2 id="where-it-fits">Where it fits</h2>
+          <p>This skill opens the day. It tells you what to work on. Other skills in the <code>work</code> group help you during and after the work.</p>
+          <pre><code class="language-txt">morning   → jira-standup-meeting → focus list → you work the issues
+work done → progress-summary → Jira / Discord update
+too much  → calm-down triage → battle plan</code></pre>
+          <p>To post what you finished, use <a href="progress-summary.html"><code>progress-summary</code></a>. If the focus list feels too big, use <a href="calm-down.html"><code>calm-down</code></a> in triage mode.</p>
+          <p>Source: <a href="../../../skills/work/jira-standup-meeting/SKILL.md"><code>skills/work/jira-standup-meeting/SKILL.md</code></a></p>
+        </main>
+
+        <nav class="toc" data-auto aria-label="Table of contents"></nav>
+      </div>
+    </div>
+  </body>
+</html>

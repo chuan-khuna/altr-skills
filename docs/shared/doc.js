@@ -8,6 +8,11 @@
 (() => {
   "use strict";
 
+  /* Resolve sibling files (glossary data, glossary page) from this script's URL. */
+  const BASE = document.currentScript?.src || location.href;
+  const GLOSSARY_DATA_URL = new URL("glossary-data.js", BASE).href;
+  const GLOSSARY_PAGE_URL = new URL("../documents/glossary.html", BASE).href;
+
   const SHIKI_URL = "https://esm.sh/shiki@4.5.0";
   const PELE_URL = "https://cdn.jsdelivr.net/npm/pele@1.12.0/dist/pele.global.js";
 
@@ -26,6 +31,7 @@
     zoomIn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg>',
     zoomOut: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M8 11h6"/></svg>',
     reset: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>',
+    book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>',
     close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>',
   };
 
@@ -303,12 +309,192 @@
     }
   }
 
+  /* ---------- Glossary ---------- */
+
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = reject;
+      document.head.append(s);
+    });
+  }
+
+  async function loadGlossary() {
+    if (!window.DOC_GLOSSARY) {
+      try {
+        await loadScript(GLOSSARY_DATA_URL);
+      } catch {
+        return [];
+      }
+    }
+    return window.DOC_GLOSSARY || [];
+  }
+
+  const termHref = (id) => `${GLOSSARY_PAGE_URL}#${id}`;
+
+  /* Link the first use of each glossary term in the page body.
+     Skips code, links, headings, diagrams and the page header.
+     Write <a class="term" data-term="id"> by hand to pick a specific spot. */
+  const SKIP = "pre, code, a, h1, h2, h3, h4, figure, .header, .toc, .topbar, .no-terms";
+
+  function linkTerms(entries) {
+    const content = document.querySelector(".content");
+    if (!content) return;
+    const done = new Set([...content.querySelectorAll(".term[data-term]")].map((a) => a.dataset.term));
+
+    for (const entry of entries) {
+      if (done.has(entry.id) || !entry.match) continue;
+      const re = new RegExp(entry.match, "i");
+      const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT, {
+        acceptNode: (n) => (n.parentElement.closest(SKIP) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT),
+      });
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        const m = re.exec(node.nodeValue);
+        if (!m) continue;
+        const hit = node.splitText(m.index);
+        hit.splitText(m[0].length);
+        const a = document.createElement("a");
+        a.className = "term";
+        a.dataset.term = entry.id;
+        a.textContent = hit.nodeValue;
+        hit.replaceWith(a);
+        done.add(entry.id);
+        break;
+      }
+    }
+
+    const byId = new Map(entries.map((e) => [e.id, e]));
+    content.querySelectorAll(".term[data-term]").forEach((a) => {
+      if (!byId.has(a.dataset.term)) return;
+      a.href = termHref(a.dataset.term);
+      a.setAttribute("aria-describedby", "term-pop");
+      attachPopup(a, byId.get(a.dataset.term));
+    });
+  }
+
+  let pop;
+  let hideTimer;
+  function getPopup() {
+    if (pop) return pop;
+    pop = document.createElement("div");
+    pop.id = "term-pop";
+    pop.className = "term-pop";
+    pop.setAttribute("role", "tooltip");
+    pop.hidden = true;
+    pop.innerHTML = `<div class="term-pop-head"><span class="term-pop-kicker">${ICONS.book}Glossary</span><span class="term-pop-title"></span></div><p class="term-pop-body"></p><a class="term-pop-link">Read definition <span aria-hidden="true">→</span></a>`;
+    pop.addEventListener("mouseenter", () => clearTimeout(hideTimer));
+    pop.addEventListener("mouseleave", scheduleHide);
+    document.addEventListener("keydown", (e) => e.key === "Escape" && hidePopup());
+    window.addEventListener("scroll", () => !pop.hidden && pop._anchor && place(pop._anchor), { passive: true });
+    document.body.append(pop);
+    return pop;
+  }
+
+  function place(anchor) {
+    const r = anchor.getBoundingClientRect();
+    const w = Math.min(320, window.innerWidth - 32);
+    pop.style.width = `${w}px`;
+    const left = Math.max(16, Math.min(r.left, window.innerWidth - w - 16));
+    const below = r.bottom + 8;
+    const h = pop.offsetHeight;
+    const top = below + h > window.innerHeight - 8 && r.top - h - 8 > 8 ? r.top - h - 8 : below;
+    pop.style.left = `${left + window.scrollX}px`;
+    pop.style.top = `${top + window.scrollY}px`;
+  }
+
+  function showPopup(anchor, entry) {
+    const p = getPopup();
+    clearTimeout(hideTimer);
+    p.querySelector(".term-pop-title").textContent = entry.term;
+    p.querySelector(".term-pop-body").textContent = entry.short;
+    p.querySelector(".term-pop-link").href = termHref(entry.id);
+    p._anchor = anchor;
+    p.hidden = false;
+    place(anchor);
+  }
+
+  function scheduleHide() {
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(hidePopup, 150);
+  }
+  function hidePopup() {
+    if (pop) pop.hidden = true;
+  }
+
+  function attachPopup(a, entry) {
+    let showTimer;
+    a.addEventListener("mouseenter", () => {
+      showTimer = setTimeout(() => showPopup(a, entry), 120);
+    });
+    a.addEventListener("mouseleave", () => {
+      clearTimeout(showTimer);
+      scheduleHide();
+    });
+    a.addEventListener("focus", () => showPopup(a, entry));
+    a.addEventListener("blur", scheduleHide);
+    /* Touch: first tap shows the pop-up, second tap follows the link. */
+    a.addEventListener("click", (e) => {
+      const open = pop && !pop.hidden && pop._anchor === a;
+      if (window.matchMedia("(hover: none)").matches && !open) {
+        e.preventDefault();
+        showPopup(a, entry);
+      }
+    });
+  }
+
+  /* Glossary page: <div data-glossary></div> renders every entry by group. */
+  function renderGlossary(host, entries) {
+    const groups = new Map();
+    for (const e of [...entries].sort((a, b) => a.term.localeCompare(b.term))) {
+      if (!groups.has(e.group)) groups.set(e.group, []);
+      groups.get(e.group).push(e);
+    }
+    const frag = document.createDocumentFragment();
+    for (const [group, list] of groups) {
+      const h2 = document.createElement("h2");
+      h2.textContent = group;
+      h2.id = slug(group);
+      const dl = document.createElement("dl");
+      dl.className = "glossary";
+      for (const e of list) {
+        const dt = document.createElement("dt");
+        dt.id = e.id;
+        const anchor = document.createElement("a");
+        anchor.href = `#${e.id}`;
+        anchor.textContent = e.term;
+        dt.append(anchor);
+        const dd = document.createElement("dd");
+        const p = document.createElement("p");
+        p.textContent = e.short;
+        dd.append(p);
+        if (e.more) {
+          const more = document.createElement("p");
+          more.textContent = e.more;
+          dd.append(more);
+        }
+        dl.append(dt, dd);
+      }
+      frag.append(h2, dl);
+    }
+    host.replaceChildren(frag);
+    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+  }
+
   /* ---------- Boot ---------- */
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", async () => {
     document.querySelectorAll("[data-doc-controls]").forEach(buildControls);
-    document.querySelectorAll("nav.toc[data-auto]").forEach(buildToc);
     highlightCode();
     renderDiagrams();
+
+    const entries = await loadGlossary();
+    const glossaryHost = document.querySelector("[data-glossary]");
+    if (glossaryHost) renderGlossary(glossaryHost, entries);
+    else linkTerms(entries);
+
+    /* Build the TOC last, so it sees headings the glossary page adds. */
+    document.querySelectorAll("nav.toc[data-auto]").forEach(buildToc);
   });
 })();

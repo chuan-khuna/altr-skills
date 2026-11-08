@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>brockmann-grid-system — altr-skills</title>
+    <meta name="description" content="Build editorial webpages on a real Müller-Brockmann modular grid: one CSS-variable source of truth, subgrid bands, baseline lock, optical alignment, and a Puppeteer harness that proves it." />
+    <link rel="stylesheet" href="../../shared/globals.css" />
+    <script src="../../shared/doc.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="INDEX.html">skills</a> / brockmann-grid-system</nav>
+        <div data-doc-controls></div>
+      </header>
+
+      <div class="layout">
+        <main class="content">
+          <div class="header">
+            <p class="eyebrow">design · skill</p>
+            <h1>brockmann-grid-system</h1>
+            <p class="lede">A grid you can't measure is a mood board, not a system. This skill builds an editorial page on a real modular grid, then proves it at 0px.</p>
+            <div class="meta">
+              <span class="tag">skills/design/brockmann-grid-system</span>
+              <span class="tag">scripts: grid_tokens.py · verify_grid.js</span>
+            </div>
+          </div>
+
+          <h2 id="what-it-does">What it does</h2>
+          <p>The skill encodes Josef Müller-Brockmann's grid discipline and the front-end engineering that makes the grid real on the web. It gives you three things:</p>
+          <ul>
+            <li><strong>The discipline.</strong> A modular grid of columns and rows, an 8px baseline, a grotesque sans, flush-left type, and large jumps in scale.</li>
+            <li><strong>The engineering.</strong> One set of CSS variables, subgrid <em>bands</em> that place every element by column line, a baseline lock, and runtime <em>optical alignment</em>.</li>
+            <li><strong>The proof.</strong> A scaffold generator (<code>scripts/grid_tokens.py</code>) and a Puppeteer harness (<code>scripts/verify_grid.js</code>) that measures adherence.</li>
+          </ul>
+          <p>The skill has two hard limits. It does not change colours, and it does not draw a visible grid overlay or a show/hide-grid control. It governs layout, columns and vertical rhythm only.</p>
+
+          <h2 id="when-to-use-it">When to use it</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Situation</th><th>Use</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>You build a magazine spread, report or longform page that must read as Swiss or “Müller-Brockmann”.</td><td><code>brockmann-grid-system</code></td></tr>
+                <tr><td>A reviewer says “the H in the headline is off the grid”, but the box is on it.</td><td><code>brockmann-grid-system</code> (optical alignment, §2.4)</td></tr>
+                <tr><td>You want the page to keep its current colours and theme.</td><td><code>brockmann-grid-system</code>. It never touches colour.</td></tr>
+                <tr><td>You want a Vignelli Canon layout, not a Müller-Brockmann modular grid.</td><td>The sibling Vignelli Canon skill (not in this repo)</td></tr>
+                <tr><td>You want to write the words, not lay out the page.</td><td><a href="write-doc.html"><code>write-doc</code></a> or <a href="quill-edit.html"><code>quill-edit</code></a></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Short version: use it when alignment must be <strong>measured</strong>, not only claimed.</p>
+
+          <h2 id="prerequisites">Prerequisites</h2>
+          <ul>
+            <li><strong>Python 3</strong> to run <code>scripts/grid_tokens.py</code>. It needs no network and no credentials.</li>
+            <li><strong>Node.js, puppeteer-core and Chrome</strong> to run <code>scripts/verify_grid.js</code>. Set <code>CHROME</code> to the Chrome binary and <code>PUP</code> to the puppeteer-core module path.</li>
+            <li><strong>The real webfont as a local TTF</strong> if you want to verify optical alignment offline. See the warning below.</li>
+          </ul>
+
+          <h2 id="how-it-works">How it works</h2>
+          <p>The skill follows a fixed workflow. You build first, then you measure, and you fix until the harness passes.</p>
+          <figure class="diagram">
+            <pre class="mermaid">
+flowchart TD
+  A[Pick subject and real photos] --> B[Generate scaffold with grid_tokens.py]
+  B --> C[Build subgrid bands on the baseline]
+  C --> D[Add optical alignment JS]
+  D --> E[Run verify_grid.js at several widths]
+  E -- FAIL --> C
+  E -- PASS --> F[Page is on the grid]
+            </pre>
+            <figcaption>The brockmann-grid-system workflow</figcaption>
+          </figure>
+          <ol>
+            <li><strong>Pick the subject.</strong> Gather real photos and host them publicly.</li>
+            <li><strong>Generate the scaffold.</strong> Run <code>python3 scripts/grid_tokens.py</code>, or add <code>--scaffold</code> for a full page. Wire it into the page's existing palette.</li>
+            <li><strong>Build the spreads.</strong> Place every element by column line inside a band. Lock spacing, line-heights and media heights to the baseline.</li>
+            <li><strong>Add optical alignment.</strong> The scaffold already has the JS. Point its selector list at your display elements.</li>
+            <li><strong>Verify.</strong> Run the harness, look at a zoom crop of the top-left corner, fix and run again.</li>
+          </ol>
+
+          <h3>One source of truth</h3>
+          <p>Every grid parameter lives in <code>:root</code> CSS variables: <code>--cols</code>, <code>--gutter</code>, <code>--margin</code>, <code>--bl</code> (baseline), <code>--lh</code> (leading, 3 × baseline) and <code>--maxw</code>. Every element reads the same variables, so placements stay consistent at every viewport width.</p>
+
+          <h3>Subgrid bands</h3>
+          <p>A <em>band</em> spans all columns and exposes them again as a subgrid. Children place with <code>grid-column: &lt;startline&gt; / &lt;endline&gt;</code>, for example <code>1 / 6</code> and <code>6 / 13</code>. You never eyeball a span.</p>
+
+          <h3>Baseline lock</h3>
+          <ul>
+            <li>Every line-height is a multiple of the baseline. Use px for display type, not unitless values.</li>
+            <li>Every margin and padding is a multiple of the baseline.</li>
+            <li>Media heights are multiples of the leading (for example 240, 360, 432 or 480px), so the top and bottom of a photo land on lines.</li>
+          </ul>
+
+          <h3>Optical alignment</h3>
+          <p>A large headline can have its box exactly on a column line and still look wrong. The letterform's ink is inset by its <em>left side-bearing</em>. Box-on-grid is not ink-on-grid.</p>
+          <p>The runtime JS measures the first glyph with canvas <code>actualBoundingBoxLeft</code> and shifts the element so the ink lands on the line. It runs after <code>document.fonts.ready</code> and on resize, so it uses the font that actually loaded.</p>
+          <div class="callout warn">
+            <span class="label">Side-bearing is font-specific</span>
+            <p>Headless Chrome often lacks the webfont and falls back to another grotesque. The skill measured −16px on the fallback and −7px on real Inter for the same <code>H</code>. To verify optics offline, embed the real webfont with <code>@font-face</code>.</p>
+          </div>
+
+          <h3>The three checks</h3>
+          <p><code>verify_grid.js</code> renders the page at several widths, above and below <code>--maxw</code> (default <code>1440,1180,900</code>). At each width it checks:</p>
+          <ol>
+            <li><strong>Column adherence.</strong> Each <code>.band &gt; *</code> starts on a column start line and ends on a column end line. The harness builds both sets, so a span that ends past a gutter does not report a false error. It skips the optically aligned display elements.</li>
+            <li><strong>Baseline.</strong> Text tops, modulo the baseline, are close to 0. It measures per spread, against that spread's <code>.grid</code> top.</li>
+            <li><strong>Optical ink.</strong> Each display element's ink-left equals its own nearest column start, not always line 1.</li>
+          </ol>
+
+          <h2 id="what-you-get">What you get</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Command</th><th>Output</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>python3 scripts/grid_tokens.py</code></td><td>A block on stdout: <code>:root</code> tokens, the <code>.grid</code>/<code>.band</code> CSS, the optical-alignment JS and a band markup pattern</td></tr>
+                <tr><td><code>python3 scripts/grid_tokens.py --scaffold</code></td><td>A full minimal HTML page with the same block</td></tr>
+                <tr><td><code>--cols --baseline --gutter --margin --maxw</code></td><td>Custom grid values. Defaults are 12, 8, 24, 72 and 1296. It warns if gutter or margin is not a baseline multiple.</td></tr>
+                <tr><td><code>node scripts/verify_grid.js &lt;file-or-url&gt;</code></td><td>One <code>[PASS]</code> or <code>[FAIL]</code> line per width, then <code>GRID VERIFY: PASS</code>, or <code>GRID VERIFY: FAIL</code> with exit code 1</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The scaffold emits no colours. A band from the scaffold looks like this:</p>
+          <pre><code class="language-css">.band {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  column-gap: var(--gutter);
+  align-items: start;
+}
+@supports not (grid-template-columns: subgrid) {
+  .band {
+    grid-template-columns: repeat(var(--cols), 1fr);
+  }
+}</code></pre>
+          <p>To verify, run the harness with the two environment variables set:</p>
+          <pre><code class="language-bash">CHROME=/path/to/chrome PUP=/path/to/puppeteer-core \
+  node scripts/verify_grid.js file:///path/to/index.html --widths=1440,1180,900</code></pre>
+          <p>A clean run reports <code>col=0px baseline≤4px ink=0px</code> and ends with <code>GRID VERIFY: PASS</code>.</p>
+
+          <h2 id="common-questions">Common questions</h2>
+          <dl class="faq">
+            <dt>Will it change my page's colours?</dt>
+            <dd>No. The skill sets no palette tokens and no <code>background</code> or <code>color</code> rules. It keeps the host design system's colours exactly as they are.</dd>
+            <dt>Can I turn on a grid overlay to check alignment by eye?</dt>
+            <dd>No. The skill does not draw a visible grid or a toggle. The harness proves the grid by measurement, and a top-left zoom crop is the human check.</dd>
+            <dt>Why does my headline look off the grid when its box is on it?</dt>
+            <dd>Large glyphs have a left side-bearing, so the ink sits inside the box. The optical-alignment JS shifts the element so the ink, not the box, lands on the line.</dd>
+            <dt>Why does the optical check fail in headless Chrome but look fine in my browser?</dt>
+            <dd>Headless Chrome probably used a fallback font with a different side-bearing. Embed the real webfont through <code>@font-face</code> with a local TTF, then run the check again.</dd>
+            <dt>Why test at widths above and below the max-width?</dt>
+            <dd>A centred container can drift when the viewport is wider or narrower than <code>--maxw</code>. Several widths catch that drift.</dd>
+            <dt>Which grid should I start with?</dt>
+            <dd>For the web, a 12-column grid with an 8px baseline is a strong default. Use a 6×6 or 4×8 modular field grid when you want visible rows too.</dd>
+          </dl>
+
+          <h2 id="its-working-if">It’s working if</h2>
+          <ul class="checks">
+            <li><code>verify_grid.js</code> prints <code>GRID VERIFY: PASS</code> at every width you test.</li>
+            <li>Each width line shows column error ≤ 0.5px, baseline error ≤ half a baseline, and ink error ≤ 1px.</li>
+            <li>In a top-left zoom crop, the masthead ink, the body text and the column line share one edge.</li>
+            <li>The page's colours are the same as before the skill ran.</li>
+            <li>Every grid value comes from the <code>:root</code> variables, not from numbers on single elements.</li>
+          </ul>
+
+          <h2 id="where-it-fits">Where it fits</h2>
+          <p>brockmann-grid-system sits between a page's content and its final layout. Use it after you have the words and photos, and before you publish.</p>
+          <pre><code class="language-txt">content + photos → grid_tokens.py scaffold → subgrid bands + optical JS → verify_grid.js → PASS → publish</code></pre>
+          <p>To write the copy first, use <a href="write-doc.html"><code>write-doc</code></a>. To polish it, use <a href="quill-edit.html"><code>quill-edit</code></a>. For a Vignelli Canon layout, use the sibling Vignelli Canon skill instead.</p>
+          <p>Source: <a href="../../../skills/design/brockmann-grid-system/SKILL.md"><code>skills/design/brockmann-grid-system/SKILL.md</code></a></p>
+        </main>
+
+        <nav class="toc" data-auto aria-label="Table of contents"></nav>
+      </div>
+    </div>
+  </body>
+</html>

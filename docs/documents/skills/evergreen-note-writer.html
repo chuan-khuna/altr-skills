@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>evergreen-note-writer — altr-skills</title>
+    <meta name="description" content="Turns one or more sources into atomic evergreen notes, then saves each note only after you approve its content and path." />
+    <link rel="stylesheet" href="../../shared/globals.css" />
+    <script src="../../shared/doc.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="INDEX.html">skills</a> / evergreen-note-writer</nav>
+        <div data-doc-controls></div>
+      </header>
+
+      <div class="layout">
+        <main class="content">
+          <div class="header">
+            <p class="eyebrow">productivity · skill</p>
+            <h1>evergreen-note-writer</h1>
+            <p class="lede">Give it your reading material. It gives back small notes, one idea each, with titles that say something on their own.</p>
+            <div class="meta">
+              <span class="tag">skills/productivity/evergreen-note-writer</span>
+              <span class="tag">output: note files</span>
+            </div>
+          </div>
+
+          <h2 id="what-it-does">What it does</h2>
+          <p>evergreen-note-writer reads your sources and turns them into <em>evergreen notes</em>. An evergreen note holds one idea: a concept, a claim, a definition or an insight. You can refine it over time and link it to other notes.</p>
+          <p>Each note has four properties:</p>
+          <ul>
+            <li><strong>Atomic.</strong> One idea per note, not a summary of a whole source.</li>
+            <li><strong>Concept-first title.</strong> An assertion (“X causes Y”), a question (“What is X?”) or a scoped definition.</li>
+            <li><strong>Interlinked.</strong> It links to related ideas.</li>
+            <li><strong>Standalone.</strong> You can read it without the source.</li>
+          </ul>
+          <p>The skill never writes a file on its own. You review the content first, then you tell it where to save each note.</p>
+
+          <h2 id="when-to-use-it">When to use it</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Situation</th><th>Use</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>You read an article, a paper or a set of files, and you want to keep the ideas as linked notes.</td><td><code>evergreen-note-writer</code></td></tr>
+                <tr><td>You pasted some text and want a few atomic notes from it.</td><td><code>evergreen-note-writer</code></td></tr>
+                <tr><td>You want one longer document from a conversation or a codebase feature.</td><td><code>write-doc</code></td></tr>
+                <tr><td>You already have a note and only want to fix its English.</td><td><code>quill-edit</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Short version: use it when you want <strong>many small ideas</strong>, not one big summary.</p>
+
+          <h2 id="how-it-works">How it works</h2>
+          <p>The skill works in six steps. You approve the content and the save path before any file exists.</p>
+          <figure class="diagram">
+            <pre class="mermaid">
+flowchart TD
+  A[Read all sources] --> B[Ask about granularity]
+  B --> C[Propose notes]
+  C -- you adjust, merge or split --> C
+  C -- you approve --> D[Ask path for each note]
+  D --> E[Create files]
+            </pre>
+            <figcaption>From sources to saved notes</figcaption>
+          </figure>
+          <ol>
+            <li><strong>Read.</strong> The skill reads every source you give: files, pasted text, web pages, MCP data or references. If there are many sources, it first summarises what it found across all of them.</li>
+            <li><strong>Ask about granularity.</strong> It asks how many notes you want, and at what level. The default is one note per distinct claim or insight.</li>
+            <li><strong>Propose.</strong> For each note, it writes a title, a short body in plain words, links to related concepts, and frontmatter if it fits your project.</li>
+            <li><strong>Review.</strong> You change titles or scope, merge or split notes, and add or remove links.</li>
+            <li><strong>Ask where to save.</strong> For each approved note, it asks for the path and filename.</li>
+            <li><strong>Create.</strong> It writes each file only after you confirm the path. It never overwrites a file without your permission.</li>
+          </ol>
+          <div class="callout tip">
+            <span class="label">No fixed schema</span>
+            <p>The skill does not assume a frontmatter schema, a folder structure or a link format. It asks you, or it follows what your project already uses, for example <code>[[wikilinks]]</code> in an Obsidian vault.</p>
+          </div>
+
+          <h2 id="what-it-writes">What it writes</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Part</th><th>What you get</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>File</td><td>One file per approved note, at the path you give.</td></tr>
+                <tr><td>Title</td><td>An assertion, a question or a definition. Never “Notes on X” or “Summary of Y”.</td></tr>
+                <tr><td>Body</td><td>One idea, in your own words. The skill synthesises; it does not copy source text.</td></tr>
+                <tr><td>Links</td><td>Links to related concepts, in your project’s link format.</td></tr>
+                <tr><td>Frontmatter</td><td>Only if you ask for it, or if the project context makes it clear.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>A note in an Obsidian vault can look like this:</p>
+          <pre><code class="language-markdown"># Spaced repetition beats rereading for long-term recall
+
+Rereading feels productive because the text becomes familiar.
+Familiarity is not recall. When you test yourself at growing
+intervals, you force retrieval, and retrieval makes the memory stronger.
+
+Related: [[Retrieval practice strengthens memory]],
+[[Familiarity is often mistaken for understanding]]</code></pre>
+
+          <h2 id="common-questions">Common questions</h2>
+          <dl class="faq">
+            <dt>Why does it ask about granularity before it writes anything?</dt>
+            <dd>The same source can give three notes or fifteen. When you choose the level first, the proposals match what you want.</dd>
+            <dt>Can I give it more than one source?</dt>
+            <dd>Yes. It reads all of them and summarises across them before it proposes notes. It does not handle each source in isolation.</dd>
+            <dt>Will it save files in a default folder?</dt>
+            <dd>No. It asks you for the path and filename of each note. It uses only what you tell it.</dd>
+            <dt>What if a file already exists at that path?</dt>
+            <dd>The skill does not overwrite it unless you give explicit permission.</dd>
+            <dt>What if one note covers two ideas?</dt>
+            <dd>The skill splits it into two notes. You can also ask it to merge or split notes during review.</dd>
+          </dl>
+
+          <h2 id="its-working-if">It’s working if</h2>
+          <ul class="checks">
+            <li>Every title makes a claim, asks a question or defines a term.</li>
+            <li>Each note body covers exactly one idea.</li>
+            <li>You can read a note and understand it without the source.</li>
+            <li>No file appears before you approve its content and its path.</li>
+            <li>The body text is a rephrase, not a copy of the source.</li>
+          </ul>
+
+          <h2 id="where-it-fits">Where it fits</h2>
+          <p>evergreen-note-writer sits between reading and your note system. Use it after you collect material and before you link it into your vault.</p>
+          <pre><code class="language-txt">sources → evergreen-note-writer → reviewed notes → files in your vault
+note text → quill-edit → corrected British English</code></pre>
+          <p>For one long document instead of many notes, use <code>write-doc</code>. To polish the wording of a note, use <code>quill-edit</code>.</p>
+          <p>Source: <a href="../../../skills/productivity/evergreen-note-writer/SKILL.md"><code>skills/productivity/evergreen-note-writer/SKILL.md</code></a></p>
+        </main>
+
+        <nav class="toc" data-auto aria-label="Table of contents"></nav>
+      </div>
+    </div>
+  </body>
+</html>

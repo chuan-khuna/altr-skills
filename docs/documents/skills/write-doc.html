@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>write-doc — altr-skills</title>
+    <meta name="description" content="Two-mode documentation skill: turn a conversation into a standalone markdown doc, or explore a codebase feature and document how it works." />
+    <link rel="stylesheet" href="../../shared/globals.css" />
+    <script src="../../shared/doc.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="INDEX.html">skills</a> / write-doc</nav>
+        <div data-doc-controls></div>
+      </header>
+
+      <div class="layout">
+        <main class="content">
+          <div class="header">
+            <p class="eyebrow">productivity · skill</p>
+            <h1>write-doc</h1>
+            <p class="lede">Synthesise, don't transcribe. The skill turns a conversation or a codebase feature into a markdown document that a reader understands on its own.</p>
+            <div class="meta">
+              <span class="tag">skills/productivity/write-doc</span>
+              <span class="tag">modes: conversation · explore</span>
+            </div>
+          </div>
+
+          <h2 id="what-it-does">What it does</h2>
+          <p>write-doc has two modes. Both modes end with one markdown file, written only after you confirm the path.</p>
+          <ul>
+            <li><strong>Mode 1, conversation to doc.</strong> The skill extracts the context, key decisions, outcomes and open questions from the current chat. It does not copy the back-and-forth.</li>
+            <li><strong>Mode 2, explore and document.</strong> The skill investigates a feature in the codebase, then writes technical documentation about how it works.</li>
+          </ul>
+          <p>The skill detects the mode from your words. If it can't tell, it asks one question: <em>“Should I document this conversation, or explore a feature in the codebase?”</em></p>
+
+          <h2 id="when-to-use-it">When to use it</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Situation</th><th>Use</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>You just finished a design discussion and want a record of it.</td><td><code>write-doc</code>, mode 1 (“document this conversation”)</td></tr>
+                <tr><td>You want to know and record how a feature in the code works.</td><td><code>write-doc</code>, mode 2 (“explore X and write the doc”)</td></tr>
+                <tr><td>You want a raw transcript of the chat.</td><td>Not this skill. It synthesises, so it asks you to confirm first.</td></tr>
+                <tr><td>You give work to someone who can't ask you questions.</td><td><a href="calm-down.html"><code>calm-down assign</code></a></td></tr>
+                <tr><td>You want evergreen notes from reading material or files.</td><td><a href="evergreen-note-writer.html"><code>evergreen-note-writer</code></a></td></tr>
+                <tr><td>You already have text and want it corrected.</td><td><a href="quill-edit.html"><code>quill-edit</code></a></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Short version: <strong>mode 1</strong> records what you decided, <strong>mode 2</strong> explains what the code does.</p>
+          <p>Do not start it before there is a conversation, or before you name the feature. In both cases the skill stops and asks.</p>
+
+          <h2 id="how-it-works">How it works</h2>
+          <p>The two modes collect material in different ways. Then they share the same draft-and-save flow.</p>
+          <figure class="diagram">
+            <pre class="mermaid">
+flowchart TD
+  A[Trigger phrase] --> B{Which mode?}
+  B -- conversation --> C[Extract decisions and outcomes]
+  B -- feature --> D[Ask depth and scope, then explore code]
+  C --> E[Show draft and take revisions]
+  D --> E
+  E --> F[Confirm path, then write file]
+            </pre>
+            <figcaption>The write-doc flow for both modes</figcaption>
+          </figure>
+
+          <h3>Mode 1: conversation to doc</h3>
+          <ol>
+            <li><strong>Extract.</strong> The skill pulls out four things: context, key decisions and why, outcomes, and open questions.</li>
+            <li><strong>Write standalone.</strong> A reader who was not in the conversation must understand the doc.</li>
+            <li><strong>Add a diagram if it helps.</strong> If the chat covered a design, flow or architecture, the skill adds a Mermaid diagram. It skips the diagram for discussion with no structure.</li>
+          </ol>
+
+          <h3>Mode 2: explore and document</h3>
+          <ol>
+            <li><strong>Ask.</strong> The skill asks two questions in one message: what <em>depth</em> (overview or deep detail) and what <em>scope</em> (what to focus on or exclude). It waits for your answers. If your trigger already answers them, it continues.</li>
+            <li><strong>Explore.</strong> It uses grep, glob and file reads to trace code paths, key modules, data flow and edge cases.</li>
+            <li><strong>Write.</strong> It uses the default sections below and adds at least one Mermaid diagram when the feature has real structure.</li>
+          </ol>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Section</th><th>Include when</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Overview</td><td>Always. One paragraph: what, why, and where it fits.</td></tr>
+                <tr><td>How It Works</td><td>Always. The core mechanism, end to end.</td></tr>
+                <tr><td>Request / Response</td><td>The feature has an API or protocol boundary.</td></tr>
+                <tr><td>Key Files / Entry Points</td><td>The codebase is non-trivial.</td></tr>
+                <tr><td>Usage / Examples</td><td>The feature has a public API or other code calls it.</td></tr>
+                <tr><td>Notes / Caveats</td><td>There are gotchas worth saving the next engineer from.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Draft and save (both modes)</h3>
+          <ol>
+            <li><strong>Show the draft</strong> in chat as one block. Nothing is on disk yet.</li>
+            <li><strong>Take one round of revisions.</strong> The skill applies your changes at once.</li>
+            <li><strong>Propose a filename and path.</strong> It waits for you to confirm.</li>
+            <li><strong>Write the file</strong> only after you confirm. It never overwrites a file without your permission.</li>
+          </ol>
+          <div class="callout tip">
+            <span class="label">Three revisions is a smell</span>
+            <p>One revision is normal. If you get to three, the skill stops guessing and asks which section is wrong.</p>
+          </div>
+
+          <h2 id="what-it-writes">What it writes</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Where you are</th><th>What happens</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>A project repo</td><td>Proposes <code>docs/artifacts/&lt;category&gt;/yyyy-mm-dd-&lt;topic&gt;.md</code></td></tr>
+                <tr><td>An Obsidian vault</td><td>Hands off to the <code>obsidian-markdown</code> skill to write the file</td></tr>
+                <tr><td>Neither</td><td>Asks you where to save</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The skill infers <code>&lt;category&gt;</code> from the content, for example <code>prd</code>, <code>adr</code>, <code>issues</code>, <code>auth</code>, <code>api</code> or <code>architecture</code>. The <code>&lt;topic&gt;</code> is kebab-case, 2 to 5 words. A mode 2 doc for a sign-in API starts like this:</p>
+          <pre><code class="language-markdown"># JWT Sign-In API
+
+## Overview
+When the frontend sign-in page submits credentials, it calls `POST /api/auth/sign-in/`.
+Django REST Framework validates the credentials, then returns an access token and a refresh token.
+
+## How It Works
+(sequenceDiagram: Browser → DRF → Database, then Bearer token on later requests)
+
+## Key Files / Entry Points
+- `urls.py` — registers `POST /api/auth/sign-in/` → `SignInView`
+- `settings.py` — `SIMPLE_JWT` block controls token lifetimes</code></pre>
+          <p>The skill saves it as, for example, <code>docs/artifacts/auth/2026-05-23-jwt-sign-in-api.md</code>.</p>
+
+          <h2 id="common-questions">Common questions</h2>
+          <dl class="faq">
+            <dt>Will it save the chat word for word?</dt>
+            <dd>No. It synthesises decisions, mechanisms and outcomes. If you want a raw transcript, the skill asks you to clarify before it continues.</dd>
+            <dt>Why does it ask about depth and scope before it explores?</dt>
+            <dd>An overview and a deep technical doc need different exploration. Two answers up front keep the skill from tracing code you don't care about.</dd>
+            <dt>Does it always add a diagram?</dt>
+            <dd>No. It adds a Mermaid diagram only when there is structure to show, such as a flow, a state machine or service interactions.</dd>
+            <dt>Can it overwrite an existing doc?</dt>
+            <dd>Only with your explicit permission. It also never writes anything before you confirm the full path and filename.</dd>
+            <dt>What if the code is unclear?</dt>
+            <dd>The skill never invents facts. It marks the gap clearly instead of filling it with a guess.</dd>
+          </dl>
+
+          <h2 id="its-working-if">It’s working if</h2>
+          <ul class="checks">
+            <li>Someone who missed the conversation can read the doc and know what was decided and why.</li>
+            <li>A mode 2 doc names real files, functions and field names, not “some module”.</li>
+            <li>Every doc has an Overview and a How It Works section.</li>
+            <li>No file appears on disk before you confirm the path.</li>
+            <li>You approve the draft after one round of revisions, not three.</li>
+          </ul>
+
+          <h2 id="where-it-fits">Where it fits</h2>
+          <p>write-doc sits at the end of a discussion or an investigation. Use it when the thinking is done and you want a record that lasts.</p>
+          <pre><code class="language-txt">design chat      → write-doc (mode 1) → draft → confirm path → docs/artifacts/adr/…md
+"how does X work" → write-doc (mode 2) → explore → draft → confirm path → docs/artifacts/&lt;domain&gt;/…md</code></pre>
+          <p>To turn a doc into work for someone else, use <a href="calm-down.html"><code>calm-down assign</code></a>. To polish the prose, run <a href="quill-edit.html"><code>quill-edit</code></a> on it. For notes from reading material, use <a href="evergreen-note-writer.html"><code>evergreen-note-writer</code></a>.</p>
+          <p>Source: <a href="../../../skills/productivity/write-doc/SKILL.md"><code>skills/productivity/write-doc/SKILL.md</code></a></p>
+        </main>
+
+        <nav class="toc" data-auto aria-label="Table of contents"></nav>
+      </div>
+    </div>
+  </body>
+</html>
