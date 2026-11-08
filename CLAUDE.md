@@ -53,6 +53,17 @@ When a document is generated as HTML:
   `color-mix(in oklch, …)`); no hex, `rgb()` or `hsl()`.
 - Thai body text: use a looped Thai font (e.g. Noto Sans Thai Looped).
 
+### Skill documents
+
+Every skill in `skills/` has a technical document at `docs/documents/skills/<skill-name>.html`. `docs/documents/skills/INDEX.html` is the index page: one card per skill, grouped like `skills/<group>/`, linking to each document.
+
+- When you add, rename, remove or change a skill, add or update its document and its card in `INDEX.html` (and the bullet in `docs/documents/INDEX.md`) in the same change.
+- Copy the structure of an existing skill document (e.g. `calm-down.html`): same `<head>`, top bar, header, auto table of contents, and no page-level `<style>` or `<script>` — use `docs/shared/globals.css` and `docs/shared/doc.js`.
+- Sections, in order: What it does · When to use it (situation → skill table, pointing to neighbouring skills) · Prerequisites (only if needed) · How it works (one Mermaid diagram, then numbered steps) · What it writes · Common questions · It’s working if · Where it fits (skill chain and a link to the source `SKILL.md`).
+- Describe only what the skill's files say. Do not invent features, flags or paths.
+- Style reference: [aihero.dev — grill-with-docs](https://www.aihero.dev/skills-grill-with-docs). Direct, second person, candid, examples in the prose.
+- Language: ASD-STE100 Simplified Technical English at about 50%, with natural wording. Use short sentences (up to about 20 words for instructions, 25 for descriptions), one instruction per sentence, active voice, present tense, common verbs, and one term for one meaning. Keep a human voice; don't make it robotic.
+
 ### Records
 
 Discussion records live at `docs/records/yyyy-mm-dd-<slug>.md`, dated the day the discussion took place. Each record captures one discussion: what was discussed, what was decided, and any open questions.

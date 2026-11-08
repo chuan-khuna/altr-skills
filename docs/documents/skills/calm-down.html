@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>calm-down — altr-skills</title>
+    <meta name="description" content="Two-mode work structuring skill: assign writes a cold-start handoff, triage turns urgent work into a prioritised battle plan." />
+    <link rel="stylesheet" href="../../shared/globals.css" />
+    <script src="../../shared/doc.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="INDEX.html">skills</a> / calm-down</nav>
+        <div data-doc-controls></div>
+      </header>
+
+      <div class="layout">
+        <main class="content">
+          <div class="header">
+            <p class="eyebrow">work · skill</p>
+            <h1>calm-down</h1>
+            <p class="lede">Stop, think, then act. The skill turns a rough brief into a document that someone can start from with no other context.</p>
+            <div class="meta">
+              <span class="tag">skills/work/calm-down</span>
+              <span class="tag">modes: assign · triage</span>
+            </div>
+          </div>
+
+          <h2 id="what-it-does">What it does</h2>
+          <p>calm-down has two modes. Both modes start from a short brief and end with one file on disk.</p>
+          <ul>
+            <li><strong><code>calm-down assign</code></strong> writes a <em>handoff document</em>. A teammate or an AI agent can read it and start work without asking you anything.</li>
+            <li><strong><code>calm-down triage</code></strong> is for urgent work that you must do yourself. It sorts the scope into P0, P1 and a cut list, and gives you a battle plan.</li>
+          </ul>
+          <p>Each mode asks you questions, one at a time. Each question comes with a recommended answer, so you can usually accept it with one word. The skill stops when the document is complete, not when it reaches a question count.</p>
+
+          <h2 id="when-to-use-it">When to use it</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Situation</th><th>Use</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>You give work to another person or an agent, and you will not be there to answer questions.</td><td><code>calm-down assign</code></td></tr>
+                <tr><td>You have a deadline in hours, too many tasks, and you feel panic.</td><td><code>calm-down triage</code></td></tr>
+                <tr><td>You want to test a plan or design, with no deadline pressure.</td><td><code>grill-me</code> or <code>grilling</code></td></tr>
+                <tr><td>You want a spec or tickets for a feature.</td><td><code>to-spec</code>, then <code>to-tickets</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Short version: <strong>assign</strong> is for someone else, <strong>triage</strong> is for you, now.</p>
+
+          <h2 id="how-it-works">How it works</h2>
+          <p>The two modes use the same loop. Only the questions and the output template change.</p>
+          <figure class="diagram">
+            <pre class="mermaid">
+flowchart TD
+  A[Brief] --> B[Propose task breakdown]
+  B -- you correct it --> B
+  B -- you confirm --> C[Grill: one question at a time]
+  C -- answer is vague --> C
+  C -- document is self-sufficient --> D[Ask format: Markdown or HTML]
+  D --> E[Write file to docs/]
+            </pre>
+            <figcaption>The shared calm-down loop</figcaption>
+          </figure>
+          <ol>
+            <li><strong>Propose.</strong> The skill reads the brief and proposes a task breakdown at once. You confirm or correct it.</li>
+            <li><strong>Grill.</strong> The skill asks one question at a time, with a recommended answer. If an answer is vague, it asks again.</li>
+            <li><strong>Choose a format.</strong> You pick Markdown or HTML.</li>
+            <li><strong>Write.</strong> The skill writes the file immediately, with no preview, and tells you the path.</li>
+          </ol>
+
+          <h3>Assign mode</h3>
+          <p>Assign mode asks about three areas, in this order:</p>
+          <ol>
+            <li><strong>Context:</strong> what started the work, what is already done, and any hard constraint or deadline.</li>
+            <li><strong>Each task:</strong> the concrete input, the expected output, how to verify that it is done, and what can go wrong.</li>
+            <li><strong>Scope:</strong> what each task must <em>not</em> touch.</li>
+          </ol>
+          <p>Expect 6 to 12 questions.</p>
+
+          <h3>Triage mode</h3>
+          <p>Triage mode follows <em>Stop → Think → Act</em>. It is shorter: 6 questions or fewer.</p>
+          <ul>
+            <li><strong>Stop.</strong> The skill names the task and the time that remains. It tells you that five minutes of thinking now saves time later.</li>
+            <li><strong>Think.</strong> It asks what exists, what is missing, who must approve, and which constraints apply. Then it makes the <em>triage call</em>: every task goes into P0, P1 or the cut list.</li>
+            <li><strong>Act.</strong> It gives one recommended approach for each P0 and P1 task, then writes the plan.</li>
+          </ul>
+          <div class="callout tip">
+            <span class="label">Why the cut list matters</span>
+            <p>Most panic comes from scope that nobody has sorted. When you name what you will <em>not</em> do, you can stop thinking about it. If you mark every task as P0, the skill pushes back: “If you only had half the time, which one would you keep?”</p>
+          </div>
+
+          <h2 id="what-it-writes">What it writes</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Mode</th><th>File</th><th>Main sections</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>assign</td><td><code>docs/yyyy-mm-dd-{topic}.{md,html}</code></td><td>Background, Current State, Suggested Assignee, Tasks</td></tr>
+                <tr><td>triage</td><td><code>docs/yyyy-mm-dd-{topic}-triage.{md,html}</code></td><td>Situation, What We Have, What’s Still Missing, The Triage Call, Tasks</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Each task in an assign document has an input, an output, a checklist, an out-of-scope line and at least one gotcha. Each task in a triage plan also has a priority, a time estimate and one recommended approach.</p>
+          <p>A short assign task looks like this:</p>
+          <pre><code class="language-markdown">### Task 1: Rotate the staging API key
+
+**Input:** Admin access to the vault; current key at `staging/api-key`
+**Output:** New key in the vault; old key revoked
+
+**Checklist:**
+- [ ] `curl -H "Authorization: Bearer $KEY" $STAGING/health` returns 200
+- [ ] Old key returns 401
+
+**Out of scope:** Production keys
+
+**Gotchas:**
+- The worker caches the key for 10 minutes. Restart it after the change.</code></pre>
+          <p>For HTML output, the skill copies <code>references/html_boilerplate.html</code> and fills it in. The boilerplate holds the full design system from <code>references/DESIGN.md</code>, so the skill does not write new CSS.</p>
+
+          <h2 id="common-questions">Common questions</h2>
+          <dl class="faq">
+            <dt>Why does it propose a breakdown before it asks anything?</dt>
+            <dd>A wrong task list makes every later question wrong. When you confirm the list first, the rest of the session stays on the correct work.</dd>
+            <dt>Why is there no preview before it writes the file?</dt>
+            <dd>The grill already confirmed every part of the content. A preview adds one more step and does not add information. Edit the file after it is written if you want to change it.</dd>
+            <dt>Can I skip questions?</dt>
+            <dd>Yes. If the brief already answers a question, the skill skips it. You can also accept the recommended answer with one word.</dd>
+            <dt>Why must every task have a gotcha and an out-of-scope line?</dt>
+            <dd>The reader cannot ask you questions. The gotcha tells them what is likely to fail. The out-of-scope line stops them from doing extra work on wrong assumptions.</dd>
+            <dt>Does triage work for non-code work?</dt>
+            <dd>Yes. The triage call works for any urgent scope: a report, a demo, a release, or a move.</dd>
+          </dl>
+
+          <h2 id="its-working-if">It’s working if</h2>
+          <ul class="checks">
+            <li>A fresh agent can start an assigned task with no follow-up question.</li>
+            <li>Every checklist item is a thing you can run or observe, not “make sure it works”.</li>
+            <li>The triage plan has at least one item in the cut list.</li>
+            <li>The session takes minutes, not most of the time that remains.</li>
+            <li>You feel calmer at the end than at the start.</li>
+          </ul>
+
+          <h2 id="where-it-fits">Where it fits</h2>
+          <p>calm-down sits between a vague request and real work. Use it after you know <em>what</em> to do, and before someone starts to do it.</p>
+          <pre><code class="language-txt">rough brief → calm-down assign → handoff doc → teammate / agent works it
+deadline    → calm-down triage → battle plan → you work P0, then P1</code></pre>
+          <p>For deeper design questions, use <code>grill-me</code> first. To track the tasks as issues, run <code>to-tickets</code> on the handoff document.</p>
+          <p>Source: <a href="../../../skills/work/calm-down/SKILL.md"><code>skills/work/calm-down/SKILL.md</code></a></p>
+        </main>
+
+        <nav class="toc" data-auto aria-label="Table of contents"></nav>
+      </div>
+    </div>
+  </body>
+</html>
