@@ -1,0 +1,17 @@
+[tools]
+bun = "1.4.4"
+
+[tasks.skills]
+description = "Install the vendored agent skills"
+run = [
+  "bunx skills add mattpocock/skills#v1.3.1  --agent 'universal' --agent 'claude-code' -y -p",
+  "bunx skills add kepano/obsidian-skills --agent 'universal' --agent 'claude-code' -y -p",
+]
+
+[tasks.plugins]
+description = "Install the local altr-skills plugin (altr-stack marketplace)"
+run = [
+  "claude plugin marketplace add ./ --scope project",
+  "claude plugin install altr-skills@altr-stack --scope project",
+  "claude plugin update altr-skills@altr-stack --scope project",
+]

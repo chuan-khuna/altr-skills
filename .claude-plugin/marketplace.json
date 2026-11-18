@@ -1,0 +1,13 @@
+{
+  "name": "altr-stack",
+  "description": "Plugins by ALTR.",
+  "owner": { "name": "ALTR" },
+  "plugins": [
+    {
+      "name": "altr-skills",
+      "source": "./",
+      "description": "Writing skills by ALTR: resume, technical-writing and unslop.",
+      "version": "0.1.0"
+    }
+  ]
+}

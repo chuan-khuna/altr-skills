@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>resume — altr-skills</title>
+    <meta name="description" content="Resume skill: writes and proofreads resume text in British English, by the Harvard and Guardian CV rules, with technical-writing and unslop." />
+    <link rel="stylesheet" href="../../shared/globals.css" />
+    <script src="../../shared/doc.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="INDEX.html">skills</a> / resume</nav>
+        <div data-doc-controls></div>
+      </header>
+
+      <div class="layout">
+        <main class="content">
+          <div class="header">
+            <p class="eyebrow">writing · skill</p>
+            <h1>resume</h1>
+            <p class="lede">Give it a bullet, an entry or a whole resume. You get back text a recruiter reads in one pass, and that you can defend line by line in an interview.</p>
+            <div class="meta">
+              <span class="tag">skills/writing/resume</span>
+              <span class="tag">British English</span>
+              <span class="tag">manual only</span>
+            </div>
+          </div>
+
+          <h2 id="what-it-does">What it does</h2>
+          <p>resume rewrites and proofreads the resume text you give it. You can give a single bullet, an entry, a summary, a whole resume, or rough notes about your work. You get the text back, ready to paste.</p>
+          <p>The rules come from three sources, in this order of precedence:</p>
+          <ol>
+            <li><strong>The skill's own resume rules.</strong> The content rules come mainly from Harvard FAS Career Services, <a href="https://careerservices.fas.harvard.edu/resources/create-a-strong-resume/">“Create a strong resume”</a>. The grammar rules come mainly from the Guardian, <a href="https://www.theguardian.com/careers/careers-blog/grammar-rules-cv-top-tips">“Grammar rules for your CV: top tips”</a>.</li>
+            <li><strong>The <a href="technical-writing.html"><code>technical-writing</code></a> and <a href="unslop.html"><code>unslop</code></a> skills.</strong></li>
+            <li><strong>House style:</strong> British English, the grammar of Craig Shrives' <em>Smashing Grammar</em>, and the prose habits of Gary Provost's <em>100 Ways to Improve Your Writing</em>.</li>
+          </ol>
+          <p>The skill does not invent achievements. Every claim in the result is traceable to your text or your answers. If a bullet needs a number you did not give, the skill keeps the bullet without it and asks you.</p>
+
+          <h2 id="when-to-use-it">When to use it</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Situation</th><th>Use</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>You have resume bullets that feel vague or full of adjectives.</td><td><code>/resume</code></td></tr>
+                <tr><td>You want to tailor your resume to a job description.</td><td><code>/resume</code> with the job description</td></tr>
+                <tr><td>You write a README, RFC or PR description.</td><td><a href="technical-writing.html"><code>technical-writing</code></a></td></tr>
+                <tr><td>You only want to remove AI-sounding phrases.</td><td><a href="unslop.html"><code>unslop</code></a></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The skill sets <code>disable-model-invocation: true</code>. Claude does not start it by itself. You call it by name.</p>
+
+          <h2 id="prerequisites">Prerequisites</h2>
+          <p>The skill reads the <code>technical-writing</code> and <code>unslop</code> skills in full before it edits. Both are in the same <code>writing</code> group, so the altr-skills plugin installs them together. If you copy <code>resume</code> on its own, copy the other two as well.</p>
+
+          <h2 id="how-it-works">How it works</h2>
+          <figure class="diagram">
+            <pre class="mermaid">
+flowchart TD
+  A[Your resume text] --> B[Read technical-writing and unslop]
+  B --> C{Job description given?}
+  C -- yes --> D[Tailoring: sort requirements, write a plan]
+  D --> E[Stop: you approve the plan]
+  E --> F[Rewrite to the content rules]
+  C -- no --> F
+  F --> G[Proofread: grammar and British spelling]
+  G --> H[Check every resume and unslop rule]
+  H --> I[Text, changes list and questions]
+            </pre>
+            <figcaption>The resume workflow</figcaption>
+          </figure>
+          <ol>
+            <li><strong>Read the rules.</strong> The skill reads the <code>technical-writing</code> and <code>unslop</code> skills in full.</li>
+            <li><strong>Tailor, if you give a job description.</strong> The skill lists each requirement and sorts it as <em>Direct</em> (your text shows it), <em>Bridge</em> (your text shows a close equivalent) or <em>Gap</em> (your text does not show it). It writes a plan and stops. It rewrites only after you approve the plan.</li>
+            <li><strong>Rewrite.</strong> Each bullet gets one result: the action, the thing it acted on, and the result. The skill uses your numbers. Where you gave no number, it keeps the bullet and adds a question.</li>
+            <li><strong>Proofread.</strong> The skill checks grammar and British spelling sentence by sentence. It checks homophones such as <em>practice</em> and <em>practise</em> by meaning, because a spellchecker passes them.</li>
+            <li><strong>Check.</strong> It checks the text against every resume rule and every unslop rule by number. The step is done when no line fails a rule.</li>
+            <li><strong>Return.</strong> You get the text, then a list of changes that altered a fact or dropped a claim, then the questions.</li>
+          </ol>
+
+          <h3>Content rules</h3>
+          <ul>
+            <li><strong>One result per bullet.</strong> Quantify with your number. With no number, give the scale: how many sites, users or teams.</li>
+            <li><strong>Plain action verbs.</strong> Built, designed, led, analysed, deployed, automated.</li>
+            <li><strong>Ownership.</strong> “Built” or “led” for work you did alone or led. “Co-developed” or “contributed to” for shared work. If the text does not say, the skill keeps your verb and asks.</li>
+            <li><strong>Evidence, not adjectives.</strong> “Passionate” and “results-driven” become the fact that shows them.</li>
+            <li><strong>Specific nouns.</strong> “Detect vehicles on 12 CCTV feeds with YOLO”, not “work on computer vision solutions”.</li>
+            <li><strong>Length.</strong> 30 words or fewer per bullet, most relevant bullet first.</li>
+          </ul>
+
+          <h3>Person and tense</h3>
+          <ul>
+            <li>Bullets have no subject and no pronoun. The verb starts the line.</li>
+            <li>Summaries and profiles use “I” from the first sentence to the last.</li>
+            <li>Present tense for the current role. Past tense for every other entry.</li>
+          </ul>
+
+          <h2 id="what-it-writes">What it writes</h2>
+          <p>The skill replies in chat. It does not write a file.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Part</th><th>Content</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Tailoring plan (only with a job description)</td><td>Entries to keep, bullets to reorder or rewrite, and the job's terms each change uses</td></tr>
+                <tr><td>Rewritten text</td><td>Your resume text, ready to paste</td></tr>
+                <tr><td>Changes list</td><td>Each change that altered a fact or dropped a claim</td></tr>
+                <tr><td>Questions</td><td>Missing numbers, unclear ownership, and gaps against the job description</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>For the input <em>“Passionate engineer who worked on computer vision solutions for traffic.”</em>, a reply can look like this:</p>
+          <pre><code class="language-markdown">- Built a vehicle detection pipeline with YOLO for CCTV traffic feeds.
+
+Changes
+- Removed "passionate": the bullet now shows the work instead.
+- Changed "worked on" to "built": please confirm you built it alone.
+
+Questions
+1. How many camera feeds did the pipeline cover?
+2. Did detection accuracy or review time improve? By how much?</code></pre>
+
+          <h2 id="common-questions">Common questions</h2>
+          <dl class="faq">
+            <dt>Will it make up numbers to make a bullet stronger?</dt>
+            <dd>No. Every claim comes from your text or your answers. A bullet with no number stays without one, and you get a question.</dd>
+            <dt>Will it copy keywords from the job description?</dt>
+            <dd>Only where your text supports them. For a Bridge, it names what you did, not what the job asked for. A Gap becomes a question.</dd>
+            <dt>Does it use American spelling for a US job?</dt>
+            <dd>No. The skill writes British English. It keeps the maker's spelling only in product names and code, such as the CSS property <code>color</code>.</dd>
+            <dt>Why did it write “APIs” and not “API's”?</dt>
+            <dd>Plurals, including acronym plurals, take no apostrophe. That is one of the Guardian grammar rules the skill uses.</dd>
+            <dt>Can I reject a change?</dt>
+            <dd>Yes. You stay the author. The changes list makes each change easy to accept or reject.</dd>
+          </dl>
+
+          <h2 id="its-working-if">It’s working if</h2>
+          <ul class="checks">
+            <li>Every bullet starts with a plain verb and states one result.</li>
+            <li>No bullet holds a number, tool or result that you did not give.</li>
+            <li>Spelling is British: <em>analysed</em>, <em>optimisation</em>, <em>modelling</em>.</li>
+            <li>With a job description, the skill shows a plan and waits before it rewrites.</li>
+            <li>The reply ends with the changes list and the questions.</li>
+          </ul>
+
+          <h2 id="where-it-fits">Where it fits</h2>
+          <p>resume sits on top of the two general writing skills. It reads them first, then applies its own rules over them.</p>
+          <pre><code class="language-txt">notes or old resume → resume (reads technical-writing + unslop) → text + changes + questions → your answers → resume again</code></pre>
+          <p>Source: <a href="../../../skills/writing/resume/SKILL.md"><code>skills/writing/resume/SKILL.md</code></a></p>
+        </main>
+
+        <nav class="toc" data-auto aria-label="Table of contents"></nav>
+      </div>
+    </div>
+  </body>
+</html>

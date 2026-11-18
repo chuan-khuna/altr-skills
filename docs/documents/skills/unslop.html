@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>unslop — altr-skills</title>
+    <meta name="description" content="Unslop skill: removes AI tells from any writing with a numbered rule list that other skills cite." />
+    <link rel="stylesheet" href="../../shared/globals.css" />
+    <script src="../../shared/doc.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="INDEX.html">skills</a> / unslop</nav>
+        <div data-doc-controls></div>
+      </header>
+
+      <div class="layout">
+        <main class="content">
+          <div class="header">
+            <p class="eyebrow">writing · skill</p>
+            <h1>unslop</h1>
+            <p class="lede">Remove the phrases and habits that make text sound machine-written, and keep what it means.</p>
+            <div class="meta">
+              <span class="tag">skills/writing/unslop</span>
+              <span class="tag">manual only</span>
+            </div>
+          </div>
+
+          <h2 id="what-it-does">What it does</h2>
+          <p>unslop edits text to remove AI tells. It scans for the patterns in a numbered rule list, then rewrites. It keeps the meaning and matches the tone the text is meant to have.</p>
+          <p>The rule numbers are stable ids. Other skills cite them: <a href="resume.html"><code>resume</code></a> says “unslop 16” for bold labels and “unslop 19” for straight quotes. A removed rule leaves a gap in the numbers, so the citations stay correct.</p>
+          <p>The skill comes from <a href="https://github.com/cursor/plugins/tree/e1cc03121a0e71129a4fb730d7c5528a0a3e43c8/pstack/skills/unslop">cursor/plugins <code>pstack</code></a>, pinned at commit <code>e1cc031</code>.</p>
+
+          <h2 id="when-to-use-it">When to use it</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Situation</th><th>Use</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>A draft sounds like a chatbot wrote it.</td><td><code>/unslop</code></td></tr>
+                <tr><td>You want a whole technical doc brought to standard.</td><td><a href="technical-writing.html"><code>technical-writing</code></a>, which applies unslop</td></tr>
+                <tr><td>You want resume text rewritten and proofread.</td><td><a href="resume.html"><code>resume</code></a>, which applies unslop</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The skill sets <code>disable-model-invocation: true</code>. Claude does not start it by itself. You call it by name, or another skill tells Claude to read it.</p>
+
+          <h2 id="how-it-works">How it works</h2>
+          <figure class="diagram">
+            <pre class="mermaid">
+flowchart LR
+  A[Your text] --> B[Scan for each numbered pattern]
+  B --> C[Rewrite the lines that fail]
+  C --> D[Same meaning, same tone, no tells]
+            </pre>
+            <figcaption>The unslop pass</figcaption>
+          </figure>
+          <ol>
+            <li><strong>Scan.</strong> The skill checks the text against each numbered rule.</li>
+            <li><strong>Rewrite.</strong> It rewrites each line that fails a rule. It keeps the meaning and the intended tone.</li>
+          </ol>
+
+          <h3>The rules, by kind</h3>
+          <ul>
+            <li><strong>Words.</strong> No AI vocabulary such as <em>delve</em>, <em>crucial</em>, <em>pivotal</em> or <em>showcase</em> (7). “Is” or “has”, not “serves as” or “boasts” (8). The plain word, not “leverage” (31). No abstract metaphor nouns such as <em>paradigm</em> or <em>flywheel</em> (26).</li>
+            <li><strong>Sentence shapes.</strong> No trailing “-ing” phrase that adds no fact (3). No “not just X, but Y” (9). Ideas do not come in forced threes (10). One idea per sentence (28). Active voice (29).</li>
+            <li><strong>Claims.</strong> No vague attributions such as “experts believe” (5). One hedge at most (24). No generic conclusions (25). Say what it does, not how it feels (27).</li>
+            <li><strong>Punctuation and format.</strong> No em dashes or en dashes (13). A colon goes only before a list or an example (14). Sentence case headings (17). Straight quotes (19). No decorative emojis (18).</li>
+            <li><strong>Chat habits.</strong> No “I hope this helps!” (20). No praise or agreement openers (22). Cut filler such as “in order to” (23).</li>
+          </ul>
+
+          <h2 id="what-it-writes">What it writes</h2>
+          <p>The skill returns the edited text. It writes no file of its own. An example:</p>
+          <pre><code class="language-txt">Before: Great question! This pivotal update serves as a testament to our commitment,
+        ensuring a seamless experience — not just faster, but smarter.
+After:  The update cuts page load from 2.1 s to 0.8 s.</code></pre>
+          <p>In the example, the 0.8 s figure must come from the writer. Rule 27 asks for the number. It does not invent one.</p>
+
+          <h2 id="common-questions">Common questions</h2>
+          <dl class="faq">
+            <dt>Why are some rule numbers missing?</dt>
+            <dd>Other skills cite rules by number. When a rule is removed, its number is not reused, so old citations do not point at the wrong rule.</dd>
+            <dt>Does it change the meaning?</dt>
+            <dd>No. It removes patterns and keeps the meaning and tone.</dd>
+            <dt>Can another skill override a rule?</dt>
+            <dd>Yes. <a href="resume.html"><code>resume</code></a> replaces rule 33 for abbreviations: it keeps well-known ones such as SQL and API as they are.</dd>
+          </dl>
+
+          <h2 id="its-working-if">It’s working if</h2>
+          <ul class="checks">
+            <li>No em dashes, curly quotes or decorative emojis remain.</li>
+            <li>None of the listed AI words, such as <em>delve</em> or <em>crucial</em>, remain.</li>
+            <li>Each vague claim is now a number, a name or a mechanism, or is gone.</li>
+            <li>The text says the same thing as before, in the same tone.</li>
+          </ul>
+
+          <h2 id="where-it-fits">Where it fits</h2>
+          <p>unslop is the base layer of the writing group. <a href="technical-writing.html"><code>technical-writing</code></a> hands it the slop-pattern catalogue, and <a href="resume.html"><code>resume</code></a> checks every line against its rules by number.</p>
+          <pre><code class="language-txt">any draft → unslop → same text, no AI tells</code></pre>
+          <p>Source: <a href="../../../skills/writing/unslop/SKILL.md"><code>skills/writing/unslop/SKILL.md</code></a></p>
+        </main>
+
+        <nav class="toc" data-auto aria-label="Table of contents"></nav>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>technical-writing — altr-skills</title>
+    <meta name="description" content="Technical-writing skill: a layered standard of Diátaxis structure, Google developer style sentences, STE instruction rules and Global English syntax." />
+    <link rel="stylesheet" href="../../shared/globals.css" />
+    <script src="../../shared/doc.js"></script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="INDEX.html">skills</a> / technical-writing</nav>
+        <div data-doc-controls></div>
+      </header>
+
+      <div class="layout">
+        <main class="content">
+          <div class="header">
+            <p class="eyebrow">writing · skill</p>
+            <h1>technical-writing</h1>
+            <p class="lede">A writing standard in four layers, so a tired engineer understands your doc on the first read.</p>
+            <div class="meta">
+              <span class="tag">skills/writing/technical-writing</span>
+              <span class="tag">manual only</span>
+            </div>
+          </div>
+
+          <h2 id="what-it-does">What it does</h2>
+          <p>technical-writing is a set of rules that Claude applies when it writes or reviews docs, RFCs, READMEs, PR descriptions or commit messages. The rules come in four layers. Each layer works at a smaller scale than the one before:</p>
+          <ol>
+            <li><strong>Diátaxis</strong> picks the mode of the whole document.</li>
+            <li><strong>Google developer style</strong> shapes each sentence for the reader.</li>
+            <li><strong>STE rules</strong> make each statement load one at a time.</li>
+            <li><strong>Global English</strong> leaves no sentence open to two readings.</li>
+          </ol>
+          <p>Over all four sit a few base rules. Cut every word that does no work. Use the short, everyday word: “use”, not “utilize”. Write the real symbol, file, flag or command name. If a rule makes a sentence worse, fix the sentence another way or leave it alone.</p>
+          <p>The skill comes from <a href="https://github.com/cursor/plugins/tree/e1cc03121a0e71129a4fb730d7c5528a0a3e43c8/pstack/skills/technical-writing">cursor/plugins <code>pstack</code></a>, pinned at commit <code>e1cc031</code>.</p>
+
+          <h2 id="when-to-use-it">When to use it</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Situation</th><th>Use</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>You write or review a README, RFC, guide or reference page.</td><td><code>/technical-writing</code></td></tr>
+                <tr><td>You write a PR description or a commit message.</td><td><code>/technical-writing</code></td></tr>
+                <tr><td>You only want to remove AI-sounding phrases from any text.</td><td><a href="unslop.html"><code>unslop</code></a></td></tr>
+                <tr><td>You write resume bullets.</td><td><a href="resume.html"><code>resume</code></a>, which reads this skill first</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The skill sets <code>disable-model-invocation: true</code>. Claude does not start it by itself. You call it by name, or another skill tells Claude to read it.</p>
+
+          <h2 id="how-it-works">How it works</h2>
+          <figure class="diagram">
+            <pre class="mermaid">
+flowchart TD
+  A[Draft or doc to review] --> B[Diátaxis: pick one mode]
+  B --> C[Google style: write to the reader]
+  C --> D[STE: one statement at a time]
+  D --> E[Global English: one reading only]
+  E --> F[Apply unslop]
+  F --> G[Finished doc]
+            </pre>
+            <figcaption>The four layers, from whole document to single word</figcaption>
+          </figure>
+          <ol>
+            <li><strong>Pick the mode.</strong> One document has one mode: tutorial, how-to, reference or explanation. If a doc mixes modes, split it and link the parts. Opinion belongs only in explanation.</li>
+            <li><strong>Write to the reader.</strong> Use “you” and the present tense. Write instructions as commands, with the condition first. Never write “simply”, “easy” or “quickly” in a procedure. Headings carry the point, in sentence case.</li>
+            <li><strong>Load one statement at a time.</strong> One instruction per sentence. Split instructions over about 20 words and other sentences over about 25. Put the warning before the step it guards.</li>
+            <li><strong>Remove second readings.</strong> Keep “only” and “not” next to the word they change. Make every “it”, “they” and “this” point at one thing. Use periods, not semicolons or em dashes. Skip idioms and Latin abbreviations.</li>
+            <li><strong>Apply unslop.</strong> The skill hands the slop-pattern catalogue to <a href="unslop.html"><code>unslop</code></a> for every doc it touches.</li>
+          </ol>
+
+          <h3>Rules for PRs and commits</h3>
+          <p>PR descriptions and commit messages are writing too. Every layer except Diátaxis applies to them. A PR body is a briefing that a reviewer reads in under a minute. Link logs and metric tables. Do not paste them.</p>
+
+          <h2 id="what-it-writes">What it writes</h2>
+          <p>The skill writes no file of its own. It changes how Claude writes the doc, PR description or commit message you asked for. Two examples of the change:</p>
+          <pre><code class="language-txt">Before: Schema changes can cause issues, so simply run the migration first.
+After:  A column rename fails the build. Run the migration first.
+
+Before: It is important to note that the cache, which is optional, should be utilized.
+After:  Use the cache. It is optional.</code></pre>
+
+          <h2 id="common-questions">Common questions</h2>
+          <dl class="faq">
+            <dt>Does it apply to UI strings in my product?</dt>
+            <dd>No. Product UI strings are not documentation. Use your product's copy guidelines for those.</dd>
+            <dt>What if a rule makes the sentence worse?</dt>
+            <dd>Fix the sentence another way, or leave it alone. The rules serve the reader, not the other way round.</dd>
+            <dt>Why no semicolons or em dashes?</dt>
+            <dd>The Global English layer prefers periods. A reader who does not speak English as a first language parses two short sentences more easily than one joined sentence.</dd>
+            <dt>Is opinion allowed?</dt>
+            <dd>Only in explanation. Tutorials, how-to guides and reference stay neutral.</dd>
+          </dl>
+
+          <h2 id="its-working-if">It’s working if</h2>
+          <ul class="checks">
+            <li>Each document is one mode: tutorial, how-to, reference or explanation.</li>
+            <li>Procedures are numbered commands, one instruction per sentence.</li>
+            <li>The text names real files, flags and commands, in code font.</li>
+            <li>Every “it” and “this” points at one obvious thing.</li>
+            <li>A PR description reads in under a minute.</li>
+          </ul>
+
+          <h2 id="where-it-fits">Where it fits</h2>
+          <p>technical-writing is a base standard that other skills read. It defers to <a href="unslop.html"><code>unslop</code></a> for AI tells, and <a href="resume.html"><code>resume</code></a> reads it before it edits.</p>
+          <pre><code class="language-txt">draft → technical-writing (+ unslop) → doc, PR description or commit message</code></pre>
+          <p>Source: <a href="../../../skills/writing/technical-writing/SKILL.md"><code>skills/writing/technical-writing/SKILL.md</code></a></p>
+        </main>
+
+        <nav class="toc" data-auto aria-label="Table of contents"></nav>
+      </div>
+    </div>
+  </body>
+</html>
