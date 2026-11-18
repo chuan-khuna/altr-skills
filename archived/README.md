@@ -23,13 +23,13 @@ cp -r archived/skills/<skill> <project>/.claude/skills/
 1. Move the folder back into a group: `git mv archived/skills/<skill> skills/<group>/<skill>`.
 2. Add `./skills/<group>/<skill>` to `.claude-plugin/plugin.json`.
 3. Add the skill to `skills/<group>/README.md`.
-4. Move its document from `docs/documents/skills/archived/` back to `docs/documents/skills/`, and fix its relative links.
+4. Write its document at `docs/documents/skills/<skill>.html`.
 5. Add its card to `docs/documents/skills/INDEX.html` and its bullet to `docs/documents/INDEX.md`.
 6. Remove it from this README.
 
 ## Skills
 
-Each skill shows the group it was in before it moved here. Its old document is in [`docs/documents/skills/archived/`](../docs/documents/skills/archived/).
+Each skill shows the group it was in before it moved here.
 
 ### work
 

@@ -1,4 +1,4 @@
-# altr-skills conventions
+# altr-stack conventions
 
 ## Structure
 

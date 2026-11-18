@@ -2,32 +2,27 @@
 
 ## Marketplace
 
-This repo is a Claude Code plugin marketplace called `altr-stack`. It is defined in [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json).
+This repo (`chuan-khuna/altr-stack`) is a **Claude Code plugin marketplace** called `altr-stack`. It is defined in [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json).
 
 Add the marketplace once:
 
 ```bash
-claude plugin marketplace add chuan-khuna/altr-skills
+claude plugin marketplace add chuan-khuna/altr-stack
 ```
 
 Then install a plugin from it as `<plugin>@altr-stack`.
 
 ## Available plugins
 
-- **`altr-skills`** (version 0.1.0) — Writing skills: resume, technical-writing and unslop. Manifest: [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json).
-  - [resume](skills/writing/resume/SKILL.md) — Write and proofread resume content in British English, by the Harvard and Guardian CV rules.
-  - [technical-writing](skills/writing/technical-writing/SKILL.md) — Four-layer standard for docs, PRs and commits: Diátaxis, Google style, STE and Global English.
-  - [unslop](skills/writing/unslop/SKILL.md) — Cut AI tells from any writing.
+### `altr-skills`
+
+Version 0.1.0. Writing skills: resume, technical-writing and unslop. Manifest: [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json).
+
+- [resume](skills/writing/resume/SKILL.md) — Write and proofread resume content in British English, by the Harvard and Guardian CV rules.
+- [technical-writing](skills/writing/technical-writing/SKILL.md) — Four-layer standard for docs, PRs and commits: Diátaxis, Google style, STE and Global English.
+- [unslop](skills/writing/unslop/SKILL.md) — Cut AI tells from any writing.
 
 The skills run with the plugin name in front, for example `/altr-skills:resume`. All three set `disable-model-invocation: true`, so they run only when you call them by name.
-
-## Groups
-
-- [writing](skills/writing/) — Writing standards and editors for resumes, docs and any prose.
-
-Skills no longer in use live in [`archived/skills/<skill>/`](archived/). No plugin ships them.
-
-Copied skills, with their source and version, are listed in [CREDITS.md](CREDITS.md).
 
 ## How to install
 
@@ -36,14 +31,14 @@ Copied skills, with their source and version, are listed in [CREDITS.md](CREDITS
 For your user:
 
 ```bash
-claude plugin marketplace add chuan-khuna/altr-skills
+claude plugin marketplace add chuan-khuna/altr-stack
 claude plugin install altr-skills@altr-stack
 ```
 
 For a project:
 
 ```bash
-claude plugin marketplace add chuan-khuna/altr-skills --scope project
+claude plugin marketplace add chuan-khuna/altr-stack --scope project
 claude plugin install altr-skills@altr-stack --scope project
 ```
 
@@ -60,8 +55,8 @@ After you change a skill, refresh the marketplace with `claude plugin marketplac
 ### As plain skills
 
 ```bash
-npx skills add https://github.com/chuan-khuna/altr-skills
-bunx skills add https://github.com/chuan-khuna/altr-skills
+npx skills add https://github.com/chuan-khuna/altr-stack
+bunx skills add https://github.com/chuan-khuna/altr-stack
 ```
 
 ## Install skills for this repository

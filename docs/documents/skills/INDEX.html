@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Skills — altr-skills</title>
-    <meta name="description" content="Index of technical documents for every skill in altr-skills." />
+    <title>Skills — altr-stack</title>
+    <meta name="description" content="Index of technical documents for every skill in altr-stack." />
     <link rel="stylesheet" href="../../shared/globals.css" />
     <script src="../../shared/doc.js"></script>
   </head>
@@ -18,7 +18,7 @@
       <div class="layout">
         <main class="content">
           <div class="header">
-            <p class="eyebrow">altr-skills · documents</p>
+            <p class="eyebrow">altr-stack · documents</p>
             <h1>Skills</h1>
             <p class="lede">One page for each skill in this repository. Each page tells you what the skill does, when to use it, how it works, and what it writes. Point to an underlined term to see its definition, or open the <a href="../glossary.html">glossary</a>.</p>
           </div>
@@ -36,10 +36,10 @@
 
           <h3 id="install-plugin">As a Claude Code plugin</h3>
           <p>To install for your user:</p>
-          <pre><code class="language-bash">claude plugin marketplace add chuan-khuna/altr-skills
+          <pre><code class="language-bash">claude plugin marketplace add chuan-khuna/altr-stack
 claude plugin install altr-skills@altr-stack</code></pre>
           <p>To install for a project, add <code>--scope project</code>. Both commands then write to <code>.claude/settings.json</code> in the project. Commit that file, and everyone who clones the project is offered the plugin.</p>
-          <pre><code class="language-bash">claude plugin marketplace add chuan-khuna/altr-skills --scope project
+          <pre><code class="language-bash">claude plugin marketplace add chuan-khuna/altr-stack --scope project
 claude plugin install altr-skills@altr-stack --scope project</code></pre>
           <p>Skills then run with the plugin name in front, for example <code>/altr-skills:resume</code>.</p>
 
@@ -53,11 +53,11 @@ claude plugin install altr-skills@altr-stack --scope project</code></pre>
 
           <h3 id="install-plain">As plain skills</h3>
           <p>The <code>skills</code> CLI copies the skill folders into <code>.claude/skills/</code>:</p>
-          <pre><code class="language-bash">npx skills add https://github.com/chuan-khuna/altr-skills
-bunx skills add https://github.com/chuan-khuna/altr-skills</code></pre>
+          <pre><code class="language-bash">npx skills add https://github.com/chuan-khuna/altr-stack
+bunx skills add https://github.com/chuan-khuna/altr-stack</code></pre>
 
           <h2 id="archived">Archived</h2>
-          <p>Skills no longer in use. They live in <code>archived/</code>, and the plugin does not ship them. Their old documents stay in <code>archived/</code> next to this page.</p>
+          <p>Skills no longer in use. They live in <code>archived/</code>, and the plugin does not ship them.</p>
           <p>To try every archived skill for one session, run <code>claude --plugin-dir archived</code>. See <code>archived/README.md</code> to restore one.</p>
         </main>
 
