@@ -14,6 +14,8 @@ Then install a plugin from it as `<plugin>@altr-stack`.
 
 ## Available plugins
 
+Some skills are copied from other projects. [CREDITS.md](CREDITS.md) lists each one with its source and version.
+
 ### `altr-skills`
 
 Version 0.1.0. Writing skills: resume, technical-writing and unslop. Manifest: [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json).
