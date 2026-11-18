@@ -1,6 +1,6 @@
 {
-  "name": "altr-local",
-  "description": "Local marketplace for the altr-skills plugin.",
+  "name": "altr-stack",
+  "description": "Plugins by ALTR.",
   "owner": { "name": "ALTR" },
   "plugins": [
     {

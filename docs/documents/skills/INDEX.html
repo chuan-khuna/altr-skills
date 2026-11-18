@@ -32,22 +32,22 @@
           </ul>
 
           <h2 id="install">Install</h2>
-          <p>The plugin <code>altr-skills</code> ships the skills on this page. The marketplace that lists it is <code>altr-local</code>, in <code>.claude-plugin/marketplace.json</code>.</p>
+          <p>The plugin <code>altr-skills</code> ships the skills on this page. The marketplace that lists it is <code>altr-stack</code>, in <code>.claude-plugin/marketplace.json</code>.</p>
 
           <h3 id="install-plugin">As a Claude Code plugin</h3>
           <p>To install for your user:</p>
           <pre><code class="language-bash">claude plugin marketplace add chuan-khuna/altr-skills
-claude plugin install altr-skills@altr-local</code></pre>
+claude plugin install altr-skills@altr-stack</code></pre>
           <p>To install for a project, add <code>--scope project</code>. Both commands then write to <code>.claude/settings.json</code> in the project. Commit that file, and everyone who clones the project is offered the plugin.</p>
           <pre><code class="language-bash">claude plugin marketplace add chuan-khuna/altr-skills --scope project
-claude plugin install altr-skills@altr-local --scope project</code></pre>
+claude plugin install altr-skills@altr-stack --scope project</code></pre>
           <p>Skills then run with the plugin name in front, for example <code>/altr-skills:resume</code>.</p>
 
           <h3 id="install-local">From a local clone</h3>
           <p>To install the plugin for this repo only:</p>
           <pre><code class="language-bash">mise run plugins</code></pre>
           <p>After you change a skill, refresh the marketplace:</p>
-          <pre><code class="language-bash">claude plugin marketplace update altr-local</code></pre>
+          <pre><code class="language-bash">claude plugin marketplace update altr-stack</code></pre>
           <p>To try the plugin for one session without installing it:</p>
           <pre><code class="language-bash">claude --plugin-dir .</code></pre>
 

@@ -20,7 +20,7 @@ mise run skills
 
 ```bash
 claude plugin marketplace add chuan-khuna/altr-skills --scope project
-claude plugin install altr-skills@altr-local --scope project
+claude plugin install altr-skills@altr-stack --scope project
 ```
 
 `--scope project` writes both settings to `.claude/settings.json` in your project. Commit that file, and everyone who clones the project is offered the plugin. Leave the flag out to install for your user only.

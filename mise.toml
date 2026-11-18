@@ -9,9 +9,9 @@ run = [
 ]
 
 [tasks.plugins]
-description = "Install the local altr-skills plugin (altr-local marketplace)"
+description = "Install the local altr-skills plugin (altr-stack marketplace)"
 run = [
   "claude plugin marketplace add ./ --scope project",
-  "claude plugin install altr-skills@altr-local --scope project",
-  "claude plugin update altr-skills@altr-local --scope project",
+  "claude plugin install altr-skills@altr-stack --scope project",
+  "claude plugin update altr-skills@altr-stack --scope project",
 ]
