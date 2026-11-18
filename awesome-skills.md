@@ -1,5 +1,19 @@
 # Awesome Skills
 
+## mise.toml
+
+```toml
+[tools]
+bun = "1.4.4"
+
+[tasks.skills]
+description = "Install the vendored agent skills"
+run = [
+  "bunx skills add mattpocock/skills#v1.3.2  --agent 'universal' --agent 'claude-code' -y -p",
+  "bunx skills add thananon/9arm-skills --agent 'universal' --agent 'claude-code' -y -p",
+]
+```
+
 ## Coding
 
 - [mattpocock/skills](https://github.com/mattpocock/skills) — Workflow skills such as grill-me, grill-with-docs and handoff.
