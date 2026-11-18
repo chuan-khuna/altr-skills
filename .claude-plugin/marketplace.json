@@ -1,0 +1,13 @@
+{
+  "name": "altr-local",
+  "description": "Local marketplace for the altr-skills plugin.",
+  "owner": { "name": "ALTR" },
+  "plugins": [
+    {
+      "name": "altr-skills",
+      "source": "./",
+      "description": "Writing skills by ALTR: resume, technical-writing and unslop.",
+      "version": "0.1.0"
+    }
+  ]
+}

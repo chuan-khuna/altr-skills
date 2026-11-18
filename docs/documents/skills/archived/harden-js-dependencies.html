@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>harden-js-dependencies — altr-skills</title>
     <meta name="description" content="Sets an install cooldown (minimum release age) for npm, bun, pnpm or yarn, so new package versions must be public for days before you can install them." />
-    <link rel="stylesheet" href="../../shared/globals.css" />
-    <script src="../../shared/doc.js"></script>
+    <link rel="stylesheet" href="../../../shared/globals.css" />
+    <script src="../../../shared/doc.js"></script>
   </head>
   <body>
     <div class="page">
       <header class="topbar">
-        <nav class="crumbs" aria-label="Breadcrumb"><a href="INDEX.html">skills</a> / harden-js-dependencies</nav>
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../INDEX.html">skills</a> / harden-js-dependencies</nav>
         <div data-doc-controls></div>
       </header>
 
@@ -22,7 +22,7 @@
             <h1>harden-js-dependencies</h1>
             <p class="lede">Make new package versions wait before they reach your repo. Most bad releases are found and removed in hours, so a 7-day wait keeps them out.</p>
             <div class="meta">
-              <span class="tag">skills/work/harden-js-dependencies</span>
+              <span class="tag">archived/skills/harden-js-dependencies</span>
               <span class="tag">npm · bun · pnpm · yarn</span>
               <span class="tag">default: 7 days</span>
             </div>
@@ -155,7 +155,7 @@ npmMinimalAgeGate: "7d"</code></pre>
           <pre><code class="language-txt">JS repo → harden-js-dependencies → config file committed → installs wait 7 days
 release blocked → add exclude (bun / pnpm / yarn) → install</code></pre>
           <p>CI must use the same config. If the file is not committed, or CI overrides it, the protection is local only. For other guardrails, see <code>git-guardrails-claude-code</code> and <code>security-review</code>.</p>
-          <p>Source: <a href="../../../skills/work/harden-js-dependencies/SKILL.md"><code>skills/work/harden-js-dependencies/SKILL.md</code></a></p>
+          <p>Source: <a href="../../../../archived/skills/harden-js-dependencies/SKILL.md"><code>archived/skills/harden-js-dependencies/SKILL.md</code></a></p>
         </main>
 
         <nav class="toc" data-auto aria-label="Table of contents"></nav>

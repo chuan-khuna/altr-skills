@@ -23,29 +23,42 @@
             <p class="lede">One page for each skill in this repository. Each page tells you what the skill does, when to use it, how it works, and what it writes. Point to an underlined term to see its definition, or open the <a href="../glossary.html">glossary</a>.</p>
           </div>
 
-          <h2 id="work">Work</h2>
-          <p>Day-to-day work: standups, progress updates, handoffs and project setup.</p>
+          <h2 id="writing">Writing</h2>
+          <p>Writing standards and editors for resumes, docs and any prose.</p>
           <ul class="cards">
-            <li><a class="card" href="calm-down.html"><span class="card-name">calm-down</span><span class="card-desc">Turn a brief into a cold-start handoff (assign) or a prioritised battle plan (triage).</span></a></li>
-            <li><a class="card" href="jira-standup-meeting.html"><span class="card-name">jira-standup-meeting</span><span class="card-desc">Query Jira for a start-of-day summary of your tasks, with recommendations.</span></a></li>
-            <li><a class="card" href="progress-summary.html"><span class="card-name">progress-summary</span><span class="card-desc">Turn raw notes or a git log into a short update for Jira or Discord.</span></a></li>
-            <li><a class="card" href="harden-js-dependencies.html"><span class="card-name">harden-js-dependencies</span><span class="card-desc">Set an install cooldown so new npm versions wait before you can install them.</span></a></li>
+            <li><a class="card" href="resume.html"><span class="card-name">resume</span><span class="card-desc">Write and proofread resume text in British English, by the Harvard and Guardian CV rules.</span></a></li>
+            <li><a class="card" href="technical-writing.html"><span class="card-name">technical-writing</span><span class="card-desc">A four-layer standard for docs, PRs and commits: Diátaxis, Google style, STE and Global English.</span></a></li>
+            <li><a class="card" href="unslop.html"><span class="card-name">unslop</span><span class="card-desc">Remove AI tells from any writing, by a numbered rule list other skills cite.</span></a></li>
           </ul>
 
-          <h2 id="productivity">Productivity</h2>
-          <p>Daily writing and thinking tools that are not about code.</p>
-          <ul class="cards">
-            <li><a class="card" href="write-doc.html"><span class="card-name">write-doc</span><span class="card-desc">Write a Markdown document from a conversation or from a codebase feature.</span></a></li>
-            <li><a class="card" href="evergreen-note-writer.html"><span class="card-name">evergreen-note-writer</span><span class="card-desc">Make evergreen notes from one or more sources and save them to files.</span></a></li>
-            <li><a class="card" href="quill-edit.html"><span class="card-name">quill-edit</span><span class="card-desc">Rephrase and correct English text with British English conventions.</span></a></li>
-            <li><a class="card" href="revise-prompt.html"><span class="card-name">revise-prompt</span><span class="card-desc">Refine a rough idea into a clear, ready-to-use prompt, together with you.</span></a></li>
-          </ul>
+          <h2 id="install">Install</h2>
+          <p>The plugin <code>altr-skills</code> ships the skills on this page. The marketplace that lists it is <code>altr-local</code>, in <code>.claude-plugin/marketplace.json</code>.</p>
 
-          <h2 id="design">Design</h2>
-          <p>Front-end craft: typography, layout systems, and the code that proves them.</p>
-          <ul class="cards">
-            <li><a class="card" href="brockmann-grid-system.html"><span class="card-name">brockmann-grid-system</span><span class="card-desc">Align an editorial page to a Müller-Brockmann modular grid, and prove 0px adherence.</span></a></li>
-          </ul>
+          <h3 id="install-plugin">As a Claude Code plugin</h3>
+          <p>To install for your user:</p>
+          <pre><code class="language-bash">claude plugin marketplace add chuan-khuna/altr-skills
+claude plugin install altr-skills@altr-local</code></pre>
+          <p>To install for a project, add <code>--scope project</code>. Both commands then write to <code>.claude/settings.json</code> in the project. Commit that file, and everyone who clones the project is offered the plugin.</p>
+          <pre><code class="language-bash">claude plugin marketplace add chuan-khuna/altr-skills --scope project
+claude plugin install altr-skills@altr-local --scope project</code></pre>
+          <p>Skills then run with the plugin name in front, for example <code>/altr-skills:resume</code>.</p>
+
+          <h3 id="install-local">From a local clone</h3>
+          <p>To install the plugin for this repo only:</p>
+          <pre><code class="language-bash">mise run plugins</code></pre>
+          <p>After you change a skill, refresh the marketplace:</p>
+          <pre><code class="language-bash">claude plugin marketplace update altr-local</code></pre>
+          <p>To try the plugin for one session without installing it:</p>
+          <pre><code class="language-bash">claude --plugin-dir .</code></pre>
+
+          <h3 id="install-plain">As plain skills</h3>
+          <p>The <code>skills</code> CLI copies the skill folders into <code>.claude/skills/</code>:</p>
+          <pre><code class="language-bash">npx skills add https://github.com/chuan-khuna/altr-skills
+bunx skills add https://github.com/chuan-khuna/altr-skills</code></pre>
+
+          <h2 id="archived">Archived</h2>
+          <p>Skills no longer in use. They live in <code>archived/</code>, and the plugin does not ship them. Their old documents stay in <code>archived/</code> next to this page.</p>
+          <p>To try every archived skill for one session, run <code>claude --plugin-dir archived</code>. See <code>archived/README.md</code> to restore one.</p>
         </main>
 
         <nav class="toc" data-auto aria-label="Table of contents"></nav>
