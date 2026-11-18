@@ -1,84 +1,32 @@
 # Awesome Skills
 
-A personal curation of agent skills I use across projects. These are skills from various authors that I've found useful and install regularly. Organized by category for quick reference.
+## Coding
 
-## Installation
+- [mattpocock/skills](https://github.com/mattpocock/skills) — Workflow skills such as grill-me, grill-with-docs and handoff.
+- [thananon/9arm-skills](https://github.com/thananon/9arm-skills) — Engineering skills for debugging, post-mortems, code review and delegating simple tasks.
+- [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) — A CLAUDE.md with four coding rules: think first, keep it simple, make surgical changes, work to a goal.
+- [github/awesome-copilot](https://github.com/github/awesome-copilot) — Community collection of agent instructions and skills, including git-commit.
+- [cursor/plugins — pstack](https://github.com/cursor/plugins/tree/main/pstack) — Playbooks for bug fixes, features, refactors and performance work, started with `/poteto-mode`.
 
-Use either `npx` or `bunx` to install skills:
+## Documentation
 
-```bash
-npx skills@latest add <repo> --skill <skill-name>
-bunx skills@latest add <repo> --skill <skill-name>
-```
+- [anthropics/skills](https://github.com/anthropics/skills) — Anthropic's official skills, including doc-coauthoring and frontend-design.
+- [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills) — Skills for working with Obsidian vaults, notes and formats.
 
-To install at the project level (saves to `.agents/` and symlinks to `.claude/`), append these flags to any install command:
+## Frontend & Design
 
-```bash
--a 'universal' -a 'claude-code' -y -p
-```
+- [pbakaus/impeccable](https://github.com/pbakaus/impeccable) · [site](https://impeccable.style/) — Design vocabulary and commands that improve the look of frontend output.
+- [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) — Builds polished websites with a consistent design system, real images and browser checks.
+- [nutlope/hallmark](https://github.com/nutlope/hallmark) · [site](https://www.usehallmark.com/) — Builds web pages with a non-generic look and lints them for common AI design patterns.
+- [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) — Vercel skills, including react-best-practices and web-design-guidelines.
+- [vercel/components.build](https://github.com/vercel/components.build) — Guidelines for building reusable UI components.
+- [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser) — Browser automation for agents.
+- [Vercel agent skills docs](https://vercel.com/docs/agent-resources/skills) — Vercel's documentation for its agent skills.
+- [Müller-Brockmann grid systems](https://github.com/alex-hyperagent/hyperagent-public-skills/blob/main/skill-muller-brockmann-grid-systems.json) — Builds editorial pages on a Müller-Brockmann modular grid and checks the alignment.
+- [nexu-io/open-design](https://github.com/nexu-io/open-design) — Local-first workspace where people and agents make prototypes, sites, decks, images and videos.
 
-## Coding Skills
+## Other
 
-Sources:
-
-- https://github.com/mattpocock/skills
-- https://github.com/thananon/9arm-skills
-- https://github.com/multica-ai/andrej-karpathy-skills
-
-```bash
-npx skills add github/awesome-copilot --skill git-commit -a 'universal' -a 'claude-code' -y -p
-npx skills add mattpocock/skills --skill grill-me -a 'universal' -a 'claude-code' -y -p
-npx skills add mattpocock/skills --skill handoff -a 'universal' -a 'claude-code' -y -p
-npx skills add thananon/9arm-skills --skill scrutinize -a 'universal' -a 'claude-code' -y -p
-
-npx skills add multica-ai/andrej-karpathy-skills -a 'universal' -a 'claude-code' -y -p
-```
-
-Mattpocock's sets
-
-```bash
-npx skills add mattpocock/skills -s 'handoff' -s 'grill-me' -s 'grill-with-docs' -a 'universal' -a 'claude-code' -y -p
-```
-
-## Documentation Skills
-
-```bash
-npx skills add anthropics/skills --skill doc-coauthoring -a 'universal' -a 'claude-code' -y -p
-```
-
-## Obsidian Skills
-
-```bash
-# Installs all skills from the repo
-npx skills add kepano/obsidian-skills -a 'universal' -a 'claude-code' -y -p
-```
-
-## Frontend Skills
-
-Sources:
-
-- https://vercel.com/docs/agent-resources/skills
-- https://www.usehallmark.com/
-- https://impeccable.style/
-
-```bash
-# Design taste skills
-npx skills add pbakaus/impeccable -a 'universal' -a 'claude-code' -y -p
-npx skills add Leonxlnx/taste-skill -a 'universal' -a 'claude-code' -y -p
-npx skills add nutlope/hallmark -a 'universal' -a 'claude-code' -y -p
-
-# Vercel skills
-npx skills add vercel-labs/agent-skills --skill vercel-react-best-practices -a 'universal' -a 'claude-code' -y -p
-npx skills add vercel-labs/agent-skills --skill web-design-guidelines -a 'universal' -a 'claude-code' -y -p
-npx skills add vercel/components.build --skill building-components -a 'universal' -a 'claude-code' -y -p
-npx skills add vercel-labs/agent-browser -a 'universal' -a 'claude-code' -y -p
-
-npx skills add anthropics/skills --skill frontend-design -a 'universal' -a 'claude-code' -y -p
-```
-
-## Other Tools & Skills Worth Exploring
-
-- https://github.com/nexu-io/open-design
-- https://github.com/different-ai/openwork
-- https://github.com/virattt/dexter
-- https://github.com/himself65/finance-skills
+- [different-ai/openwork](https://github.com/different-ai/openwork) — Open-source desktop app, built on OpenCode, that lets agents work on your local files.
+- [virattt/dexter](https://github.com/virattt/dexter) — AI agent that does multi-step financial research with live market data.
+- [himself65/finance-skills](https://github.com/himself65/finance-skills) — Skills for financial analysis and trading, such as stock valuation and earnings analysis.
