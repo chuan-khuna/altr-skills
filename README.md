@@ -26,6 +26,16 @@ Version 0.1.0. Writing skills: resume, technical-writing and unslop. Manifest: [
 
 The skills run with the plugin name in front, for example `/altr-skills:resume`. All three set `disable-model-invocation: true`, so they run only when you call them by name.
 
+### `context-weather`
+
+Version 0.1.0. A Claude Code mod that draws your status line's figures as a weather band above the prompt: model, context fill, recent turns, rate limits, time and cost. Source and details: [`plugins/context-weather`](plugins/context-weather/README.md).
+
+```bash
+claude plugin install context-weather@altr-stack
+```
+
+It needs Claude Code 2.1.318 or later, running in a terminal.
+
 ## How to install
 
 ### As a Claude Code plugin
@@ -46,7 +56,7 @@ claude plugin install altr-skills@altr-stack --scope project
 
 `--scope project` writes both settings to `.claude/settings.json` in your project. Commit that file, and everyone who clones the project is offered the plugin.
 
-From a local clone, install for this repo only:
+From a local clone, install both plugins for this repo only:
 
 ```bash
 mise run plugins

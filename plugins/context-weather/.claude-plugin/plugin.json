@@ -1,0 +1,6 @@
+{
+  "name": "context-weather",
+  "version": "0.1.0",
+  "description": "A weather band above the prompt: model, context fill, recent turns, rate limits, time and cost.",
+  "types": "./types/index.d.ts"
+}

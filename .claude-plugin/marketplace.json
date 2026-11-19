@@ -8,6 +8,12 @@
       "source": "./",
       "description": "Writing skills by ALTR: resume, technical-writing and unslop.",
       "version": "0.1.0"
+    },
+    {
+      "name": "context-weather",
+      "source": "./plugins/context-weather",
+      "description": "A weather band above the prompt: model, context fill, recent turns, rate limits, time and cost.",
+      "version": "0.1.0"
     }
   ]
 }
