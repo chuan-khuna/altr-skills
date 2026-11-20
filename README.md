@@ -56,6 +56,15 @@ claude plugin install altr-skills@altr-stack --scope project
 
 `--scope project` writes both settings to `.claude/settings.json` in your project. Commit that file, and everyone who clones the project is offered the plugin.
 
+For yourself, in one project only:
+
+```bash
+claude plugin marketplace add chuan-khuna/altr-stack --scope local
+claude plugin install altr-skills@altr-stack --scope local
+```
+
+`--scope local` writes both settings to `.claude/settings.local.json`. Git ignores that file, so the plugin stays on your machine.
+
 From a local clone, install both plugins for this repo only:
 
 ```bash
