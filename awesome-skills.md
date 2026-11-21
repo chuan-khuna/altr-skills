@@ -44,6 +44,7 @@ run = [
 - [MrBongoC/ai-iso-skill](https://github.com/MrBongoC/ai-iso-skill) — Draws an object as an interactive isometric line drawing in a single HTML file, with parts you can press.
 - [iso-glow](https://isoglow.dev/) — Builds on ai-iso-skill: draws an object, device or building as an isometric line drawing whose switched-on parts glow.
 - [wheresryan22/anatomy](https://github.com/wheresryan22/anatomy) · [site](https://skills.wheresryan.sh/anatomy) — Turns a one-line idea into an interactive isometric machine that shows how the idea works.
+- [colorfigures](https://april-zhu.com/colorfigures) — Builds on ai-iso-skill and anatomy: draws an everyday machine as a hand-inked isometric figure in one HTML file. You can turn it, press its buttons and see inside. The skill is free (MIT); a ready-made illustration pack is paid.
 - [tinycharts](https://april-zhu.com/tinycharts) — Turns a plain-language description into a hand-drawn, clickable chart whose buttons follow the rules of the real process. Free tier with 9 chart types; Pro is paid.
 - [kevintngo/statechart-art](https://github.com/kevintngo/statechart-art) — Example project, not a skill: four statecharts about a boba shop, checked in TLA+ and drawn as code-made art with a `/statechart` skill.
 
