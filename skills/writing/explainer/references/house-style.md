@@ -4,9 +4,12 @@ The voice and shape of an article that teaches a topic. This file adds to the **
 
 ## Style guides
 
-Follow these two books where the skills and this file don't cover a point:
+Follow these five books where the skills and this file don't cover a point. Each book owns one area:
 
+- Teaching the reader: Steven Pinker, _The Sense of Style_. Write against the curse of knowledge, and show the reader the thing.
+- Sentence clarity: Joseph M. Williams and Joseph Bizup, _Style: Lessons in Clarity and Grace_. Make the characters the subjects and the actions the verbs, and put old information before new.
 - Grammar: Craig Shrives, _Smashing Grammar_.
+- Usage: Kay Sayce, _What Not to Write: A Guide to the Dos and Don'ts of Good English_. Use it for misused and confused words, clichés and redundant phrases.
 - Prose habits: Gary Provost, _100 Ways to Improve Your Writing_.
 
 ## The reader

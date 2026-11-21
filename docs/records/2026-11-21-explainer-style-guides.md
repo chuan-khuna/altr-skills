@@ -56,6 +56,12 @@ Extract the rules into `house-style.md` as numbered lines. Keep each source as a
 | Chip Heath and Dan Heath, _Made to Stick_ | Concrete before abstract, and the curse of knowledge from the reader's side. Supports "example first". |
 | Peter C. Brown, Henry L. Roediger III and Mark A. McDaniel, _Make It Stick_ | Retrieval practice. Supports the end-of-article questions. |
 
+### Add: usage
+
+| Source | What it gives |
+| --- | --- |
+| Kay Sayce, _What Not to Write: A Guide to the Dos and Don'ts of Good English_ | Usage in British English: misused and confused words, clichés, and redundant phrases. Fills the gap between Shrives (grammar) and Provost (prose habits). |
+
 ### Add: reference style guides
 
 | Source | What it gives |
@@ -72,6 +78,26 @@ Extract the rules into `house-style.md` as numbered lines. Keep each source as a
 | ราชบัณฑิตยสถาน, หลักเกณฑ์การใช้เครื่องหมายวรรคตอน | Punctuation in Thai text. |
 | ราชบัณฑิตยสถาน, หลักเกณฑ์การทับศัพท์ภาษาอังกฤษ and ศัพท์คอมพิวเตอร์ | Thai spellings of English terms, such as "ฟังก์ชัน". |
 
+### Verdict: the five English books
+
+`house-style.md` names these five books. Each one owns one area, so no two books rule on the same point.
+
+| # | Book | Area | Why it made the cut |
+| --- | --- | --- | --- |
+| 1 | Steven Pinker, _The Sense of Style_ | Teaching the reader | Targets the curse of knowledge, the main risk in a teaching article. |
+| 2 | Joseph M. Williams and Joseph Bizup, _Style: Lessons in Clarity and Grace_ | Sentence clarity | Gives rules a reviewer can check sentence by sentence. |
+| 3 | Craig Shrives, _Smashing Grammar_ | Grammar | Already used by `resume`. One grammar authority across the writing skills. |
+| 4 | Kay Sayce, _What Not to Write_ | Usage | Misused words, clichés and redundant phrases in British English. No other pick covers usage. |
+| 5 | Gary Provost, _100 Ways to Improve Your Writing_ | Prose habits | Already used by `resume`. Covers rhythm and specific detail. |
+
+Cut from the shortlist:
+
+- _Made to Stick_. Its main lesson, concrete before abstract, is already a house style rule ("Show a concrete example first").
+- _Make It Stick_. It is about learning, not writing. Its one use, retrieval practice, only supports the end-of-article questions.
+- _New Hart's Rules_. It would settle British spelling, but one line in the house style can do that without a sixth book.
+
+The reference style guides (GOV.UK, Microsoft) and the Thai sources are not books in this sense, and stay as proposals.
+
 ### Exemplars, not rules
 
 Writers to read for the target voice: Julia Evans (zines), Bartosz Ciechanowski (interactive explainers), and aihero.dev (already the style reference in `CLAUDE.md`). The house style can name them, but rules come only from the sources above.
@@ -83,7 +109,7 @@ Writers to read for the target voice: Julia Evans (zines), Bartosz Ciechanowski 
 ## Decided
 
 - The skill combines technical-writing and unslop with a house style in `references/house-style.md`.
-- The house style names _Smashing Grammar_ and _100 Ways to Improve Your Writing_.
+- The house style names five English books: Pinker, Williams and Bizup, Shrives, Sayce, and Provost. See the verdict above.
 - House style rules win over technical-writing and unslop. Each override names the rule it replaces.
 - `skills/writing/explainer/SKILL.md` exists under the working name `explainer`, with seven steps: read the rules, collect the inputs, check the mode, get the outline approved, draft, check, return. It is in `plugin.json` and both READMEs. Its HTML document in `docs/documents/skills/` is not written yet.
 
@@ -92,7 +118,7 @@ Writers to read for the target voice: Julia Evans (zines), Bartosz Ciechanowski 
 ## Open questions
 
 1. Is the skill name `explainer`?
-2. Which of the proposed sources go in? The recommended minimum is Pinker, Williams and the ราชบัณฑิตยสถาน rules.
+2. The English books are settled. Which of the other proposed sources go in: the reference style guides and the ราชบัณฑิตยสถาน rules?
 3. Which rules from each book go into `house-style.md`? Someone must pick them, or review a proposed list.
 4. British or American spelling? British matches `resume`. American matches the Google default in technical-writing.
 5. Which technical-writing and unslop rules don't apply to Thai text, and what is the Thai sentence-length guide?
