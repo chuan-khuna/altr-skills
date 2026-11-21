@@ -1,11 +1,12 @@
 {
   "name": "altr-skills",
   "version": "0.1.0",
-  "description": "Writing skills by ALTR: resume, technical-writing and unslop.",
+  "description": "Writing skills by ALTR: explainer, resume, technical-writing and unslop.",
   "author": {
     "name": "ALTR"
   },
   "skills": [
+    "./skills/writing/explainer",
     "./skills/writing/resume",
     "./skills/writing/technical-writing",
     "./skills/writing/unslop"

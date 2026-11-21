@@ -18,8 +18,9 @@ Some skills are copied from other projects. [CREDITS.md](CREDITS.md) lists each 
 
 ### `altr-skills`
 
-Version 0.1.0. Writing skills: resume, technical-writing and unslop. Manifest: [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json).
+Version 0.1.0. Writing skills: explainer, resume, technical-writing and unslop. Manifest: [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json).
 
+- [explainer](skills/writing/explainer/SKILL.md) — Write an article that teaches a topic to a newcomer, in English or Thai.
 - [resume](skills/writing/resume/SKILL.md) — Write and proofread resume content in British English, by the Harvard and Guardian CV rules.
 - [technical-writing](skills/writing/technical-writing/SKILL.md) — Four-layer standard for docs, PRs and commits: Diátaxis, Google style, STE and Global English.
 - [unslop](skills/writing/unslop/SKILL.md) — Cut AI tells from any writing.
